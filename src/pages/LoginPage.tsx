@@ -14,8 +14,9 @@ export default function LoginPage() {
     return (
         <>
             <div className = {styles.LoginContainer}>
-                Not signed in <br />
-                <button onClick={() => signIn()}>Sign in</button>
+                <span id = {styles.title}> Queue Our Codes </span><br />
+                <span id = {styles.user}> Not signed in </span> <br />
+                <button onClick={() => signIn("google")}>Sign in with Google</button>
             </div>
         </>
     )
