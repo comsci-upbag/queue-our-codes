@@ -14,12 +14,6 @@
   font-size: 24px;
 }
 
-#user {
-  display: inline-block;
-  margin: 5px;
-  font-size: 18px;
-}
-
 #LoginButton {
   display: flex;
   flex-direction: row;
