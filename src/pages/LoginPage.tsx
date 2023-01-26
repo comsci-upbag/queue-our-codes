@@ -1,5 +1,5 @@
 import { useSession, signIn, signOut } from "next-auth/react"
-import "@/styles/Home.module.css"
+import styles from "@/styles/Home.module.css"
 
 export default function LoginPage() {
     const { data: session } = useSession()
@@ -13,7 +13,7 @@ export default function LoginPage() {
     }
     return (
         <>
-            <div className = "LoginContainer">
+            <div className = {styles.LoginContainer}>
                 Not signed in <br />
                 <button onClick={() => signIn()}>Sign in</button>
             </div>
