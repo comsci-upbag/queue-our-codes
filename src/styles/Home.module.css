@@ -75,6 +75,32 @@
     text-align: left;
 }
 
+#InputContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: left;
+    justify-content: space-between;
+}
+
+#InputField {
+    display: inline-block;
+    border: none;
+    outline-width: 0;
+    font: 100 18px/1.5 "Quicksand";
+    color: #fff;
+    width: 85%;
+    background: transparent;
+}
+
+#SubmitButtonImage {
+    height: 32px;
+    width: 32px;
+    filter: invert(100%);
+    cursor: pointer;
+    display: inline-block;
+    rotate: 90deg;
+}
+
 .ProgressBar {
     margin: 20px 0 20px 0;
     border: 1px solid #533BA3;
@@ -84,36 +110,37 @@
 }
 
 .Progress {
-    content: "";
     display: inline-block;
     position: relative;
     width: 50%;
+    left: 2px;
+    top: 2px;
     height: 20px;
     border-radius: 20px;
-    background-color: #fff;
+    background: linear-gradient(to left, #533BA3, #2B2D67);
 }
 
 .Footer {
-  position: fixed;
-  opacity: 50%;
-  bottom: 30px;
-  left: 50%;
-  transform: translate(-50%, 0%);
-  margin: auto;
+    position: fixed;
+    opacity: 50%;
+    bottom: 30px;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    margin: auto;
 }
 
 .circle {
-  top: -50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  position: fixed;
+    top: -50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: fixed;
 
-  z-index: -100;
-  /* background: radial-gradient(circle, #533BA3, #0A0311); */
-  height: 100vh;
-  width: 100vw;
+    z-index: -100;
+    /* background: radial-gradient(circle, #533BA3, #0A0311); */
+    height: 100vh;
+    width: 100vw;
 
-  background: #533BA3;
-  /* mix-blend-mode: hard-light; */
-  filter: blur(500px);
+    background: #533BA3;
+    /* mix-blend-mode: hard-light; */
+    filter: blur(500px);
 }
