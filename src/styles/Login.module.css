@@ -41,3 +41,19 @@
   transform: translate(-50%, 0%);
   margin: auto;
 }
+
+.circle {
+  top: -50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: fixed;
+
+  z-index: -100;
+  /* background: radial-gradient(circle, #533BA3, #0A0311); */
+  height: 100vh;
+  width: 100vw;
+
+  background: #533BA3;
+  /* mix-blend-mode: hard-light; */
+  filter: blur(500px);
+}

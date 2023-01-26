@@ -12,6 +12,9 @@ export default function LoginPage() {
                 </div>
             </div>
             <div className={styles.Footer}>COMSCI@UP.BAG 2023</div>
+            <div className={styles.cover}>
+                <div className={styles.circle}/>
+            </div>
         </>
     )
 }
