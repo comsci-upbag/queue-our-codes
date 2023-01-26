@@ -13,7 +13,7 @@ export default function HomePage() {
         <span id = {styles.title}> Queue Our Codes </span><br />
         <div className = {styles.HomeContainer} id = {styles.UserContainer}>
           <div id = {styles.UserContainerInner}>
-            <Image id = {styles.userpic} src={session!.user.image.replaceAll("s96-c", "s192-c")} alt="Picture of the user"/>
+            <Image id = {styles.userpic} src={session!.user.image.replaceAll("s96-c", "s192-c")} alt="Picture of the user" width={32} height={32}/>
             <span id = {styles.username}>Ji Changmin 큐</span>
           </div>
           <Image id = {styles.userpic} src={profilePic} alt="Picture of the user"/>
