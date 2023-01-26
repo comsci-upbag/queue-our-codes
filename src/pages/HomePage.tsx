@@ -6,7 +6,9 @@ import logoutImage from "../images/logout.svg"
 import enterImage from "../images/enter.svg"
 
 export default function HomePage() {
-  const { data: session } = useSession()
+  const { data: session } = useSession();
+
+  if (!session) return <></>;
 
   const userName = session!.user.name;
   const userImage = session!.user.image.replaceAll("s96-c", "s192-c");
