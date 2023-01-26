@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css?family=Quicksand&display=swap');
+
+.LoginContainer {
+  text-align: center;
+  padding: 50px;
+  border: 1px solid #533BA3;
+  border-radius: 20px;
+  background: #050618;
+}
+
+#title {
+  display: inline-block;
+  margin: 5px;
+  font-size: 24px;
+}
+
+#user {
+  display: inline-block;
+  margin: 5px;
+  font-size: 18px;
+}
+
+#LoginButton {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin: 5px;
+  margin-top: 30px;
+  padding: 20px;
+  border: 1px solid #533BA3;
+  border-radius: 10px;
+  background: #050618;
+  color: #533BA3;
+  cursor: pointer;
+}
+
+#Google {
+  margin-left: 20px;
+}
+
+.Footer {
+  position: fixed;
+  opacity: 50%;
+  bottom: 30px;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  margin: auto;
+}

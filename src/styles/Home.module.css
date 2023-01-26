@@ -1,42 +1,71 @@
 @import url('https://fonts.googleapis.com/css?family=Quicksand&display=swap');
 
-.LoginContainer {
+#home {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: center;
+  width: 50vw;
+}
+
+#title {
+    display: inline-block;
+    margin: 5px;
+    font-size: 24px;
+}
+
+.HomeContainer {
+  margin: 20px 0 20px 0;
   text-align: center;
-  padding: 50px;
+  padding: 20px;
   border: 1px solid #533BA3;
   border-radius: 20px;
   background: #050618;
 }
 
-#title {
-  display: inline-block;
-  margin: 5px;
-  font-size: 24px;
+#UserContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: left;
+    justify-content: space-between;
 }
 
-#user {
-  display: inline-block;
-  margin: 5px;
-  font-size: 18px;
+#UserContainerInner {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }
 
-#LoginButton {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  margin: 5px;
-  margin-top: 30px;
-  padding: 20px;
-  border: 1px solid #533BA3;
-  border-radius: 10px;
-  background: #050618;
-  color: #533BA3;
-  cursor: pointer;
+#userpic {
+    height: 32px;
+    width: 32px;
+    border: 1px solid #533BA3;
+    border-radius: 50%;
 }
 
-#Google {
-  margin-left: 20px;
+#username {
+    font-size: 18px;
+    margin-left: 10px;
+}
+
+#ClueContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: center;
+}
+
+#cluenum {
+    font-size: 14px;
+    opacity: 50%;
+    text-align: left;
+}
+
+#cluecont {
+    margin: 20px 0 20px 0;
+    font-size: 18px;
+    text-align: left;
 }
 
 .Footer {
