@@ -4,18 +4,18 @@
 // import styles from '@/styles/Home.module.css'
 
 import { useState } from 'react'
+import { useSession, signIn, signOut } from "next-auth/react"
 
 import HomePage from "./HomePage"
+import LoginPage from "./LoginPage"
 
 // const inter = Inter({ subsets: ['latin'] })
 
 export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { data: session } = useSession()
 
-  if (isLoggedIn)
-    return <HomePage/>
+  if (session)
+    return <HomePage />
 
-  return (
-    <h1> "hello there" </h1>
-  )
+  return <LoginPage />
 }
