@@ -1,4 +1,5 @@
 import { useSession, signIn, signOut } from "next-auth/react"
+import "@/styles/Home.module.css"
 
 export default function LoginPage() {
     const { data: session } = useSession()
@@ -12,8 +13,10 @@ export default function LoginPage() {
     }
     return (
         <>
-            Not signed in <br />
-            <button onClick={() => signIn()}>Sign in</button>
+            <div className = "LoginContainer">
+                Not signed in <br />
+                <button onClick={() => signIn()}>Sign in</button>
+            </div>
         </>
     )
 }
