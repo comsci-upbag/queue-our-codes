@@ -1,20 +1,29 @@
-// import Head from 'next/head'
-// import Image from 'next/image'
-// import { Inter } from '@next/font/google'
 
-import { useState } from 'react'
-import { useSession, signIn, signOut } from "next-auth/react"
 
-import HomePage from "./HomePage"
-import LoginPage from "./LoginPage"
+import { getSession } from "next-auth/react"
+import { NextPageContext } from "next";
 
-// const inter = Inter({ subsets: ['latin'] })
+export async function getServerSideProps(context: NextPageContext) {
+  const session = await getSession(context);
 
-export default function App() {
-  const { data: session } = useSession()
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    }
+  }
 
-  if (session)
-    return <HomePage />
+  return {
+    redirect: {
+      destination: '/home',
+      permanent: false,
+    },
+  }
+}
 
-  return <LoginPage />
+
+export default function Index() {
+  return <h1> hi there </h1>
 }
