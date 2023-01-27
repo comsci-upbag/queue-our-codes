@@ -104,6 +104,7 @@ export default function Home({ userName, userImage, currentPuzzle } : props ) {
         </div>
 
         <div className={styles.HomeContainer} id={styles.ClueContainer}>
+          <span id={styles.cluenum}> Clue #{currentPuzzle} </span>
           <Puzzle puzzleId={currentPuzzle} />
         </div>
 

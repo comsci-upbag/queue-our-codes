@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import WebCam from './webcam';
+import WebCam from "../../components/webcam"
 
 import styles from "../../styles/Home.module.css";
 
@@ -9,7 +9,7 @@ function Puzzle({ puzzleId }: { puzzleId: number }) {
   const [prediction, setPrediction] = useState<string | null>(null);
   const [probability, setProbability] = useState<number | null>(null);
 
-  if (puzzleId == 1)
+  if (puzzleId == 1) {
     return (
       <>
         <span id={styles.cluenum}> Clue #{puzzleId} </span>
@@ -21,10 +21,11 @@ function Puzzle({ puzzleId }: { puzzleId: number }) {
         </span>
       </>
     )
-  else if (puzzleId == 2)
+  } 
+
+  if (puzzleId == 2) {
     return (
       <>
-        <span id={styles.cluenum}> Clue #{puzzleId} </span>
         <span id={styles.cluecont}>
           Keep your eyes open, and you will see... <br /><br />
           <WebCam URL="https://teachablemachine.withgoogle.com/models/QJqiovVqX/" setPrediction={setPrediction} setProbability={setProbability} />
@@ -36,6 +37,7 @@ function Puzzle({ puzzleId }: { puzzleId: number }) {
         </div>
       </>
     )
+  }
 
   return (
     <></>
