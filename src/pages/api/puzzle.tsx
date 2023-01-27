@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import WebCam from "../../components/webcam-tm"
+import WebCam from "../../components/webcam-tf"
 
 import styles from "../../styles/Home.module.css";
 
@@ -28,7 +28,7 @@ function Puzzle({ puzzleId }: { puzzleId: number }) {
         <span id={styles.cluecont}>
           Keep your eyes open, and you will see... <br /><br />
           <WebCam URL="https://teachablemachine.withgoogle.com/models/w2FwPYeyg/" setPrediction={setPrediction} setProbability={setProbability} />
-          {prediction === "white-cat-yellow-head" && probability! > 0.8 ? "You got it! The answer is all yours!" : ""}
+          {prediction === "white-cat-yellow-head" && probability! > 0.5 ? "You got it! The answer is all yours!" : ""}
         </span>
 
         <div className={styles.PredictionBar}>

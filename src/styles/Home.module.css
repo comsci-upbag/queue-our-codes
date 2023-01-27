@@ -119,6 +119,7 @@
     width: 50%;
     left: 2px;
     top: 2px;
+    transition: all 2s ease-in-out;
     height: 20px;
     border-radius: 20px;
     background: linear-gradient(to left, var(--color1), var(--color5));

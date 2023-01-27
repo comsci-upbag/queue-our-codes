@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react";
 
 import * as tf from "@tensorflow/tfjs";
-import Webcam from "react-webcam";
 
 interface Props {
 	URL: string;
@@ -11,9 +10,8 @@ interface Props {
 
 export default function WebCam({ URL, setPrediction, setProbability }: Props) {
 	const webcamContainer = useRef<HTMLDivElement>(null);
-	let webcam = useRef<Webcam>(null);
+	const video = useRef<HTMLVideoElement>(null);
 
-	let video: HTMLVideoElement | null;
 	let model: tf.LayersModel;
 	let labels: string[];
 
@@ -22,46 +20,46 @@ export default function WebCam({ URL, setPrediction, setProbability }: Props) {
 		const metadata = await (await fetch('/data/metadata.json')).json();
 		labels = metadata.labels;
 
-		window.requestAnimationFrame(loop);
-	}
-
-	async function loop() {
-		video = webcam.current!.video;
-		await predict();
-		window.requestAnimationFrame(loop);
+		setInterval(() => {
+			predict();
+		}, 1000);
 	}
 
 	async function predict() {
 		if (video) {
-			// Get the image data from the video element
-			const webcamImage = await tf.browser.fromPixels(video);
+			// check if the video is ready
+			if (video.current?.readyState === video.current?.HAVE_ENOUGH_DATA) {
 
-			// Crop the image so we're using the center square of the rectangular
-			// webcam.
-			const croppedImage = cropImage(webcamImage);
+				// Get the image data from the video element
+				const webcamImage = await tf.browser.fromPixels(video.current!);
 
-			// Expand the outer most dimension so we have a batch size of 1.
-			const batchedImage = croppedImage.expandDims(0);
+				// Crop the image so we're using the center square of the rectangular
+				// webcam.
+				const croppedImage = cropImage(webcamImage);
 
-			// Make a prediction through mobilenet.
-			const predictions = await model.predict(batchedImage) as tf.Tensor;
+				// Expand the outer most dimension so we have a batch size of 1.
+				const batchedImage = croppedImage.expandDims(0);
 
-			// Turn predictions into a 1D array and find the index with the maximum
-			// probability. The number corresponds to the class the model thinks is
-			// the most probable given the input.
-			const classId = (await predictions.as1D().argMax()).dataSync()[0];
+				// Make a prediction through mobilenet.
+				const prediction = await model.predict(batchedImage) as tf.Tensor;
 
-			// Turn the class index into a human readable label.
-			setPrediction(labels[classId]);
+				// Turn predictions into a 1D array and find the index with the maximum
+				// probability. The number corresponds to the class the model thinks is
+				// the most probable given the input.
+				const classId = (await prediction.as1D().argMax()).dataSync()[0];
 
-			// Turn the predictions into a 1D array and find the maximum probability.
-			setProbability((await predictions.as1D().max()).dataSync()[0]);
+				// Turn the class index into a human readable label.
+				setPrediction(labels[classId]);
 
-			// Dispose the tensor to release the memory.
-			webcamImage.dispose();
-			croppedImage.dispose();
-			batchedImage.dispose();
-			predictions.dispose();
+				// Turn the predictions into a 1D array and find the maximum probability.
+				setProbability((await prediction.as1D().max()).dataSync()[0]);
+
+				// Dispose the tensor to release the memory.
+				webcamImage.dispose();
+				croppedImage.dispose();
+				batchedImage.dispose();
+				prediction.dispose();
+			}
 		}
 	}
 
@@ -71,19 +69,44 @@ export default function WebCam({ URL, setPrediction, setProbability }: Props) {
 		const beginHeight = centerHeight - (size / 2);
 		const centerWidth = img.shape[1] / 2;
 		const beginWidth = centerWidth - (size / 2);
-		return img.slice([beginHeight, beginWidth, 0], [size, size, 3]);
+
+		// normalise the image between -1 and 1
+		const normalized = img.toFloat().div(tf.scalar(127)).sub(tf.scalar(1));
+
+		// Crop the image so we're using the center square of the rectangular
+		return normalized.slice([beginHeight, beginWidth, 0], [size, size, 3]);
 	}
 
+	function hasGetUserMedia() {
+		return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+	}
+
+	function enableCam() {
+		if (hasGetUserMedia()) {
+			// getUsermedia parameters.
+			const constraints = {
+				video: true,
+				width: webcamContainer.current?.clientWidth,
+				height: webcamContainer.current?.clientWidth,
+				facingMode: { exact: "environment" }
+			};
+
+			// Activate the webcam stream.
+			navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
+				video.current!.srcObject = stream;
+				video.current?.addEventListener('loadeddata', function () {
+					video.current!.play();
+				});
+			});
+		} else {
+			console.warn('getUserMedia() is not supported by your browser');
+		}
+	}
 
 	useEffect(() => {
+		enableCam();
 		init();
 	}, []);
-
-	const videoConstraints = {
-		width: webcamContainer.current?.offsetWidth,
-		height: webcamContainer.current?.offsetWidth,
-		facingMode: { exact: "environment" }
-	};
 
 	return (
 		<>
@@ -93,16 +116,10 @@ export default function WebCam({ URL, setPrediction, setProbability }: Props) {
 						display: "inline-block",
 						width: "100%",
 						height: "100%",
-						borderRadius: "100%",
 					}
 				}
 			>
-				<Webcam ref={webcam}
-					audio={false}
-					screenshotFormat="image/png"
-					videoConstraints={videoConstraints}
-					width={webcamContainer.current?.offsetWidth}
-					height={webcamContainer.current?.offsetWidth} />
+				<video ref={video} autoPlay playsInline muted width="100%" height="100%" />
 			</div>
 		</>
 	)
