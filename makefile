@@ -4,8 +4,12 @@ run-dev:
 
 setup:
 	npm install
-	npx prisma db pull
-	npx prisma db generate
+	# for setting up prisma the first time
+	# npx prisma db generate
+	# npx prisma db pull
+
+migrate:
+	npx prisma migrate dev --name init
 
 build:
 	npm run build

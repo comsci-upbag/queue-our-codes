@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@next/font": "13.1.5",
+    "@prisma/client": "^4.9.0",
     "@teachablemachine/image": "^0.8.5",
     "@tensorflow/tfjs": "^4.2.0",
     "@types/node": "^18.11.18",

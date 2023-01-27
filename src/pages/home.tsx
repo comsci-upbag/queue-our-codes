@@ -7,6 +7,7 @@ import { NextPageContext } from "next";
 import styles from "@/styles/Home.module.css"
 import Puzzle from "./api/puzzle"
 
+import { PrismaClient } from "@prisma/client";
 
 export async function getServerSideProps(context: NextPageContext) {
   const session = await getSession(context);
@@ -20,11 +21,36 @@ export async function getServerSideProps(context: NextPageContext) {
     }
   }
 
+  const prisma = new PrismaClient();
+
+  const user = await prisma.participantStatus.findUnique({
+    where: {
+      email: session.user.email
+    }
+  })
+
+  // create user on the dataabse
+  if (!user) {
+    await prisma.participantStatus.create({
+      data: {
+        email: session.user.email,
+        name: session.user.name,
+      }
+    })
+    return {
+      props: {
+        userName: session.user.name,
+        userImage: session.user.image,
+        currentPuzzle: 1
+      },
+    }
+  }
+
   return {
     props: {
       userName: session.user.name,
       userImage: session.user.image,
-      currentPuzzle: 1
+      currentPuzzle: user.current_puzzle,
     },
   }
 }
