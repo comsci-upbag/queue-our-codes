@@ -6,15 +6,8 @@
     align-items: left;
     justify-content: center;
     width: 50vw;
-    min-width: 350px;
+    min-width: 300px;
     max-width: 600px;
-}
-
-@media only screen and (min-width: 370px) {
-    #home {
-        min-width: 300px;
-        width: 90vw;
-    }
 }
 
 #title {
