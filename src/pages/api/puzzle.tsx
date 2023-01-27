@@ -21,7 +21,7 @@ function Puzzle({ puzzleId }: { puzzleId: number }) {
         </span>
       </>
     )
-  } 
+  }
 
   if (puzzleId == 2) {
     return (
@@ -32,8 +32,8 @@ function Puzzle({ puzzleId }: { puzzleId: number }) {
           {prediction === "open-mouth" && probability! > 0.8 ? "You got it! The answer is all yours!" : ""}
         </span>
 
-        <div className={styles.ProgressBar}>
-          <div className={styles.Progress} style={{ width: `calc((${prediction === "open-mouth" ? probability : 0}) * 100% - 4px)` }}></div >
+        <div className={styles.PredictionBar}>
+          <div className={styles.Prediction} style={{ width: `calc((${prediction === "open-mouth" ? probability : 0}) * 100% - 4px)` }}></div >
         </div>
       </>
     )
