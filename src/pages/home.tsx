@@ -7,7 +7,9 @@ import { NextPageContext } from "next";
 import styles from "@/styles/Home.module.css"
 import Puzzle from "./api/puzzle"
 
+
 import { PrismaClient } from "@prisma/client";
+import { useRef } from "react";
 
 export async function getServerSideProps(context: NextPageContext) {
   const session = await getSession(context);
@@ -23,14 +25,14 @@ export async function getServerSideProps(context: NextPageContext) {
 
   const prisma = new PrismaClient();
 
-  const user = await prisma.participantStatus.findUnique({
+  const participant = await prisma.participantStatus.findUnique({
     where: {
       email: session.user.email
     }
   })
 
   // create user on the dataabse
-  if (!user) {
+  if (!participant) {
     await prisma.participantStatus.create({
       data: {
         email: session.user.email,
@@ -50,7 +52,7 @@ export async function getServerSideProps(context: NextPageContext) {
     props: {
       userName: session.user.name,
       userImage: session.user.image,
-      currentPuzzle: user.current_puzzle,
+      currentPuzzle: participant.current_puzzle,
     },
   }
 }
@@ -62,6 +64,32 @@ interface props {
 }
 
 export default function Home({ userName, userImage, currentPuzzle } : props ) {
+
+  const inputField = useRef<HTMLInputElement>(null);
+
+  const handleSubmitAnswer = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+
+    const request = {
+      puzzleId: currentPuzzle,
+      answer: inputField.current!.value
+    };
+
+    fetch("/api/validateAnswer", {
+      method: "POST",
+      body: JSON.stringify(request),
+    }).then(data => data.json())
+      .then(data => data.isAnswerCorrect)
+      .then(isAnswerCorrect => {
+        // TODO: handle popup
+        if (isAnswerCorrect) {
+          window.location.reload();
+        } else {
+          console.log("Wrong!");
+        }
+      })
+  }
+
 
   return (
     <>
@@ -80,11 +108,11 @@ export default function Home({ userName, userImage, currentPuzzle } : props ) {
         </div>
 
         <div className={styles.HomeContainer} id={styles.InputContainer}>
-          <input id={styles.InputField} type="text" placeholder="Answer" />
-          <Image id={styles.SubmitButtonImage} src="enter.svg" alt="Picture of the user" width={25} height={25} onClick={() => console.log("button click")} />
+          <input ref={inputField} id={styles.InputField} type="text" placeholder="Answer" />
+          <Image id={styles.SubmitButtonImage} src="enter.svg" alt="Picture of the user" width={25} height={25} onClick={handleSubmitAnswer} />
         </div>
         <div className={styles.ProgressBar}>
-          <div className={styles.Progress} style={{ width: `calc(" + (${currentPuzzle-1}/ 10) * 100 + "% - 4px)` }}></div >
+          <div className={styles.Progress} style={{ width: `calc((${currentPuzzle}/ 10) * 100% - 4px)` }}></div >
         </div>
         <div className={styles.Footer}>COMSCI@UP.BAG 2023</div>
       </div>
