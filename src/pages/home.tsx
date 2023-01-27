@@ -110,7 +110,7 @@ export default function Home({ userName, userImage, currentPuzzle } : props ) {
 
         <div className={styles.HomeContainer} id={styles.InputContainer}>
           <input ref={inputField} id={styles.InputField} type="text" placeholder="Answer" />
-          <Image id={styles.SubmitButtonImage} src="enter.svg" alt="Picture of the user" width={25} height={25} onClick={handleSubmitAnswer} />
+          <Image id={styles.SubmitButtonImage} src="submit.svg" alt="Picture of the user" width={25} height={25} onClick={handleSubmitAnswer} />
         </div>
         <div className={styles.ProgressBar}>
           <div className={styles.Progress} style={{ width: `calc((${currentPuzzle}/ 10) * 100% - 4px)` }}></div >

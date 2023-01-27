@@ -1,16 +1,17 @@
-@import url('https://fonts.googleapis.com/css?family=Quicksand&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Niconne&display=swap');
 
 .LoginContainer {
   text-align: center;
   padding: 50px;
-  border: 1px solid #533BA3;
-  border-radius: 20px;
-  background: #050618;
+  border-radius: 10px;
+  background: var(--color1);
+  color: var(--color4);
+  box-shadow: 0px 10px 10px var(--color3);
 }
 
 #title {
   display: inline-block;
-  margin: 5px;
+  margin: 0 0 0 5px;
   font-size: 24px;
 }
 
@@ -22,10 +23,9 @@
   margin: 5px;
   margin-top: 30px;
   padding: 20px;
-  border: 1px solid #533BA3;
   border-radius: 10px;
-  background: #050618;
-  color: #533BA3;
+  background: var(--color6);
+  color: var(--color1);
   cursor: pointer;
 }
 
@@ -35,7 +35,7 @@
 
 .Footer {
   position: fixed;
-  opacity: 25%;
+  z-index: -99;
   bottom: 5vh;
   left: 50%;
   transform: translate(-50%, 0%);
@@ -43,7 +43,7 @@
 }
 
 .circle {
-  top: -50%;
+  top: 150%;
   left: 50%;
   transform: translate(-50%, -50%);
   position: fixed;
@@ -53,7 +53,7 @@
   height: 100vh;
   width: 100vw;
 
-  background: #533BA3;
+  background: var(--color3);
   /* mix-blend-mode: hard-light; */
   filter: blur(500px);
 }
