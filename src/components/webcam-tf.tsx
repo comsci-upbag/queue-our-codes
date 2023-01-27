@@ -22,7 +22,7 @@ export default function WebCam({ URL, setPrediction, setProbability }: Props) {
 
 		setInterval(() => {
 			predict();
-		}, 1000);
+		}, 500);
 	}
 
 	async function predict() {
