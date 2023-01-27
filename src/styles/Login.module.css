@@ -3,7 +3,7 @@
 .LoginContainer {
   text-align: center;
   padding: 50px;
-  border-radius: 10px;
+  border-radius: 30px;
   background: var(--color1);
   color: var(--color4);
   box-shadow: 0px 10px 10px var(--color3);
@@ -23,7 +23,7 @@
   margin: 5px;
   margin-top: 30px;
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 20px;
   background: var(--color6);
   color: var(--color1);
   cursor: pointer;
