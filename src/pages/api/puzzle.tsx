@@ -1,7 +1,13 @@
+import { useState } from "react";
+
+import WebCam from './webcam';
 
 import styles from "../../styles/Home.module.css";
 
-function Puzzle( { puzzleId } : {puzzleId: number} ) {
+function Puzzle({ puzzleId }: { puzzleId: number }) {
+
+  const [prediction, setPrediction] = useState<string | null>(null);
+  const [probability, setProbability] = useState<number | null>(null);
 
   if (puzzleId == 1)
     return (
@@ -13,6 +19,21 @@ function Puzzle( { puzzleId } : {puzzleId: number} ) {
           By the Laws of Physics, what goes up but never goes down? <br /><br />
           I get bigger the more is taken away
         </span>
+      </>
+    )
+  else if (puzzleId == 2)
+    return (
+      <>
+        <span id={styles.cluenum}> Clue #{puzzleId} </span>
+        <span id={styles.cluecont}>
+          Keep your eyes open, and you will see... <br /><br />
+          <WebCam URL="https://teachablemachine.withgoogle.com/models/QJqiovVqX/" setPrediction={setPrediction} setProbability={setProbability} />
+          {prediction === "open-mouth" && probability! > 0.8 ? "You got it! The answer is all yours!" : ""}
+        </span>
+
+        <div className={styles.ProgressBar}>
+          <div className={styles.Progress} style={{ width: `calc((${prediction === "open-mouth" ? probability : 0}) * 100% - 4px)` }}></div >
+        </div>
       </>
     )
 

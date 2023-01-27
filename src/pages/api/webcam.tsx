@@ -1,26 +1,28 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, Dispatch, SetStateAction } from 'react';
 
 import * as tmImage from '@teachablemachine/image';
 
-export default function Meow() {
-    const URL = "https://teachablemachine.withgoogle.com/models/QJqiovVqX/";
+interface Props {
+    URL: string;
+    setPrediction: (prediction: string) => void;
+    setProbability: (probability: number) => void;
+}
 
-    const [prediction, setPrediction] = useState<string | null>(null);
-    const [probability, setProbability] = useState<number | null>(null);
-
-    let webcam = new tmImage.Webcam(200, 200, true);
-
+export default function WebCam({ URL, setPrediction, setProbability }: Props) {
+    let webcam: tmImage.Webcam;
     let model: tmImage.CustomMobileNet;
     let maxPredictions: number;
 
     const webcamContainer = useRef<HTMLDivElement>(null);
 
-    init();
-
     // Load the image model and setup the webcam
     async function init() {
         const modelURL = URL + "model.json";
         const metadataURL = URL + "metadata.json";
+
+        // get the minimum width and height of the webcam bazed on the screen size
+        const size = webcamContainer.current!.offsetWidth;
+        webcam = new tmImage.Webcam(size, size, true);
 
         // load the model and metadata
         // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
@@ -34,15 +36,13 @@ export default function Meow() {
         await webcam.play();
         window.requestAnimationFrame(loop);
 
-
-        if (webcamContainer.current !== null && webcamContainer.current!.children.length == 0 && webcam.canvas !== undefined) {
-            webcamContainer.current!.append(webcam.canvas);
-        }
+        // append elements to the DOM
+        webcamContainer.current!.append(webcam.canvas);
     }
 
     async function loop() {
         webcam.update(); // update the webcam frame
-        await predict();
+        predict();
         window.requestAnimationFrame(loop);
     }
 
@@ -63,35 +63,20 @@ export default function Meow() {
 
     useEffect(() => {
         init();
-        if (webcamContainer.current !== null && webcamContainer.current!.children.length == 0 && webcam.canvas !== null && webcam.canvas !== undefined) {
-            webcamContainer.current!.append(webcam.canvas);
-        }
-    }, [webcamContainer, webcam.canvas !== null]);
-
+    }, []);
 
     return (
         <>
             <div ref={webcamContainer}
                 style={
                     {
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
+                        display: "inline-block",
                         width: "100%",
                         height: "100%",
+                        borderRadius: "100%",
                     }
                 }
             />
-            <div style={
-                {
-                    position: "absolute",
-                    top: "70%",
-                    left: "50%",
-                }
-            }>
-                <div>{prediction}</div>
-                <div>{probability}</div>
-            </div>
         </>
     )
 }

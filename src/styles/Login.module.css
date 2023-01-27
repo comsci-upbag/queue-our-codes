@@ -33,6 +33,26 @@
   margin-left: 20px;
 }
 
+.ProgressBar {
+  margin: 20px 0 20px 0;
+  border: 1px solid #533BA3;
+  border-radius: 20px;
+  background: #050618;
+  box-sizing: content-box;
+  align-items: flex-start;
+}
+
+.Progress {
+  display: inline-block;
+  position: relative;
+  width: 50%;
+  left: 2px;
+  top: 2px;
+  height: 20px;
+  border-radius: 20px;
+  background: linear-gradient(to left, #533BA3, #2B2D67);
+}
+
 .Footer {
   position: fixed;
   opacity: 50%;
