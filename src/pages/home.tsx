@@ -5,6 +5,7 @@ import { signOut, getSession } from "next-auth/react"
 import { NextPageContext } from "next";
 
 import styles from "@/styles/Home.module.css"
+import Puzzle from "./api/puzzle"
 
 
 export async function getServerSideProps(context: NextPageContext) {
@@ -22,7 +23,8 @@ export async function getServerSideProps(context: NextPageContext) {
   return {
     props: {
       userName: session.user.name,
-      userImage: session.user.image
+      userImage: session.user.image,
+      currentPuzzle: 1
     },
   }
 }
@@ -30,11 +32,10 @@ export async function getServerSideProps(context: NextPageContext) {
 interface props {
   userName: string,
   userImage: string,
+  currentPuzzle: number,
 }
 
-export default function Home({ userName, userImage } : props ) {
-
-  var clueNum = 6;
+export default function Home({ userName, userImage, currentPuzzle } : props ) {
 
   return (
     <>
@@ -47,21 +48,17 @@ export default function Home({ userName, userImage } : props ) {
           </div>
           <Image id={styles.logout} src="/logout.svg" width={25} height={25} alt="Picture of the user" onClick={() => signOut()} />
         </div>
+
         <div className={styles.HomeContainer} id={styles.ClueContainer}>
-          <span id={styles.cluenum}> Clue #{clueNum} </span>
-          <span id={styles.cluecont}>
-            To use me, break me <br /><br />
-            I am in front, but you can’t see me <br /><br />
-            By the Laws of Physics, what goes up but never goes down? <br /><br />
-            I get bigger the more is taken away
-          </span>
+          <Puzzle puzzleId={currentPuzzle} />
         </div>
+
         <div className={styles.HomeContainer} id={styles.InputContainer}>
           <input id={styles.InputField} type="text" placeholder="Answer" />
           <Image id={styles.SubmitButtonImage} src="enter.svg" alt="Picture of the user" width={25} height={25} onClick={() => console.log("button click")} />
         </div>
         <div className={styles.ProgressBar}>
-          <div className={styles.Progress} style={{ width: "calc(" + (clueNum / 10) * 100 + "% - 4px)" }}></div >
+          <div className={styles.Progress} style={{ width: `calc(" + (${currentPuzzle-1}/ 10) * 100 + "% - 4px)` }}></div >
         </div>
         <div className={styles.Footer}>COMSCI@UP.BAG 2023</div>
       </div>

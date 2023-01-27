@@ -25,5 +25,5 @@ export async function getServerSideProps(context: NextPageContext) {
 
 
 export default function Index() {
-  return <h1> hi there </h1>
+  return <></>
 }
