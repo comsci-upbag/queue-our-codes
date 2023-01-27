@@ -6,11 +6,14 @@
     align-items: left;
     justify-content: center;
     width: 50vw;
+    min-width: 350px;
+    max-width: 600px;
 }
 
 #title {
     display: inline-block;
     margin: 5px;
+    margin-top: 10vh;
     font-size: 24px;
 }
 
@@ -101,12 +104,32 @@
     rotate: 90deg;
 }
 
+.PredictionBar {
+    margin: 20px 0 20px 0;
+    border: 1px solid #533BA3;
+    border-radius: 20px;
+    background: #050618;
+    box-sizing: content-box;
+}
+
+.Prediction {
+    display: inline-block;
+    position: relative;
+    width: 50%;
+    left: 2px;
+    top: 2px;
+    height: 20px;
+    border-radius: 20px;
+    background: linear-gradient(to left, #533BA3, #2B2D67);
+}
+
 .ProgressBar {
     margin: 20px 0 20px 0;
     border: 1px solid #533BA3;
     border-radius: 20px;
     background: #050618;
     box-sizing: content-box;
+    margin-bottom: 10vh;
 }
 
 .Progress {
@@ -121,9 +144,9 @@
 }
 
 .Footer {
-    position: fixed;
-    opacity: 50%;
-    bottom: 30px;
+    position: sticky;
+    opacity: 25%;
+    bottom: 5vh;
     left: 50%;
     transform: translate(-50%, 0%);
     margin: auto;
