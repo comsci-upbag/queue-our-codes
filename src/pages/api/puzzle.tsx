@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import WebCam from "../../components/webcam-tf"
+import WebCam from "../../components/webcam-tflite"
 
 import styles from "../../styles/Home.module.css";
 
@@ -28,7 +28,7 @@ function Puzzle({ puzzleId }: { puzzleId: number }) {
         <span id={styles.cluecont}>
           Keep your eyes open, and you will see... <br /><br />
           <WebCam URL="https://teachablemachine.withgoogle.com/models/w2FwPYeyg/" setPrediction={setPrediction} setProbability={setProbability} />
-          {(probability) ? <p>You are showing a {prediction} with a {(probability.toFixed(2))}% confidence on our side!</p> : <></>}
+          {(probability) ? <p>You are showing a {prediction} with a {((probability * 100).toFixed(2))}% confidence on our side!</p> : <></>}
           {prediction === "white-cat-yellow-head" && probability! > 0.5 ? "You got it! The answer is all yours!" : ""}
         </span>
 

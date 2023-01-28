@@ -20,10 +20,12 @@ export default function WebCam({ URL, setPrediction, setProbability }: Props) {
 	let labels: string[];
 
 	async function init() {
-		model = await tflite.loadTFLiteModel('/data/model.tflite');
+		model = await tflite.loadTFLiteModel('/data/new-model.tflite');
 		// const metadata = await (await fetch('/data/metadata.json')).json();
 		labels = [
+			"random-image",
 			"white-cat-yellow-head",
+			"cat12",
 			"black-cat",
 			"white-cat-black-head",
 			"white-cat-black-ears",
@@ -31,9 +33,10 @@ export default function WebCam({ URL, setPrediction, setProbability }: Props) {
 			"cat6",
 			"cat7",
 			"cat8",
-			"cat12",
 			"not-up-cat",
-			"random-images"]
+			"random-image",
+			"up-background"
+		]
 
 		window.requestAnimationFrame(predict);
 	}
