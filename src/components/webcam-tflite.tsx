@@ -14,53 +14,67 @@ export default function WebCam({ URL, setPrediction, setProbability }: Props) {
 	const video = useRef<HTMLVideoElement>(null);
 
 	let model: tflite.TFLiteModel;
-	let labels: string[] = ["cat1", "white-cat-yellow-head", "cat3", "cat4", "cat5", "cat6", "cat7", "cat8", "cat12", "not-up-cat", "random-images"];
+	let labels: string[];
 
 	async function init() {
 		await tflite.setWasmPath('https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-tflite@0.0.1-alpha.9/dist/');
 		model = await tflite.loadTFLiteModel('/data/model.tflite');
+		// const metadata = await (await fetch('/data/metadata.json')).json();
+		labels = [
+			"white-cat-yellow-head",
+			"black-cat",
+			"white-cat-black-head",
+			"white-cat-black-ears",
+			"white-cat-black-tail",
+			"cat6",
+			"cat7",
+			"cat8",
+			"cat12",
+			"not-up-cat",
+			"random-images"]
 
-		setInterval(() => {
-			predict();
-		}, 500);
+		window.requestAnimationFrame(predict);
 	}
 
 	async function predict() {
 		if (video) {
-			// check if the video is ready
-			if (video.current?.readyState === video.current?.HAVE_ENOUGH_DATA) {
+			tf.tidy(() => {
+				// check if the video is ready
+				if (video.current?.readyState === video.current?.HAVE_ENOUGH_DATA) {
 
-				// Get the image data from the video element
-				const webcamImage = await tf.browser.fromPixels(video.current!);
+					// Get the image data from the video element
+					const webcamImage = tf.browser.fromPixels(video.current!);
 
-				// Crop the image so we're using the center square of the rectangular
-				// webcam.
-				const croppedImage = cropImage(webcamImage);
+					// Crop the image so we're using the center square of the rectangular
+					// webcam.
+					const croppedImage = cropImage(webcamImage);
 
-				// Expand the outer most dimension so we have a batch size of 1.
-				const batchedImage = croppedImage.expandDims(0);
+					// Expand the outer most dimension so we have a batch size of 1.
+					const batchedImage = croppedImage.expandDims(0);
 
-				// Make a prediction through mobilenet.
-				const prediction = await model.predict(batchedImage) as tf.Tensor;
+					// Make a prediction through mobilenet.
+					const prediction = model.predict(batchedImage) as tf.Tensor;
 
-				// Turn predictions into a 1D array and find the index with the maximum
-				// probability. The number corresponds to the class the model thinks is
-				// the most probable given the input.
-				const classId = (await prediction.as1D().argMax()).dataSync()[0];
+					// Turn predictions into a 1D array and find the index with the maximum
+					// probability. The number corresponds to the class the model thinks is
+					// the most probable given the input.
+					const classId = (prediction.as1D().argMax()).dataSync()[0];
 
-				// Turn the class index into a human readable label.
-				setPrediction(labels[classId]);
+					// Turn the class index into a human readable label.
+					setPrediction(labels[classId]);
 
-				// Turn the predictions into a 1D array and find the maximum probability.
-				setProbability((await prediction.as1D().max()).dataSync()[0]);
+					// Turn the predictions into a 1D array and find the maximum probability.
+					setProbability((prediction.as1D().max()).dataSync()[0]);
 
-				// Dispose the tensor to release the memory.
-				webcamImage.dispose();
-				croppedImage.dispose();
-				batchedImage.dispose();
-				prediction.dispose();
-			}
+					// Dispose the tensor to release the memory.
+					webcamImage.dispose();
+					croppedImage.dispose();
+					batchedImage.dispose();
+					prediction.dispose();
+				}
+			});
 		}
+		window.requestAnimationFrame(predict);
 	}
 
 	function cropImage(img: tf.Tensor3D) {
