@@ -16,23 +16,26 @@ export default function WebCam({ URL, setPrediction, setProbability }: Props) {
 	let labels: string[];
 
 	async function init() {
-		// model = await tf.loadLayersModel('/upb-cats/model.json');
-		model = await tf.loadGraphModel(
-			'https://tfhub.dev/google/tfjs-model/imagenet/mobilenet_v3_large_075_224/classification/5/default/1',
-			{ fromTFHub: true });
-		labels = await (await fetch('https://storage.googleapis.com/download.tensorflow.org/data/ImageNetLabels.txt')).text().then(text => text.split('\n'));
-		// labels = [
-		// 	"white-cat-yellow-head",
-		// 	"black-cat",
-		// 	"white-cat-black-head",
-		// 	"white-cat-black-ears",
-		// 	"white-cat-black-tail",
-		// 	"cat6",
-		// 	"cat7",
-		// 	"cat8",
-		// 	"cat12",
-		// 	"not-up-cat",
-		// 	"random-images"]
+		model = await tf.loadGraphModel('/data/upb-cats/model.json');
+		// model = await tf.loadGraphModel(
+		// 	'https://tfhub.dev/google/tfjs-model/imagenet/mobilenet_v3_large_075_224/classification/5/default/1',
+		// 	{ fromTFHub: true });
+		// labels = await (await fetch('https://storage.googleapis.com/download.tensorflow.org/data/ImageNetLabels.txt')).text().then(text => text.split('\n'));
+		labels = [
+			"random-image",
+			"white-cat-yellow-head",
+			"cat12",
+			"black-cat",
+			"white-cat-black-head",
+			"white-cat-black-ears",
+			"white-cat-black-tail",
+			"cat6",
+			"cat7",
+			"cat8",
+			"not-up-cat",
+			"random-image",
+			"up-background"
+		]
 
 		window.requestAnimationFrame(predict);
 	}
@@ -77,7 +80,7 @@ export default function WebCam({ URL, setPrediction, setProbability }: Props) {
 	}
 
 	function cropImage(img: tf.Tensor3D) {
-		const size = 224;
+		const size = 384;
 		const centerHeight = img.shape[0] / 2;
 		const beginHeight = centerHeight - (size / 2);
 		const centerWidth = img.shape[1] / 2;
