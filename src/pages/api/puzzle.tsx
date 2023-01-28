@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import WebCam from "../../components/webcam-tflite"
+import WebCam from "../../components/webcam-tf"
 
 import styles from "../../styles/Home.module.css";
 
