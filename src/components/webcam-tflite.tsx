@@ -1,7 +1,10 @@
 import { useEffect, useRef } from "react";
 
+import "@tensorflow/tfjs-backend-cpu"
 import * as tf from "@tensorflow/tfjs";
 import * as tflite from "@tensorflow/tfjs-tflite";
+
+tflite.setWasmPath('https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-tflite@0.0.1-alpha.9/dist/')
 
 interface Props {
 	URL: string;
@@ -17,7 +20,6 @@ export default function WebCam({ URL, setPrediction, setProbability }: Props) {
 	let labels: string[];
 
 	async function init() {
-		await tflite.setWasmPath('https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-tflite@0.0.1-alpha.9/dist/');
 		model = await tflite.loadTFLiteModel('/data/model.tflite');
 		// const metadata = await (await fetch('/data/metadata.json')).json();
 		labels = [
