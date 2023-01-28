@@ -12,24 +12,27 @@ export default function WebCam({ URL, setPrediction, setProbability }: Props) {
 	const webcamContainer = useRef<HTMLDivElement>(null);
 	const video = useRef<HTMLVideoElement>(null);
 
-	let model: tf.LayersModel;
+	let model: tf.GraphModel;
 	let labels: string[];
 
 	async function init() {
-		model = await tf.loadLayersModel('/data/model.json');
-		// const metadata = await (await fetch('/data/metadata.json')).json();
-		labels = [
-			"white-cat-yellow-head",
-			"black-cat",
-			"white-cat-black-head",
-			"white-cat-black-ears",
-			"white-cat-black-tail",
-			"cat6",
-			"cat7",
-			"cat8",
-			"cat12",
-			"not-up-cat",
-			"random-images"]
+		// model = await tf.loadLayersModel('/upb-cats/model.json');
+		model = await tf.loadGraphModel(
+			'https://tfhub.dev/google/tfjs-model/imagenet/mobilenet_v3_large_075_224/classification/5/default/1',
+			{ fromTFHub: true });
+		labels = await (await fetch('https://storage.googleapis.com/download.tensorflow.org/data/ImageNetLabels.txt')).text().then(text => text.split('\n'));
+		// labels = [
+		// 	"white-cat-yellow-head",
+		// 	"black-cat",
+		// 	"white-cat-black-head",
+		// 	"white-cat-black-ears",
+		// 	"white-cat-black-tail",
+		// 	"cat6",
+		// 	"cat7",
+		// 	"cat8",
+		// 	"cat12",
+		// 	"not-up-cat",
+		// 	"random-images"]
 
 		window.requestAnimationFrame(predict);
 	}
@@ -53,16 +56,14 @@ export default function WebCam({ URL, setPrediction, setProbability }: Props) {
 					// Make a prediction through mobilenet.
 					const prediction = model.predict(batchedImage) as tf.Tensor;
 
-					// Turn predictions into a 1D array and find the index with the maximum
-					// probability. The number corresponds to the class the model thinks is
-					// the most probable given the input.
-					const classId = (prediction.as1D().argMax()).dataSync()[0];
+					// Turn predictions into a 1D array to find the most probable class
+					prediction.as1D().argMax().data().then((data) => {
+						setPrediction(labels[data[0]]);
+					});
 
-					// Turn the class index into a human readable label.
-					setPrediction(labels[classId]);
-
-					// Turn the predictions into a 1D array and find the maximum probability.
-					setProbability((prediction.as1D().max()).dataSync()[0]);
+					prediction.as1D().max().data().then((data) => {
+						setProbability(data[0]);
+					});
 
 					// Dispose the tensor to release the memory.
 					webcamImage.dispose();
@@ -82,8 +83,8 @@ export default function WebCam({ URL, setPrediction, setProbability }: Props) {
 		const centerWidth = img.shape[1] / 2;
 		const beginWidth = centerWidth - (size / 2);
 
-		// normalise the image between -1 and 1
-		const normalized = img.toFloat().div(tf.scalar(127)).sub(tf.scalar(1));
+		// normalise the image between 0 and 1
+		const normalized = img.toFloat().div(tf.scalar(255));
 
 		// Crop the image so we're using the center square of the rectangular
 		return normalized.slice([beginHeight, beginWidth, 0], [size, size, 3]);
