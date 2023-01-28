@@ -1,14 +1,32 @@
 @import url('https://fonts.googleapis.com/css?family=Sniglet&display=swap');
 
-:root {
-  --color1: #EEF1E6;
-  --color2: #BEB0D0;
-  --color3: #B796CC;
-  --color4: #B679CB;
-  --color5: #FEE3CA;
-  --color6: #F9B05F;
-
+@media (prefers-color-scheme: light) {
+  :root {
+    --color1: #EEF1E6;
+    --color2: #BEB0D0;
+    --color3: #B796CC;
+    --color4: #B679CB;
+    --color5: #FEE3CA;
+    --color6: #F9B05F;
+    --color7: #B679CB;
+    --color8: #EEF1E6;
+  }
 }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color1: #050618;
+    --color2: #533BA3;
+    --color3: #533BA3;
+    --color4: #FFFFFF;
+    --color5: #533BA3;
+    --color6: #050618;
+    --color7: #533BA3;
+    --color8: #050618;
+  }
+}
+
+
 
 * {
   box-sizing: border-box;
@@ -32,4 +50,3 @@ body {
   color: var(--color4);
   background: var(--color1);
 }
-
