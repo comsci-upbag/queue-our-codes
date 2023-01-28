@@ -97,10 +97,9 @@ export default function WebCam({ URL, setPrediction, setProbability }: Props) {
 		if (hasGetUserMedia()) {
 			// getUsermedia parameters.
 			const constraints = {
-				video: true,
+				video: { facingMode: 'environment' },
 				width: webcamContainer.current?.clientWidth,
 				height: webcamContainer.current?.clientWidth,
-				facingMode: 'environment'
 			};
 
 			// Activate the webcam stream.
