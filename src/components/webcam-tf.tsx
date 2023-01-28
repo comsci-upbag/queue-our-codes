@@ -88,7 +88,7 @@ export default function WebCam({ URL, setPrediction, setProbability }: Props) {
 				video: true,
 				width: webcamContainer.current?.clientWidth,
 				height: webcamContainer.current?.clientWidth,
-				facingMode: { exact: "environment" }
+				facingMode: 'environment'
 			};
 
 			// Activate the webcam stream.
