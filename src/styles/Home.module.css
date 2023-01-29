@@ -58,11 +58,45 @@
     margin-left: 10px;
 }
 
+#PuzzlesContainer {
+    margin: 20px 0 20px 0;
+    text-align: center;
+    padding: 20px;
+    border-radius: 20px;
+    background: var(--color1);
+    box-shadow: 0px 10px 10px var(--color3);
+
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+    align-items: center;
+
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+
+    min-width: 50vw;
+    min-width: 300px;
+    max-width: 600px;
+}
+
+#PuzzlesContainer::-webkit-scrollbar {
+    display: none;
+}
+
+.PuzzleCard {
+    min-width: 100%;
+}
+
 #ClueContainer {
     display: flex;
     flex-direction: column;
     align-items: left;
     justify-content: center;
+    scroll-snap-align: center;
 }
 
 #cluenum {
