@@ -3,18 +3,18 @@ import { useEffect, useRef } from "react";
 import * as tf from "@tensorflow/tfjs";
 
 interface props {
-	setPrediction: (prediction: string) => void;
-	setProbability: (probability: number) => void;
+  setPrediction: (prediction: string) => void;
+  setProbability: (probability: number) => void;
 }
 
 export default function WebCam({ setPrediction, setProbability }: props) {
-	const webcamContainer = useRef<HTMLDivElement>(null);
-	const video = useRef<HTMLVideoElement>(null);
-	const loadingIndicator = useRef<HTMLDivElement>(null);
+  const webcamContainer = useRef<HTMLDivElement>(null);
+  const video = useRef<HTMLVideoElement>(null);
+  const loadingIndicator = useRef<HTMLDivElement>(null);
 
-	let model: tf.GraphModel;
+  let model: tf.GraphModel;
 
-	const labels: string[] = [
+  const labels: string[] = [
     "random-image",
     "white-cat-yellow-head",
     "cat12",
@@ -30,13 +30,22 @@ export default function WebCam({ setPrediction, setProbability }: props) {
     "up-background"
   ];
 
-	async function init() {
-		model = await tf.loadGraphModel('/data/upb-cat-detector/model.json');
+  async function init() {
+    try {
+      console.log("loading model from indexeddb");
+      model = await tf.loadGraphModel('indexeddb://my-model')
+      console.log("model loaded from indexeddb");
+    } catch (e) {
+      console.log("loading model from file");
+      model = await tf.loadGraphModel('/data/upb-cat-detector/model.json');
+      model.save('indexeddb://my-model');
+      console.log("model loaded and saved to indexeddb");
+    }
 
-		window.requestAnimationFrame(predict);
-	}
+    window.requestAnimationFrame(predict);
+  }
 
-	async function predict() {
+  async function predict() {
     if (!video) return;
 
     tf.tidy(() => {
@@ -76,33 +85,33 @@ export default function WebCam({ setPrediction, setProbability }: props) {
       prediction.dispose();
     });
 
-		window.requestAnimationFrame(predict);
-	}
+    window.requestAnimationFrame(predict);
+  }
 
-	function cropImage(img: tf.Tensor3D) {
-		const size = 384;
-		const centerHeight = img.shape[0] / 2;
-		const beginHeight = centerHeight - (size / 2);
-		const centerWidth = img.shape[1] / 2;
-		const beginWidth = centerWidth - (size / 2);
+  function cropImage(img: tf.Tensor3D) {
+    const size = 384;
+    const centerHeight = img.shape[0] / 2;
+    const beginHeight = centerHeight - (size / 2);
+    const centerWidth = img.shape[1] / 2;
+    const beginWidth = centerWidth - (size / 2);
 
-		// normalise the image between 0 and 1
-		const normalized = img.toFloat().div(tf.scalar(255));
+    // normalise the image between 0 and 1
+    const normalized = img.toFloat().div(tf.scalar(255));
 
-		// Crop the image so we're using the center square of the rectangular
-		return normalized.slice([beginHeight, beginWidth, 0], [size, size, 3]);
-	}
+    // Crop the image so we're using the center square of the rectangular
+    return normalized.slice([beginHeight, beginWidth, 0], [size, size, 3]);
+  }
 
-	function hasGetUserMedia() {
-		return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
-	}
+  function hasGetUserMedia() {
+    return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+  }
 
-	function enableCam() {
-    if (!hasGetUserMedia())  {
-			console.warn('getUserMedia() is not supported by your browser');
+  function enableCam() {
+    if (!hasGetUserMedia()) {
+      console.warn('getUserMedia() is not supported by your browser');
       return;
     }
-      
+
     // getUsermedia parameters.
     const constraints = {
       video: { facingMode: 'environment' },
@@ -117,31 +126,31 @@ export default function WebCam({ setPrediction, setProbability }: props) {
         video.current!.play();
       });
     });
-	}
+  }
 
-	useEffect(() => {
-		enableCam();
-		init();
-	}, []);
+  useEffect(() => {
+    enableCam();
+    init();
+  }, []);
 
-	return (
-		<>
-			<div ref={webcamContainer}
-				style={
-					{
-						display: "inline-block",
-						width: "100%",
-						height: "100%",
-					}
-				}
-			>
-				<div ref={loadingIndicator} style={{
-					display: "flex",
-					justifyContent: "center",
-					alignItems: "center",
-				}}>
-					<div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
-					<style jsx>{`
+  return (
+    <>
+      <div ref={webcamContainer}
+        style={
+          {
+            display: "inline-block",
+            width: "100%",
+            height: "100%",
+          }
+        }
+      >
+        <div ref={loadingIndicator} style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}>
+          <div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+          <style jsx>{`
 						.lds-ellipsis {
 							display: inline-block;
 							position: relative;
@@ -199,9 +208,9 @@ export default function WebCam({ setPrediction, setProbability }: props) {
 						}
 
 						`}</style>
-				</div>
-				<video ref={video} autoPlay playsInline muted width="100%" height="100%" style={{ display: "none" }} />
-			</div>
-		</>
-	)
+        </div>
+        <video ref={video} autoPlay playsInline muted width="100%" height="100%" style={{ display: "none" }} />
+      </div>
+    </>
+  )
 }
