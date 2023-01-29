@@ -127,8 +127,8 @@ export default function Home({ userName, userImage, currentPuzzle }: props) {
                    return (
                     <div className={styles.PuzzleCard}>
                       <div className={styles.HomeContainer} id={styles.ClueContainer}>
-                        <span id={styles.cluenum}> Clue #{i} </span>
-                        <Puzzle puzzleId={i} />
+                        <span id={styles.cluenum}> Clue #{i+1} </span>
+                        <Puzzle puzzleId={i+1} />
                         {
                           i === currentPuzzle 
                             ? 
@@ -138,7 +138,7 @@ export default function Home({ userName, userImage, currentPuzzle }: props) {
                             </div>
                             :  
                             <div className={styles.HomeContainer} id={styles.InputContainer}>
-                              <input id={styles.InputField} type="text" placeholder={`Answer for #${i} is ${puzzleAnswers[i-1]}`} disabled />
+                              <input id={styles.InputField} type="text" placeholder={`Answer for #${i+1} is ${puzzleAnswers[i]}`} disabled />
                             </div>
                         }
                       </div>
