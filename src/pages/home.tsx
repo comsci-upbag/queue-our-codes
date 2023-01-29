@@ -9,7 +9,7 @@ import Puzzle from "./api/puzzle"
 
 
 import { PrismaClient } from "@prisma/client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export async function getServerSideProps(context: NextPageContext) {
   const session = await getSession(context);
@@ -67,6 +67,7 @@ export default function Home({ userName, userImage, currentPuzzle }: props) {
 
   const inputField = useRef<HTMLInputElement>(null);
   const puzzlesContainer = useRef<HTMLDivElement>(null);
+  const [puzzleAnswers, setPuzzleAnswers] = useState<string[]>([]);
 
   const handleSubmitAnswer = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
@@ -91,11 +92,19 @@ export default function Home({ userName, userImage, currentPuzzle }: props) {
       })
   }
 
+  const fetchAnswersFromAnsweredPuzzles = () => {
+    fetch("/api/getPreviousAnswers", {
+      method: "POST",
+    }).then(data => data.json())
+      .then(data => {setPuzzleAnswers(data.answers)})
+  }
+
   useEffect(() => {
     // scroll to last clue after 3 second
     setTimeout(() => {
       puzzlesContainer.current!.scrollTo(puzzlesContainer.current!.scrollWidth, 0);
     }, 3000);
+    fetchAnswersFromAnsweredPuzzles();
   }, [])
 
 
@@ -112,42 +121,32 @@ export default function Home({ userName, userImage, currentPuzzle }: props) {
         </div>
 
         <div id={styles.PuzzlesContainer} ref={puzzlesContainer}>
-          {(
-            () => {
-              const arr = [];
-              for (let i = 1; i < currentPuzzle + 1; i++) {
-                arr.push(
-                  <div className={styles.PuzzleCard}>
-                    <div className={styles.HomeContainer} id={styles.ClueContainer}>
-                      <span id={styles.cluenum}> Clue #{i} </span>
-                      <Puzzle puzzleId={i} />
-                    </div>
-
-                    {(
-                      () => {
-                        if (i === currentPuzzle) {
-                          return (
+          {
+            Array.from({length: currentPuzzle}, (_, i) => i)
+                 .map((i) => {
+                   return (
+                    <div className={styles.PuzzleCard}>
+                      <div className={styles.HomeContainer} id={styles.ClueContainer}>
+                        <span id={styles.cluenum}> Clue #{i} </span>
+                        <Puzzle puzzleId={i} />
+                        {
+                          i === currentPuzzle 
+                            ? 
                             <div className={styles.HomeContainer} id={styles.InputContainer}>
                               <input ref={inputField} id={styles.InputField} type="text" placeholder="Answer" />
                               <Image id={styles.SubmitButtonImage} src="submit.svg" alt="Picture of the user" width={25} height={25} onClick={handleSubmitAnswer} />
                             </div>
-                          )
-                        } else {
-                          const answer = "Answer for Puzzle #" + i; // TODO: get answer from database
-                          return (
+                            :  
                             <div className={styles.HomeContainer} id={styles.InputContainer}>
-                              <input id={styles.InputField} type="text" placeholder={answer} disabled />
+                              <input id={styles.InputField} type="text" placeholder={`Answer for #${i} is ${puzzleAnswers[i-1]}`} disabled />
                             </div>
-                          )
                         }
-                      }
-                    )()}
-                  </div>
-                )
-              }
-              return arr;
-            }
-          )()}
+                      </div>
+                    </div>
+                   )
+                } 
+            )
+          }
         </div>
 
         <div className={styles.ProgressBar}>
