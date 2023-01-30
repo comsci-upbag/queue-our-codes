@@ -38,6 +38,10 @@
   margin: 0;
 }
 
+*:focus {
+  outline: none;
+}
+
 html,
 body {
   font-family: "Sniglet";
