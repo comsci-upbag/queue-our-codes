@@ -58,6 +58,30 @@
     margin-left: 10px;
 }
 
+#NavigationContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+#NavigationContainer button {
+    margin: 20px 0 20px 0;
+    text-align: center;
+    padding: 20px;
+    border-radius: 20px;
+    background: var(--color1);
+    box-shadow: 0px 10px 10px var(--color3);
+    width: 100%;
+    color: var(--color4);
+    font-size: 18px;
+    border: none;
+    outline-width: 0;
+    background: transparent;
+    cursor: pointer;
+}
+
 #PuzzlesContainer {
     margin: 20px 0 20px 0;
     text-align: center;

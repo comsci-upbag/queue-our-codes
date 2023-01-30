@@ -117,10 +117,10 @@ export default function Home({ userName, userImage, currentPuzzle, previousAnswe
           </div>
           <Image id={styles.logout} src="/logout.svg" width={25} height={25} alt="Picture of the user" onClick={() => signOut()} />
         </div>
-
-        <button id={styles.prev} onClick={() => setVisiblePuzzle(visiblePuzzle - 1)} disabled={visiblePuzzle === 1}> &lt; </button>
-        <button id={styles.next} onClick={() => setVisiblePuzzle(visiblePuzzle + 1)} disabled={visiblePuzzle === currentPuzzle}> &gt; </button>
-
+        <div id={styles.NavigationContainer}>
+          <button onClick={() => setVisiblePuzzle(visiblePuzzle - 1)} disabled={visiblePuzzle === 1}> &lt; </button>
+          <button onClick={() => setVisiblePuzzle(visiblePuzzle + 1)} disabled={visiblePuzzle === currentPuzzle}> &gt; </button>
+        </div>
         <div ref={puzzlesContainer}>
           <div className={styles.PuzzleCard} key={visiblePuzzle}>
             <div className={styles.HomeContainer} id={styles.ClueContainer}>

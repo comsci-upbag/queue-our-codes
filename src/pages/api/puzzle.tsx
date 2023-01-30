@@ -38,13 +38,9 @@ function Puzzle({ puzzleId, currentPuzzle }: Props) {
               <>
                 <WebCam setPrediction={setPrediction} setProbability={setProbability} /></>
           }
-          {(probability) ? <p>You are showing a {prediction} with a {((probability * 100).toFixed(2))}% confidence on our side!</p> : <></>}
-          {prediction === "white-cat-yellow-head" && probability! > 0.5 ? "You got it! The answer is all yours!" : ""}
+          {probability && <p>You are showing a {prediction} with a {((probability * 100).toFixed(2))}% confidence on our side!</p>}
+          {prediction === "white-cat-yellow-head" && probability! > 0.5 && <p>You got it! The answer is all yours!</p>}
         </span>
-
-        <div className={styles.PredictionBar}>
-          <div className={styles.Prediction} style={{ width: `calc((${prediction === "white-cat-yellow-head" ? probability : 0}) * 100% - 4px)` }}></div >
-        </div>
       </>
     )
   }

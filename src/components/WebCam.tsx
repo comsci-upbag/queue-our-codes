@@ -4,9 +4,11 @@ import * as tf from "@tensorflow/tfjs";
 
 import LoadingIndicator from "./LoadingIndicator";
 
+import styles from "@/styles/WebCam.module.css";
+
 interface props {
-  setPrediction: (prediction: string) => void;
-  setProbability: (probability: number) => void;
+  setPrediction: (prediction: string | null) => void;
+  setProbability: (probability: number | null) => void;
 }
 
 let model: tf.GraphModel;
@@ -17,7 +19,8 @@ export default function WebCam({ setPrediction, setProbability }: props) {
 
   const [shouldTakePicture, setShouldTakePicture] = useState<boolean>(false);
   const [isCameraReady, setIsCameraReady] = useState<boolean>(false);
-  const [isModelReady, setIsModelReady] = useState<boolean>(false);
+  const [isPredicting, setIsPredicting] = useState<boolean>(false);
+  const [currentCamera, setCurrentCamera] = useState<"user" | "environment">("environment");
 
   const labels: string[] = [
     "random-image",
@@ -37,6 +40,8 @@ export default function WebCam({ setPrediction, setProbability }: props) {
 
   async function predict() {
     if (!video) return;
+
+    setIsPredicting(true);
     if (!model) await initializeModel();
 
     tf.tidy(() => {
@@ -63,6 +68,7 @@ export default function WebCam({ setPrediction, setProbability }: props) {
 
       prediction.as1D().max().data().then((data) => {
         setProbability(data[0]);
+        setIsPredicting(false);
       });
 
       // Dispose the tensor to release the memory.
@@ -91,7 +97,7 @@ export default function WebCam({ setPrediction, setProbability }: props) {
     return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
   }
 
-  function init() {
+  function enableCamera() {
     if (!hasGetUserMedia()) {
       console.warn('getUserMedia() is not supported by your browser');
       return;
@@ -99,7 +105,7 @@ export default function WebCam({ setPrediction, setProbability }: props) {
 
     // getUsermedia parameters.
     const constraints = {
-      video: { facingMode: 'environment' },
+      video: { facingMode: currentCamera },
       width: webcamContainer.current?.clientWidth,
       height: webcamContainer.current?.clientWidth,
     };
@@ -120,42 +126,56 @@ export default function WebCam({ setPrediction, setProbability }: props) {
 
   const initializeModel = async () => {
     // Load the model.
-    setIsModelReady(false);
+    setIsPredicting(false);
     try {
       console.log("loading model from indexeddb");
       model = await tf.loadGraphModel('indexeddb://my-model')
-      console.log("loading model from indexeddb");
-      setIsModelReady(true);
+      console.log("model loaded from indexeddb");
     } catch (e) {
       console.log("loading model from local storage");
       model = await tf.loadGraphModel('/data/upb-cat-detector/model.json');
       model.save('indexeddb://my-model');
       console.log("model loaded from local storage");
-      setIsModelReady(true);
     }
   };
 
+  function stopCurrentCamera() {
+    if (video.current?.srcObject) {
+      const stream = video.current.srcObject as MediaStream;
+      const tracks = stream.getTracks();
+
+      tracks.forEach(function (track) {
+        track.stop();
+      });
+
+      video.current.srcObject = null;
+      video.current!.style.display = "none";
+
+      setShouldTakePicture(false);
+      setProbability(null);
+    }
+  }
+
+  function switchCamera() {
+    stopCurrentCamera();
+    setCurrentCamera(currentCamera === "user" ? "environment" : "user");
+    enableCamera();
+  }
+
   return (
     <>
-      {(!shouldTakePicture && !isCameraReady) || (isCameraReady && isModelReady) ? <></> : <LoadingIndicator />}
-      <div ref={webcamContainer}
-        style={
-          {
-            display: "inline-block",
-            width: "100%",
-            height: "100%",
-          }
-        }
-      >
-        <video ref={video} autoPlay playsInline muted width="100%" height="100%"
-          style={{ display: "none" }} />
+      <div ref={webcamContainer} className={styles.WebCamContainer}>
+        <video ref={video} autoPlay playsInline muted width="100%" height="100%" style={{ display: "none" }} />
         {
           shouldTakePicture ?
-            <>
+            <div className={styles.CameraControls}>
+              {isPredicting && isCameraReady && <LoadingIndicator />}
+              <button onClick={stopCurrentCamera}>Disable Camera</button>
+              <button onClick={switchCamera}>Swap Camera</button>
               <button onClick={predict}>Take a Picture!</button>
-            </>
+            </div>
             :
-            <button onClick={init}>Enable Webcam</button>
+            <button onClick={enableCamera}>Enable Webcam</button>
         }
       </div>
     </>
