@@ -11,6 +11,8 @@ import Puzzle from "./api/puzzle"
 import { PrismaClient } from "@prisma/client";
 import { useEffect, useRef, useState } from "react";
 
+import { puzzleAnswers } from "../globals/puzzleAnswers"
+
 export async function getServerSideProps(context: NextPageContext) {
   const session = await getSession(context);
 
@@ -43,7 +45,8 @@ export async function getServerSideProps(context: NextPageContext) {
       props: {
         userName: session.user.name,
         userImage: session.user.image,
-        currentPuzzle: 1
+        currentPuzzle: 1,
+        previousAnswers: []
       },
     }
   }
@@ -53,6 +56,7 @@ export async function getServerSideProps(context: NextPageContext) {
       userName: session.user.name,
       userImage: session.user.image,
       currentPuzzle: participant.current_puzzle,
+      previousAnswers: puzzleAnswers.slice(0, participant.current_puzzle - 1)
     },
   }
 }
@@ -61,13 +65,13 @@ interface props {
   userName: string,
   userImage: string,
   currentPuzzle: number,
+  previousAnswers: string[],
 }
 
-export default function Home({ userName, userImage, currentPuzzle }: props) {
+export default function Home({ userName, userImage, currentPuzzle, previousAnswers }: props) {
 
   const inputField = useRef<HTMLInputElement>(null);
   const puzzlesContainer = useRef<HTMLDivElement>(null);
-  const [puzzleAnswers, setPuzzleAnswers] = useState<string[]>([]);
 
   const handleSubmitAnswer = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
@@ -92,19 +96,12 @@ export default function Home({ userName, userImage, currentPuzzle }: props) {
       })
   }
 
-  const fetchAnswersFromAnsweredPuzzles = () => {
-    fetch("/api/getPreviousAnswers", {
-      method: "POST",
-    }).then(data => data.json())
-      .then(data => {setPuzzleAnswers(data.answers)})
-  }
 
   useEffect(() => {
     // scroll to last clue after 3 second
     setTimeout(() => {
       puzzlesContainer.current!.scrollTo(puzzlesContainer.current!.scrollWidth, 0);
     }, 3000);
-    fetchAnswersFromAnsweredPuzzles();
   }, [])
 
 
@@ -138,7 +135,7 @@ export default function Home({ userName, userImage, currentPuzzle }: props) {
                             </div>
                             :  
                             <div className={styles.HomeContainer} id={styles.InputContainer}>
-                              <input id={styles.InputField} type="text" placeholder={`Answer for #${i} is ${puzzleAnswers[i-1]}`} disabled />
+                              <input id={styles.InputField} type="text" placeholder={`Answer for #${i} is ${previousAnswers[i-1]}`} disabled />
                             </div>
                         }
                       </div>
