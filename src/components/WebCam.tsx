@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import * as tf from "@tensorflow/tfjs";
 
@@ -7,12 +7,14 @@ interface props {
   setProbability: (probability: number) => void;
 }
 
+let model: tf.GraphModel;
+
 export default function WebCam({ setPrediction, setProbability }: props) {
   const webcamContainer = useRef<HTMLDivElement>(null);
   const video = useRef<HTMLVideoElement>(null);
-  const loadingIndicator = useRef<HTMLDivElement>(null);
 
-  let model: tf.GraphModel;
+  const [shouldTakePicture, setShouldTakePicture] = useState<boolean>(false);
+  const [isCameraReady, setIsCameraReady] = useState<boolean>(false);
 
   const labels: string[] = [
     "random-image",
@@ -30,23 +32,9 @@ export default function WebCam({ setPrediction, setProbability }: props) {
     "up-background"
   ];
 
-  async function init() {
-    try {
-      console.log("loading model from indexeddb");
-      model = await tf.loadGraphModel('indexeddb://my-model')
-      console.log("model loaded from indexeddb");
-    } catch (e) {
-      console.log("loading model from file");
-      model = await tf.loadGraphModel('/data/upb-cat-detector/model.json');
-      model.save('indexeddb://my-model');
-      console.log("model loaded and saved to indexeddb");
-    }
-
-    window.requestAnimationFrame(predict);
-  }
-
   async function predict() {
     if (!video) return;
+    if (!model) await initializeModel();
 
     tf.tidy(() => {
       // ensure video is ready
@@ -72,10 +60,6 @@ export default function WebCam({ setPrediction, setProbability }: props) {
 
       prediction.as1D().max().data().then((data) => {
         setProbability(data[0]);
-        if (loadingIndicator.current) {
-          loadingIndicator.current.remove();
-          video.current!.style.display = "block";
-        }
       });
 
       // Dispose the tensor to release the memory.
@@ -84,8 +68,6 @@ export default function WebCam({ setPrediction, setProbability }: props) {
       batchedImage.dispose();
       prediction.dispose();
     });
-
-    window.requestAnimationFrame(predict);
   }
 
   function cropImage(img: tf.Tensor3D) {
@@ -106,7 +88,7 @@ export default function WebCam({ setPrediction, setProbability }: props) {
     return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
   }
 
-  function enableCam() {
+  function init() {
     if (!hasGetUserMedia()) {
       console.warn('getUserMedia() is not supported by your browser');
       return;
@@ -124,14 +106,28 @@ export default function WebCam({ setPrediction, setProbability }: props) {
       video.current!.srcObject = stream;
       video.current?.addEventListener('loadeddata', function () {
         video.current!.play();
+        setIsCameraReady(true);
+        setShouldTakePicture(true);
+        video.current!.style.display = "block";
       });
     });
+
+    initializeModel();
   }
 
-  useEffect(() => {
-    enableCam();
-    init();
-  }, []);
+  const initializeModel = async () => {
+    // Load the model.
+    try {
+      console.log("loading model from indexeddb");
+      model = await tf.loadGraphModel('indexeddb://my-model')
+      console.log("loading model from indexeddb");
+    } catch (e) {
+      console.log("loading model from local storage");
+      model = await tf.loadGraphModel('/data/upb-cat-detector/model.json');
+      model.save('indexeddb://my-model');
+      console.log("model loaded from local storage");
+    }
+  };
 
   return (
     <>
@@ -144,73 +140,88 @@ export default function WebCam({ setPrediction, setProbability }: props) {
           }
         }
       >
-        <div ref={loadingIndicator} style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}>
-          <div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
-          <style jsx>{`
-						.lds-ellipsis {
-							display: inline-block;
-							position: relative;
-							width: 80px;
-							height: 80px;
-						}
-						.lds-ellipsis div {
-							position: absolute;
-							top: 33px;
-							width: 13px;
-							height: 13px;
-							border-radius: 50%;
-							background: var(--color3);
-							animation-timing-function: cubic-bezier(0, 1, 1, 0);
-						}
-						.lds-ellipsis div:nth-child(1) {
-							left: 8px;
-							animation: lds-ellipsis1 0.6s infinite;
-						}
-						.lds-ellipsis div:nth-child(2) {
-							left: 8px;
-							animation: lds-ellipsis2 0.6s infinite;
-						}
-						.lds-ellipsis div:nth-child(3) {
-							left: 32px;
-							animation: lds-ellipsis2 0.6s infinite;
-						}
-						.lds-ellipsis div:nth-child(4) {
-							left: 56px;
-							animation: lds-ellipsis3 0.6s infinite;
-						}
-						@keyframes lds-ellipsis1 {
-							0% {
-								transform: scale(0);
-							}
-							100% {
-								transform: scale(1);
-							}
-						}
-						@keyframes lds-ellipsis3 {
-							0% {
-								transform: scale(1);
-							}
-							100% {
-								transform: scale(0);
-							}
-						}
-						@keyframes lds-ellipsis2 {
-							0% {
-								transform: translate(0, 0);
-							}
-							100% {
-								transform: translate(24px, 0);
-							}
-						}
-
-						`}</style>
-        </div>
-        <video ref={video} autoPlay playsInline muted width="100%" height="100%" style={{ display: "none" }} />
+        <video ref={video} autoPlay playsInline muted width="100%" height="100%"
+          style={{ display: "none" }} />
+        {
+          shouldTakePicture ?
+            <>
+              {isCameraReady ? <></> : <LoadingIndicator />}
+              <button onClick={predict}>Take a Picture!</button>
+            </>
+            :
+            <button onClick={init}>Enable Webcam</button>
+        }
       </div>
     </>
+  )
+}
+
+function LoadingIndicator() {
+  return (
+    <div style={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+    }}>
+      <div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+      <style jsx>{`
+        .lds-ellipsis {
+          display: inline-block;
+          position: relative;
+          width: 80px;
+          height: 80px;
+        }
+        .lds-ellipsis div {
+          position: absolute;
+          top: 33px;
+          width: 13px;
+          height: 13px;
+          border-radius: 50%;
+          background: var(--color3);
+          animation-timing-function: cubic-bezier(0, 1, 1, 0);
+        }
+        .lds-ellipsis div:nth-child(1) {
+          left: 8px;
+          animation: lds-ellipsis1 0.6s infinite;
+        }
+        .lds-ellipsis div:nth-child(2) {
+          left: 8px;
+          animation: lds-ellipsis2 0.6s infinite;
+        }
+        .lds-ellipsis div:nth-child(3) {
+          left: 32px;
+          animation: lds-ellipsis2 0.6s infinite;
+        }
+        .lds-ellipsis div:nth-child(4) {
+          left: 56px;
+          animation: lds-ellipsis3 0.6s infinite;
+        }
+        @keyframes lds-ellipsis1 {
+          0% {
+            transform: scale(0);
+          }
+          100% {
+            transform: scale(1);
+          }
+        }
+        @keyframes lds-ellipsis3 {
+          0% {
+            transform: scale(1);
+          }
+          100% {
+            transform: scale(0);
+          }
+        }
+        @keyframes lds-ellipsis2 {
+          0% {
+            transform: translate(0, 0);
+          }
+          100% {
+            transform: translate(24px, 0);
+          }
+        }
+
+        `}</style>
+    </div>
   )
 }
