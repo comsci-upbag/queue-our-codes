@@ -13,15 +13,8 @@ interface PuzzleAnswer {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
-  const { puzzleId, answer } = JSON.parse(req.body) as PuzzleAnswer;
-
-  if (puzzleAnswers[puzzleId - 1] != answer) {
-    res.status(200).json({isAnswerCorrect: false});
-    return;
-  }
-
+  const { answer } = JSON.parse(req.body) as PuzzleAnswer;
   const session = await getSession({ req });
-
 
   if (!session) {
     res.status(404).json({ messages: "No logged in account." });
@@ -38,6 +31,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   // handle when participant is not registered to the database
   if (!participant) {
     res.status(404).json({ messages: "Account is not registered." });
+    return;
+  }
+
+  const puzzleId = participant.current_puzzle;
+
+  if (puzzleAnswers[puzzleId - 1] != answer) {
+    res.status(200).json({ isAnswerCorrect: false });
     return;
   }
 

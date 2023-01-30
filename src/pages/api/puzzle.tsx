@@ -3,7 +3,12 @@ import { useState } from "react";
 import WebCam from "../../components/WebCam"
 import styles from "../../styles/Home.module.css";
 
-function Puzzle({ puzzleId }: { puzzleId: number }) {
+interface Props {
+  puzzleId: number;
+  currentPuzzle: number;
+}
+
+function Puzzle({ puzzleId, currentPuzzle }: Props) {
 
   const [prediction, setPrediction] = useState<string | null>(null);
   const [probability, setProbability] = useState<number | null>(null);
@@ -26,7 +31,13 @@ function Puzzle({ puzzleId }: { puzzleId: number }) {
       <>
         <span id={styles.cluecont}>
           Keep your eyes open, and you will see... <br /><br />
-          <WebCam setPrediction={setPrediction} setProbability={setProbability} />
+          {
+            currentPuzzle === puzzleId ?
+              <WebCam setPrediction={setPrediction} setProbability={setProbability} />
+              :
+              <>
+                <WebCam setPrediction={setPrediction} setProbability={setProbability} /></>
+          }
           {(probability) ? <p>You are showing a {prediction} with a {((probability * 100).toFixed(2))}% confidence on our side!</p> : <></>}
           {prediction === "white-cat-yellow-head" && probability! > 0.5 ? "You got it! The answer is all yours!" : ""}
         </span>
