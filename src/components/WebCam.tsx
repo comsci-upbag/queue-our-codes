@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 
 import * as tf from "@tensorflow/tfjs";
 
+import LoadingIndicator from "./LoadingIndicator";
+
 interface props {
   setPrediction: (prediction: string) => void;
   setProbability: (probability: number) => void;
@@ -15,6 +17,7 @@ export default function WebCam({ setPrediction, setProbability }: props) {
 
   const [shouldTakePicture, setShouldTakePicture] = useState<boolean>(false);
   const [isCameraReady, setIsCameraReady] = useState<boolean>(false);
+  const [isModelReady, setIsModelReady] = useState<boolean>(false);
 
   const labels: string[] = [
     "random-image",
@@ -117,20 +120,24 @@ export default function WebCam({ setPrediction, setProbability }: props) {
 
   const initializeModel = async () => {
     // Load the model.
+    setIsModelReady(false);
     try {
       console.log("loading model from indexeddb");
       model = await tf.loadGraphModel('indexeddb://my-model')
       console.log("loading model from indexeddb");
+      setIsModelReady(true);
     } catch (e) {
       console.log("loading model from local storage");
       model = await tf.loadGraphModel('/data/upb-cat-detector/model.json');
       model.save('indexeddb://my-model');
       console.log("model loaded from local storage");
+      setIsModelReady(true);
     }
   };
 
   return (
     <>
+      {(!shouldTakePicture && !isCameraReady) || (isCameraReady && isModelReady) ? <></> : <LoadingIndicator />}
       <div ref={webcamContainer}
         style={
           {
@@ -145,7 +152,6 @@ export default function WebCam({ setPrediction, setProbability }: props) {
         {
           shouldTakePicture ?
             <>
-              {isCameraReady ? <></> : <LoadingIndicator />}
               <button onClick={predict}>Take a Picture!</button>
             </>
             :
@@ -153,75 +159,5 @@ export default function WebCam({ setPrediction, setProbability }: props) {
         }
       </div>
     </>
-  )
-}
-
-function LoadingIndicator() {
-  return (
-    <div style={{
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-    }}>
-      <div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
-      <style jsx>{`
-        .lds-ellipsis {
-          display: inline-block;
-          position: relative;
-          width: 80px;
-          height: 80px;
-        }
-        .lds-ellipsis div {
-          position: absolute;
-          top: 33px;
-          width: 13px;
-          height: 13px;
-          border-radius: 50%;
-          background: var(--color3);
-          animation-timing-function: cubic-bezier(0, 1, 1, 0);
-        }
-        .lds-ellipsis div:nth-child(1) {
-          left: 8px;
-          animation: lds-ellipsis1 0.6s infinite;
-        }
-        .lds-ellipsis div:nth-child(2) {
-          left: 8px;
-          animation: lds-ellipsis2 0.6s infinite;
-        }
-        .lds-ellipsis div:nth-child(3) {
-          left: 32px;
-          animation: lds-ellipsis2 0.6s infinite;
-        }
-        .lds-ellipsis div:nth-child(4) {
-          left: 56px;
-          animation: lds-ellipsis3 0.6s infinite;
-        }
-        @keyframes lds-ellipsis1 {
-          0% {
-            transform: scale(0);
-          }
-          100% {
-            transform: scale(1);
-          }
-        }
-        @keyframes lds-ellipsis3 {
-          0% {
-            transform: scale(1);
-          }
-          100% {
-            transform: scale(0);
-          }
-        }
-        @keyframes lds-ellipsis2 {
-          0% {
-            transform: translate(0, 0);
-          }
-          100% {
-            transform: translate(24px, 0);
-          }
-        }
-
-        `}</style>
-    </div>
   )
 }
