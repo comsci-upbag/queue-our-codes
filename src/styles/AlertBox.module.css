@@ -1,0 +1,45 @@
+.alert {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+  background-color: rgba(0, 0, 0, .50);
+}
+
+.alert-success {
+  background-color: #4CAF50;
+}
+
+.alert-info {
+  background-color: #2196F3;
+}
+
+.alert-warning {
+  background-color: #ff9800;
+}
+
+.alert-danger {
+  background-color: #f44336;
+}
+
+.fade {
+  opacity: 0;
+  transition: opacity 0.15s linear;
+}
+
+.hide {
+  display: none;
+}
+
+.btn-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 1rem 1rem;
+  color: inherit;
+  background-color: transparent;
+  border: 0;
+  opacity: 0.5;
+}
