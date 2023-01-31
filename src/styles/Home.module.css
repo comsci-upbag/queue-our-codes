@@ -67,15 +67,15 @@
 }
 
 #NavigationContainer button {
-    margin: 20px 0 20px 0;
     text-align: center;
     padding: 20px;
     border-radius: 20px;
-    background: var(--color1);
-    box-shadow: 0px 10px 10px var(--color3);
     width: 100%;
+    background-color: var(--color1);
     color: var(--color4);
+    font-family: Sniglet;
     font-size: 18px;
+    font-weight: 800;
     border: none;
     outline-width: 0;
     background: transparent;

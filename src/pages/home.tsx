@@ -117,10 +117,6 @@ export default function Home({ userName, userImage, currentPuzzle, previousAnswe
           </div>
           <Image id={styles.logout} src="/logout.svg" width={25} height={25} alt="Picture of the user" onClick={() => signOut()} />
         </div>
-        <div id={styles.NavigationContainer}>
-          <button onClick={() => setVisiblePuzzle(visiblePuzzle - 1)} disabled={visiblePuzzle === 1}> &lt; </button>
-          <button onClick={() => setVisiblePuzzle(visiblePuzzle + 1)} disabled={visiblePuzzle === currentPuzzle}> &gt; </button>
-        </div>
         <div ref={puzzlesContainer}>
           <div className={styles.PuzzleCard} key={visiblePuzzle}>
             <div className={styles.HomeContainer} id={styles.ClueContainer}>
@@ -141,7 +137,10 @@ export default function Home({ userName, userImage, currentPuzzle, previousAnswe
             }
           </div>
         </div>
-
+        <div id={styles.NavigationContainer}>
+          <button onClick={() => setVisiblePuzzle(visiblePuzzle - 1)} disabled={visiblePuzzle === 1}> &lt; PREV </button>
+          <button onClick={() => setVisiblePuzzle(visiblePuzzle + 1)} disabled={visiblePuzzle === currentPuzzle}> NEXT &gt; </button>
+        </div>
         <div className={styles.ProgressBar}>
           <div className={styles.Progress} style={{ width: `calc((${currentPuzzle}/ 10) * 100% - 4px)` }}></div >
         </div>
