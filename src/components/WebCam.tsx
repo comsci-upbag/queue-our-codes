@@ -170,6 +170,7 @@ export default function WebCam({ setPrediction, setProbability }: props) {
     stopCurrentCamera();
     if (currentCamera === "user") setCurrentCamera("environment");
     else setCurrentCamera("user");
+    enableCamera();
   }
 
   return (
