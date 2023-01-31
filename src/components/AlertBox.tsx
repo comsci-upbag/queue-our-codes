@@ -19,11 +19,11 @@ export default function AlertBox({ title, message, type, show }: AlertProps) {
 
   return (
     <div ref={alertRef} className={`${styles.alert} ${styles.alert}-type`} role="alert" onClick={closeAlert}>
-      <div>
-        <h1>{title}</h1>
-        <p>{message}</p>
-        <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close" onClick={closeAlert}></button>
+      <div id="note">
+        <p id={styles.notetitle}> {title} </p>
+        <p id={styles.notemessg}> {message} </p>
       </div>
+      <button type="button" className={styles.btnclose} data-bs-dismiss="alert" aria-label="Close" onClick={closeAlert}> × </button>
     </div>
   )
 }

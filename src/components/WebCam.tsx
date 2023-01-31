@@ -170,12 +170,12 @@ export default function WebCam({ setPrediction, setProbability }: props) {
           shouldTakePicture ?
             <div className={styles.CameraControls}>
               {isPredicting && isCameraReady && <LoadingIndicator />}
-              <button onClick={stopCurrentCamera}>Disable Camera</button>
-              <button onClick={switchCamera}>Swap Camera</button>
-              <button onClick={predict}>Take a Picture!</button>
+              <button className={styles.button} onClick={stopCurrentCamera}>Disable Camera</button>
+              <button className={styles.button} onClick={switchCamera}>Swap Camera</button>
+              <button className={styles.button} onClick={predict}>Take a Picture!</button>
             </div>
             :
-            <button onClick={enableCamera}>Enable Webcam</button>
+            <button className={styles.button} onClick={enableCamera}>Enable Webcam</button>
         }
       </div>
     </>
