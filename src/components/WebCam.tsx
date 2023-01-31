@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 
 import * as tf from "@tensorflow/tfjs";
 
@@ -19,7 +20,7 @@ export default function WebCam({ setPrediction, setProbability }: props) {
 
   const [shouldTakePicture, setShouldTakePicture] = useState<boolean>(false);
   const [isCameraReady, setIsCameraReady] = useState<boolean>(false);
-  const [isPredicting, setIsPredicting] = useState<boolean>(false);
+  const [isModelReady, setIsModelReady] = useState<boolean>(false);
   const [currentCamera, setCurrentCamera] = useState<"user" | "environment">("environment");
 
   const labels: string[] = [
@@ -40,8 +41,6 @@ export default function WebCam({ setPrediction, setProbability }: props) {
 
   async function predict() {
     if (!video) return;
-
-    setIsPredicting(true);
     if (!model) await initializeModel();
 
     tf.tidy(() => {
@@ -68,7 +67,6 @@ export default function WebCam({ setPrediction, setProbability }: props) {
 
       prediction.as1D().max().data().then((data) => {
         setProbability(data[0]);
-        setIsPredicting(false);
       });
 
       // Dispose the tensor to release the memory.
@@ -77,6 +75,8 @@ export default function WebCam({ setPrediction, setProbability }: props) {
       batchedImage.dispose();
       prediction.dispose();
     });
+
+    if (shouldTakePicture) window.requestAnimationFrame(predict);
   }
 
   function cropImage(img: tf.Tensor3D) {
@@ -118,6 +118,12 @@ export default function WebCam({ setPrediction, setProbability }: props) {
         setIsCameraReady(true);
         setShouldTakePicture(true);
         video.current!.style.display = "block";
+
+        // get current camera facing mode
+        const facingMode = stream.getVideoTracks()[0].getSettings().facingMode;
+        if (facingMode === "environment") setCurrentCamera("environment");
+        else if (facingMode === "user") setCurrentCamera("user");
+        else setCurrentCamera("user");
       });
     });
 
@@ -126,7 +132,6 @@ export default function WebCam({ setPrediction, setProbability }: props) {
 
   const initializeModel = async () => {
     // Load the model.
-    setIsPredicting(false);
     try {
       console.log("loading model from indexeddb");
       model = await tf.loadGraphModel('indexeddb://my-model')
@@ -137,6 +142,9 @@ export default function WebCam({ setPrediction, setProbability }: props) {
       model.save('indexeddb://my-model');
       console.log("model loaded from local storage");
     }
+
+    setIsModelReady(true);
+    if (shouldTakePicture) window.requestAnimationFrame(predict);
   };
 
   function stopCurrentCamera() {
@@ -152,14 +160,16 @@ export default function WebCam({ setPrediction, setProbability }: props) {
       video.current!.style.display = "none";
 
       setShouldTakePicture(false);
-      setProbability(null);
+      setTimeout(() => {
+        setProbability(null);
+      }, 500);
     }
   }
 
   function switchCamera() {
     stopCurrentCamera();
-    setCurrentCamera(currentCamera === "user" ? "environment" : "user");
-    enableCamera();
+    if (currentCamera === "user") setCurrentCamera("environment");
+    else setCurrentCamera("user");
   }
 
   return (
@@ -169,13 +179,20 @@ export default function WebCam({ setPrediction, setProbability }: props) {
         {
           shouldTakePicture ?
             <div className={styles.CameraControls}>
-              {isPredicting && isCameraReady && <LoadingIndicator />}
-              <button className={styles.button} onClick={stopCurrentCamera}>Disable Camera</button>
-              <button className={styles.button} onClick={switchCamera}>Swap Camera</button>
-              <button className={styles.button} onClick={predict}>Take a Picture!</button>
+              {!isModelReady && isCameraReady && <LoadingIndicator />}
+              <button onClick={stopCurrentCamera}>
+                <Image src="/stop-camera.svg" alt="stop camera" width={32} height={32} />
+              </button>
+              <button onClick={switchCamera}>
+                {currentCamera === "user" ?
+                  <Image src="/switch-rear.svg" alt="switch camera" width={32} height={32} />
+                  :
+                  <Image src="/switch-front.svg" alt="switch camera" width={32} height={32} />
+                }
+              </button>
             </div>
             :
-            <button className={styles.button} onClick={enableCamera}>Enable Webcam</button>
+            <button className={styles.EnableButton} onClick={enableCamera}>Enable Webcam</button>
         }
       </div>
     </>
