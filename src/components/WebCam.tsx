@@ -76,7 +76,7 @@ export default function WebCam({ setPrediction, setProbability }: props) {
       prediction.dispose();
     });
 
-    if (shouldTakePicture) window.requestAnimationFrame(predict);
+    if (isCameraReady) window.requestAnimationFrame(predict);
   }
 
   function cropImage(img: tf.Tensor3D) {
@@ -144,7 +144,7 @@ export default function WebCam({ setPrediction, setProbability }: props) {
     }
 
     setIsModelReady(true);
-    if (shouldTakePicture) window.requestAnimationFrame(predict);
+    window.requestAnimationFrame(predict);
   };
 
   function stopCurrentCamera() {
@@ -191,6 +191,9 @@ export default function WebCam({ setPrediction, setProbability }: props) {
                   <Image src="/switch-front.svg" alt="switch camera" width={32} height={32} />
                 }
               </button>
+              {/* <button onClick={predict}>
+                {isModelReady && isCameraReady && <Image src="/take-picture.svg" alt="take picture" width={32} height={32} />}
+              </button> */}
             </div>
             :
             <button className={styles.EnableButton} onClick={enableCamera}>Enable Webcam</button>
