@@ -13,7 +13,7 @@ export default function AlertBox({ title, message, type, show }: AlertProps) {
   const alertRef = useRef<HTMLDivElement>(null)
 
   const closeAlert = (e: React.MouseEvent) => {
-    if (e.target != alertRef.current) return
+    if (e.target == alertRef.current) return
     show(false)
   }
 
