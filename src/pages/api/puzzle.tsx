@@ -1,7 +1,7 @@
-import { useState } from "react";
+import WebCam from "@/components/WebCam"
+import Dialogue from "@/components/Dialogue";
 
-import WebCam from "../../components/WebCam"
-import styles from "../../styles/Home.module.css";
+import styles from "@/styles/Home.module.css";
 
 interface Props {
   puzzleId: number;
@@ -27,7 +27,15 @@ function Puzzle({ puzzleId, currentPuzzle }: Props) {
     return (
       <>
         <span id={styles.cluecont}>
-          Keep your eyes open, and you will see... <br /><br />
+          <Dialogue sender="Mr. Cat" senderImage="/logo.svg" script={[
+            { type: "send", message: ["I want you to look for someone with a white fur and a yellow head."] },
+            { type: "reply", message: ["Where should I look?"] },
+            {
+              type: "send",
+              message: ["Why should I tell you?",
+                "It's up to you to find them."]
+            },
+          ]} />
           {currentPuzzle === puzzleId && <WebCam />}
         </span>
       </>
