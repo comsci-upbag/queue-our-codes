@@ -146,6 +146,7 @@ export default function WebCam() {
       video.current.srcObject = null;
       video.current!.style.display = "none";
 
+      if (isPredicting) togglePrediction();
       setIsCameraEnabled(false);
     }
   }
@@ -205,7 +206,7 @@ export default function WebCam() {
               await enableCamera();
               await initializeModel();
               await togglePrediction();
-            }}>Enable Webcam</button>
+            }}>Start Looking</button>
         }
       </div>
       {isPredicting && probability && <p>You are showing a {prediction} with a {((probability * 100).toFixed(2))}% confidence on our side!</p>}
