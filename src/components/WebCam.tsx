@@ -7,20 +7,19 @@ import LoadingIndicator from "./LoadingIndicator";
 
 import styles from "@/styles/WebCam.module.css";
 
-interface props {
-  setPrediction: (prediction: string | null) => void;
-  setProbability: (probability: number | null) => void;
-}
+let model: tf.GraphModel | null = null;
+let continuePredicting = false;
 
-let model: tf.GraphModel;
-
-export default function WebCam({ setPrediction, setProbability }: props) {
+export default function WebCam() {
   const webcamContainer = useRef<HTMLDivElement>(null);
   const video = useRef<HTMLVideoElement>(null);
 
-  const [shouldTakePicture, setShouldTakePicture] = useState<boolean>(false);
-  const [isCameraReady, setIsCameraReady] = useState<boolean>(false);
-  const [isModelReady, setIsModelReady] = useState<boolean>(false);
+  const [prediction, setPrediction] = useState<string | null>(null);
+  const [probability, setProbability] = useState<number | null>(null);
+
+  const [isCameraEnabled, setIsCameraEnabled] = useState<boolean>(false);
+  const [isPredicting, setIsPredicting] = useState<boolean>(continuePredicting);
+  const [isModelLoaded, setIsModelLoaded] = useState<boolean>(false);
   const [currentCamera, setCurrentCamera] = useState<"user" | "environment">("environment");
 
   const labels: string[] = [
@@ -39,14 +38,28 @@ export default function WebCam({ setPrediction, setProbability }: props) {
     "up-background"
   ];
 
+  async function initializeModel() {
+    if (model !== null) return;
+
+    await tf.loadGraphModel('indexeddb://my-model').then((loadedModel) => {
+      model = loadedModel;
+      setIsModelLoaded(true);
+      console.log("model loaded from indexedDB")
+    })
+      .catch(async () => {
+        let loadedModel = await tf.loadGraphModel('/data/upb-cat-detector/model.json').catch(() => {
+          console.log("model not found");
+          return null;
+        });
+        loadedModel!.save('indexeddb://my-model');
+        console.log("model loaded from local storage")
+        setIsModelLoaded(true);
+        return loadedModel;
+      })
+  }
+
   async function predict() {
-    if (!video) return;
-    if (!model) await initializeModel();
-
     tf.tidy(() => {
-      // ensure video is ready
-      if (video.current?.readyState !== video.current?.HAVE_ENOUGH_DATA) return;
-
       // Get the image data from the video element
       const webcamImage = tf.browser.fromPixels(video.current!);
 
@@ -58,7 +71,7 @@ export default function WebCam({ setPrediction, setProbability }: props) {
       const batchedImage = croppedImage.expandDims(0);
 
       // Make a prediction through mobilenet.
-      const prediction = model.predict(batchedImage) as tf.Tensor;
+      const prediction = model!.predict(batchedImage) as tf.Tensor;
 
       // Turn predictions into a 1D array to find the most probable class
       prediction.as1D().argMax().data().then((data) => {
@@ -76,7 +89,7 @@ export default function WebCam({ setPrediction, setProbability }: props) {
       prediction.dispose();
     });
 
-    if (isCameraReady) window.requestAnimationFrame(predict);
+    if (continuePredicting) requestAnimationFrame(() => predict());
   }
 
   function cropImage(img: tf.Tensor3D) {
@@ -93,12 +106,8 @@ export default function WebCam({ setPrediction, setProbability }: props) {
     return normalized.slice([beginHeight, beginWidth, 0], [size, size, 3]);
   }
 
-  function hasGetUserMedia() {
-    return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
-  }
-
-  function enableCamera() {
-    if (!hasGetUserMedia()) {
+  async function enableCamera() {
+    if (!(!!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia))) {
       console.warn('getUserMedia() is not supported by your browser');
       return;
     }
@@ -111,41 +120,19 @@ export default function WebCam({ setPrediction, setProbability }: props) {
     };
 
     // Activate the webcam stream.
-    navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
-      video.current!.srcObject = stream;
-      video.current?.addEventListener('loadeddata', function () {
-        video.current!.play();
-        setIsCameraReady(true);
-        setShouldTakePicture(true);
-        video.current!.style.display = "block";
+    video.current!.srcObject = await navigator.mediaDevices.getUserMedia(constraints);
+    await video.current!.load();
+    await video.current!.play();
+    video.current!.style.display = "block";
 
-        // get current camera facing mode
-        const facingMode = stream.getVideoTracks()[0].getSettings().facingMode;
-        if (facingMode === "environment") setCurrentCamera("environment");
-        else if (facingMode === "user") setCurrentCamera("user");
-        else setCurrentCamera("user");
-      });
-    });
+    // get the actual video facing mode
+    const track = video.current!.srcObject!.getTracks()[0];
+    const settings = track.getSettings();
+    const facingMode = settings.facingMode;
 
-    initializeModel();
+    setCurrentCamera(facingMode === "user" ? "user" : "environment");
+    setIsCameraEnabled(true);
   }
-
-  const initializeModel = async () => {
-    // Load the model.
-    try {
-      console.log("loading model from indexeddb");
-      model = await tf.loadGraphModel('indexeddb://my-model')
-      console.log("model loaded from indexeddb");
-    } catch (e) {
-      console.log("loading model from local storage");
-      model = await tf.loadGraphModel('/data/upb-cat-detector/model.json');
-      model.save('indexeddb://my-model');
-      console.log("model loaded from local storage");
-    }
-
-    setIsModelReady(true);
-    window.requestAnimationFrame(predict);
-  };
 
   function stopCurrentCamera() {
     if (video.current?.srcObject) {
@@ -159,18 +146,32 @@ export default function WebCam({ setPrediction, setProbability }: props) {
       video.current.srcObject = null;
       video.current!.style.display = "none";
 
-      setShouldTakePicture(false);
-      setTimeout(() => {
-        setProbability(null);
-      }, 500);
+      setIsCameraEnabled(false);
     }
   }
 
-  function switchCamera() {
-    stopCurrentCamera();
-    if (currentCamera === "user") setCurrentCamera("environment");
-    else setCurrentCamera("user");
-    enableCamera();
+  async function switchCamera() {
+    setCurrentCamera(() => {
+      if (currentCamera === "user") {
+
+        return "environment";
+      } else {
+        return "user";
+      }
+    });
+  }
+
+  async function togglePrediction() {
+    setIsPredicting(() => {
+      if (isPredicting) {
+        continuePredicting = false;
+        return false;
+      } else {
+        continuePredicting = true;
+        predict();
+        return true;
+      }
+    });
   }
 
   return (
@@ -178,9 +179,9 @@ export default function WebCam({ setPrediction, setProbability }: props) {
       <div ref={webcamContainer} className={styles.WebCamContainer}>
         <video ref={video} autoPlay playsInline muted width="100%" height="100%" style={{ display: "none" }} />
         {
-          shouldTakePicture ?
+          isCameraEnabled ?
             <div className={styles.CameraControls}>
-              {!isModelReady && isCameraReady && <LoadingIndicator />}
+              {!isModelLoaded && <LoadingIndicator />}
               <button onClick={stopCurrentCamera}>
                 <Image src="/stop-camera.svg" alt="stop camera" width={32} height={32} />
               </button>
@@ -191,14 +192,24 @@ export default function WebCam({ setPrediction, setProbability }: props) {
                   <Image src="/switch-front.svg" alt="switch camera" width={32} height={32} />
                 }
               </button>
-              {/* <button onClick={predict}>
-                {isModelReady && isCameraReady && <Image src="/take-picture.svg" alt="take picture" width={32} height={32} />}
-              </button> */}
+              <button onClick={togglePrediction}>
+                {isPredicting ?
+                  <Image src="/toggle-on.svg" alt="stop prediction" width={32} height={32} />
+                  :
+                  <Image src="/toggle-off.svg" alt="start prediction" width={32} height={32} />
+                }
+              </button>
             </div>
             :
-            <button className={styles.EnableButton} onClick={enableCamera}>Enable Webcam</button>
+            <button className={styles.EnableButton} onClick={async () => {
+              await enableCamera();
+              await initializeModel();
+              await togglePrediction();
+            }}>Enable Webcam</button>
         }
       </div>
+      {isPredicting && probability && <p>You are showing a {prediction} with a {((probability * 100).toFixed(2))}% confidence on our side!</p>}
+      {isPredicting && prediction === "white-cat-yellow-head" && probability! > 0.5 && <p>You got it! The answer is all yours!</p>}
     </>
   )
 }

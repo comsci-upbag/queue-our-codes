@@ -10,9 +10,6 @@ interface Props {
 
 function Puzzle({ puzzleId, currentPuzzle }: Props) {
 
-  const [prediction, setPrediction] = useState<string | null>(null);
-  const [probability, setProbability] = useState<number | null>(null);
-
   if (puzzleId == 1) {
     return (
       <>
@@ -31,15 +28,7 @@ function Puzzle({ puzzleId, currentPuzzle }: Props) {
       <>
         <span id={styles.cluecont}>
           Keep your eyes open, and you will see... <br /><br />
-          {
-            currentPuzzle === puzzleId ?
-              <WebCam setPrediction={setPrediction} setProbability={setProbability} />
-              :
-              <>
-                <WebCam setPrediction={setPrediction} setProbability={setProbability} /></>
-          }
-          {probability && <p>You are showing a {prediction} with a {((probability * 100).toFixed(2))}% confidence on our side!</p>}
-          {prediction === "white-cat-yellow-head" && probability! > 0.5 && <p>You got it! The answer is all yours!</p>}
+          {currentPuzzle === puzzleId && <WebCam />}
         </span>
       </>
     )
