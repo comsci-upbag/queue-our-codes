@@ -89,9 +89,9 @@
 }
 
 #NavigationContainer button:hover:not(:disabled) {
-    background-color: var(--color6);
-    color: var(--color11);
-    box-shadow: 0px 10px 10px var(--color2);
+    background-color: var(--color1);
+    color: var(--color4);
+    box-shadow: 0px 10px 10px var(--color3);
 }
 
 #NavigationContainer button:disabled {
