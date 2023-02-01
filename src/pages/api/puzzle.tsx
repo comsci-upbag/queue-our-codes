@@ -35,6 +35,7 @@ function Puzzle({ puzzleId, currentPuzzle }: Props) {
               message: ["Why should I tell you?",
                 "It's up to you to find them."]
             },
+            { type: "reply", message: ["I see. I'll start looking then!"] },
           ]} />
           {currentPuzzle === puzzleId && <WebCam />}
         </span>

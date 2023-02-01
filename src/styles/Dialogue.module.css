@@ -1,3 +1,9 @@
+.container {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
 .sender {
   border: none;
   float: left;
@@ -49,4 +55,26 @@
   margin-top: 3px;
   width: fit-content;
   height: fit-content;
+}
+
+.inputMessage {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0;
+  width: 100%;
+  height: 50px;
+  color: var(--color12);
+  background-color: var(--color13);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.iputWrapper {
+  width: fit-content;
+}
+
+.inputMessage p {
+  white-space: nowrap;
+  overflow: hidden;
 }
