@@ -1,5 +1,6 @@
 import WebCam from "@/components/WebCam"
 import Dialogue from "@/components/Dialogue";
+import Maze from "@/components/Maze";
 
 import styles from "@/styles/Home.module.css";
 
@@ -38,6 +39,32 @@ function Puzzle({ puzzleId, currentPuzzle }: Props) {
             { type: "reply", message: ["I see. I'll start looking then!"] },
           ]} />
           {currentPuzzle === puzzleId && <WebCam />}
+        </span>
+      </>
+    )
+  }
+
+  if (puzzleId == 3) {
+    return (
+      <>
+        <span id={styles.cluecont}>
+          <Dialogue sender="Mr. Cat" senderImage="/logo.svg" script={[
+            {
+              type: "send",
+              message: ["Ey yo, what's good chief.",
+                "Word is some kitten on the prowl for a dirty chicken crook.",
+                "Can't have no filthy fowl filcher messing up good cats' rep, so I'll be rootin' for you.",
+              ]
+            },
+            { type: "reply", message: ["Do you have any idea who the thief is?"] },
+            {
+              type: "send",
+              message: ["Now I don't know who the thief is, but I may just know who does... but I ain't no squealer!",
+                "However, on a completely unrelated note, I got my paws on this here maze, hint hint."]
+            },
+            { type: "reply", message: ["Huh? Would solving this maze lead me to something?"] },
+          ]} />
+          {currentPuzzle === puzzleId && <Maze />}
         </span>
       </>
     )
