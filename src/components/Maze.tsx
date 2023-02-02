@@ -1,4 +1,6 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import AlertBox from "./AlertBox"
+
 
 import styles from "@/styles/Maze.module.css"
 
@@ -52,40 +54,87 @@ const maze = [
   ],
 ]
 
+let visited: string[] = ['0-1-0']
+
 export default function Maze() {
   const [startGame, setStartGame] = useState(false)
   const [x, setX] = useState(0)
   const [y, setY] = useState(1)
   const [z, setZ] = useState(0)
+  const [isPlayerAtEnd, setIsPlayerAtEnd] = useState(false)
 
   function Controls() {
     return <>
       <div className={styles.Controls}>
         <span />
-        <button onClick={() => { if ((y - 1) >= 0 && maze[z][y - 1][x] !== '█') setY(y - 1) }}>🔼</button>
+        <button onClick={() => {
+          if ((y - 1) >= 0 && maze[z][y - 1][x] !== '█') {
+            setY(y - 1);
+            visited.push(z + "-" + y + "-" + x)
+          }
+        }}>🔼</button>
         <span />
-        <button onClick={() => { if ((x - 1) >= 0 && maze[z][y][x - 1] !== '█') setX(x - 1) }}>◀️</button>
-        <button onClick={() => { if (maze[z][y][x] === '🪜') z === 0 ? setZ(1) : setZ(0) }}>⭕️</button>
-        <button onClick={() => { if ((x + 1) < maze[z][y].length && maze[z][y][x + 1] !== '█') setX(x + 1) }}>▶️</button>
+        <button onClick={() => {
+          if ((x - 1) >= 0 && maze[z][y][x - 1] !== '█') {
+            setX(x - 1)
+            visited.push(z + "-" + y + "-" + x)
+          }
+        }}>◀️</button>
+        <button onClick={() => {
+          if (maze[z][y][x] === '🪜') {
+            z === 0 ? setZ(1) : setZ(0)
+            visited.push(z + "-" + y + "-" + x)
+          }
+        }}>⭕️</button>
+        <button onClick={() => {
+          if ((x + 1) < maze[z][y].length && maze[z][y][x + 1] !== '█') {
+            setX(x + 1)
+            visited.push(z + "-" + y + "-" + x)
+          }
+        }}>▶️</button>
         <span />
-        <button onClick={() => { if ((y + 1) < maze[z].length && maze[z][y + 1][x] !== '█') setY(y + 1) }}>🔽</button>
+        <button onClick={() => {
+          if ((y + 1) < maze[z].length && maze[z][y + 1][x] !== '█') {
+            setY(y + 1)
+            visited.push(z + "-" + y + "-" + x)
+          }
+        }}>🔽</button>
         <span />
       </div>
     </>
   }
 
+  useEffect(() => {
+    for (let i = 0; i < visited.length; i++) {
+      document.getElementById(visited[i])?.classList.add(styles.Visited)
+    }
+    if (maze[z][y][x] === '😼') {
+      setIsPlayerAtEnd(true)
+    }
+  }, [x, y, z])
+
   return <div className={styles.Container}>
+    {isPlayerAtEnd &&
+      <AlertBox title={"You won!"} message={"You've reached the end."} type={"success"} show={setIsPlayerAtEnd} />}
     {startGame ? <>
-      {maze[z].map((row, i) => {
-        return <div key={i} className={styles.Maze}>
-          {row.map((cell, j) => {
-            if (i === y && j === x) {
-              return <span key={j}>👤</span>
-            }
-            return <span key={j}>{cell}</span>
-          })}
-        </div>
-      })}
+      <div className={styles.MazeContainer} key={String(z + " ")}>
+        {maze[z].map((row, i) => {
+          return <div key={String(z + " " + i)} className={styles.Maze}>
+            {row.map((cell, j) => {
+              if (i === y && j === x) {
+                return <div id={z + "-" + i + "-" + j} key={j} className={styles.Visited}>👤</div>
+              }
+              if (cell === '█') {
+                return <div key={j} style={{
+                  background: 'black',
+                  width: "100%",
+                }}></div>
+              }
+              return <div key={String(z + " " + i + " " + j)} id={z + "-" + i + "-" + j}>{cell}</div>
+            })}
+          </div>
+        })}
+      </div>
       <Controls />
     </> : <>
       <button className={styles.StartButton} onClick={() => setStartGame(true)}>Start Maze</button>

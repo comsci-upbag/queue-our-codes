@@ -25,23 +25,61 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   place-items: center;
+  margin-top: 20px;
 }
 
 .Controls button {
   text-align: center;
   padding: 20px;
-  max-width: 60%;
+  /* max-width: 60%; */
   font-family: Sniglet;
   font-size: 16px;
   border: none;
   outline-width: 0;
   background: transparent;
   cursor: pointer;
+  border-radius: 20px;
+  box-shadow: 0px 7px 5px var(--color2);
+  background-color: var(--color6) !important;
+  margin: 10px;
+}
+
+.Controls button:active {
+  border-radius: 20px;
+  transform: translateY(5px);
+  box-shadow: 0px 0px;
+}
+
+.MazeContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  background: var(--color1);
+  box-shadow: 0px 10px 10px var(--color3);
 }
 
 .Maze {
   display: grid;
   grid-template-columns: repeat(21, 1fr);
-  width: 100%;
+  width: max(100%, 290px);
+  background-color: #fff;
+  color: #000;
   place-items: center;
+  justify-items: center;
+  align-items: center;
+}
+
+.Maze div {
+  width: 100%;
+  font-size: min(2vw, 14px);
+  height: min(1.2rem, 3vw);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Visited {
+  background-color: var(--color2);
 }
