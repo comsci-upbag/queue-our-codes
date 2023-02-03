@@ -52,7 +52,7 @@
   background-color: var(--color9);
   border-radius: 10px;
   padding: 10px;
-  margin-top: 3px;
+  margin-top: 10px;
   width: fit-content;
   height: fit-content;
 }
@@ -77,4 +77,54 @@
 .inputMessage p {
   white-space: nowrap;
   overflow: hidden;
+}
+
+.typingAnimation {
+  display: block;
+  border-radius: 20px;
+  margin: 0 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.typingAnimationDot {
+  display: block;
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  background-color: var(--color13);
+  margin: 3px;
+  animation: typing 1000ms ease-in-out infinite;
+  animation-delay: 3600ms;
+}
+
+.typingAnimationDot:nth-child(1) {
+  animation-delay: 0ms;
+}
+
+.typingAnimationDot:nth-child(2) {
+  animation-delay: 333ms
+}
+
+.typingAnimationDot:nth-child(3) {
+  animation-delay: 666ms;
+}
+
+@keyframes typing {
+  0% {
+    transform: scale(1);
+  }
+
+  33% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.4);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
