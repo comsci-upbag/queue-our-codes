@@ -34,7 +34,8 @@ function Puzzle({ puzzleId, currentPuzzle }: Props) {
             { type: "send", message: "Why should I tell you?" },
             { type: "send", message: "It's up to you to find them." },
             { type: "reply", message: "I see. I'll start looking then!" },
-          ]} />
+          ]}
+            isFinished={currentPuzzle !== puzzleId} />
           {currentPuzzle === puzzleId && <WebCam />}
         </span>
       </>
@@ -53,7 +54,8 @@ function Puzzle({ puzzleId, currentPuzzle }: Props) {
             { type: "send", message: "Now I don't know who the thief is, but I may just know who does... but I ain't no squealer!" },
             { type: "send", message: "However, on a completely unrelated note, I got my paws on this here maze, hint hint." },
             { type: "reply", message: "Huh? Would solving this maze lead me to something?" },
-          ]} />
+          ]}
+            isFinished={currentPuzzle !== puzzleId} />
           {currentPuzzle === puzzleId && <Maze />}
         </span>
       </>
