@@ -1,0 +1,118 @@
+@import url('https://fonts.googleapis.com/css?family=Sniglet&display=swap');
+
+.container {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+
+    scroll-snap-type: x mandatory;
+    overflow-x: auto;
+
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    width: 50vw;
+    min-width: 300px;
+    max-width: 600px;
+
+    margin: 20px 0 20px 0;
+    border-radius: 20px;
+    background: var(--color1);
+    box-shadow: 0px 10px 10px var(--color3);
+}
+
+.container::-webkit-scrollbar {
+    display: none;
+}
+
+.title {
+    display: inline-block;
+    margin: 5px;
+    font-size: 24px;
+}
+
+.page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    scroll-snap-align: center;
+    width: 50vw;
+    min-width: 300px;
+    max-width: 600px;
+    padding: 20px;
+}
+
+.LoginTitle {
+    display: inline-block;
+    margin: 0 0 0 5px;
+    font-size: 24px;
+}
+
+.LoginButton {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 5px;
+    margin-top: 30px;
+    padding: 20px;
+    border-radius: 20px;
+    background: var(--color9);
+    color: var(--color10);
+    box-shadow: 0px 5px var(--color2);
+    cursor: pointer;
+}
+
+.LoginButton:active {
+    background-color: var(--color2);
+    transform: translateY(5px);
+    box-shadow: 0px 0px;
+}
+
+.Google {
+    margin-left: 20px;
+}
+
+.ProgressBar {
+    margin: 20px 0 20px 0;
+    border-radius: 20px;
+    background: var(--color6);
+    box-sizing: content-box;
+    margin-bottom: 10vh;
+}
+
+.Progress {
+    display: inline-block;
+    position: relative;
+    max-width: 100%;
+    left: 2px;
+    top: 2px;
+    height: 20px;
+    border-radius: 20px;
+    background: linear-gradient(to left, var(--color8), var(--color5));
+}
+
+.Footer {
+    position: sticky;
+    bottom: 5vh;
+    text-align: center;
+    width: 100%;
+}
+
+.circle {
+    top: 150%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: fixed;
+
+    z-index: -100;
+    /* background: radial-gradient(circle, #533BA3, #0A0311); */
+    height: 100vh;
+    width: 100vw;
+
+    background: var(--color3);
+    /* mix-blend-mode: hard-light; */
+    filter: blur(500px);
+}
