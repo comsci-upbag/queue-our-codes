@@ -1,7 +1,9 @@
 import WebCam from "@/components/WebCam"
 import Dialogue from "@/components/Dialogue";
 import Maze from "@/components/Maze";
-import qrcodeParser from "qrcode-parser";
+import { QrScanner } from "@yudiel/react-qr-scanner";
+
+import { useState } from "react";
 
 import styles from "@/styles/Home.module.css";
 
@@ -12,18 +14,19 @@ interface Props {
 
 
 function Puzzle({ puzzleId, currentPuzzle }: Props) {
+  const [label, setLabel] = useState<string | null>(null);
+  const [probability, setProbability] = useState<number | null>(null);
+  const [qrCode, setQrCode] = useState<string | null>(null);
 
   const validateImage = async (image: string) => {
     const result = await fetch("api/validateImage", {
       method: 'POST',
       body: JSON.stringify({ image })
     })
+    const { label, probability } = await result.json();
+    setLabel(label);
+    setProbability(probability);
     return result;
-  }
-
-  const validateQRCode = async (image: string) => {
-    const result = qrcodeParser(image);
-    console.log(result);
   }
 
   if (puzzleId == 1) {
@@ -52,6 +55,10 @@ function Puzzle({ puzzleId, currentPuzzle }: Props) {
           ]}
             isFinished={currentPuzzle !== puzzleId} />
           {currentPuzzle === puzzleId && <WebCam buttonLabel="Start Looking" callback={validateImage} />}
+          {currentPuzzle === puzzleId && <QrScanner onResult={(data) => { setQrCode(data.getText()) }} onError={(err) => { console.log(err) }} />}
+          {qrCode && <span>QR Code: {qrCode}</span>}
+          {label && <span>Label: {label}</span>}
+          {probability && <span>Probability: {probability}</span>}
         </span>
       </>
     )

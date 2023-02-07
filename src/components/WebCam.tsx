@@ -1,4 +1,4 @@
-import {  useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 
 import styles from "@/styles/WebCam.module.css";
@@ -8,7 +8,7 @@ interface Props {
   callback: (image: string) => void
 }
 
-export default function WebCam({ buttonLabel, callback } : Props) {
+export default function WebCam({ buttonLabel, callback }: Props) {
   const webcamContainer = useRef<HTMLDivElement>(null);
   const video = useRef<HTMLVideoElement>(null);
 
@@ -80,7 +80,7 @@ export default function WebCam({ buttonLabel, callback } : Props) {
       let ctx = canvas.getContext('2d');
       ctx?.drawImage(video.current!, 0, 0, canvas.width, canvas.height);
 
-      let image = canvas.toDataURL('image/jpeg');
+      let image = canvas.toDataURL('image/png');
       return image;
     }
 
@@ -107,7 +107,7 @@ export default function WebCam({ buttonLabel, callback } : Props) {
                 }
               </button>
               <button onClick={takePicture}>
-                  <Image src="/switch-rear.svg" alt="switch camera" width={32} height={32} />
+                <Image src="/switch-rear.svg" alt="switch camera" width={32} height={32} />
               </button>
             </div>
             :
