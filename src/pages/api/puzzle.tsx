@@ -1,6 +1,7 @@
 import WebCam from "@/components/WebCam"
 import Dialogue from "@/components/Dialogue";
 import Maze from "@/components/Maze";
+import qrcodeParser from "qrcode-parser";
 
 import styles from "@/styles/Home.module.css";
 
@@ -9,7 +10,21 @@ interface Props {
   currentPuzzle: number;
 }
 
+
 function Puzzle({ puzzleId, currentPuzzle }: Props) {
+
+  const validateImage = async (image: string) => {
+    const result = await fetch("api/validateImage", {
+      method: 'POST',
+      body: JSON.stringify({ image })
+    })
+    return result;
+  }
+
+  const validateQRCode = async (image: string) => {
+    const result = qrcodeParser(image);
+    console.log(result);
+  }
 
   if (puzzleId == 1) {
     return (
@@ -36,7 +51,7 @@ function Puzzle({ puzzleId, currentPuzzle }: Props) {
             { type: "reply", message: "I see. I'll start looking then!" },
           ]}
             isFinished={currentPuzzle !== puzzleId} />
-          {currentPuzzle === puzzleId && <WebCam />}
+          {currentPuzzle === puzzleId && <WebCam buttonLabel="Start Looking" callback={validateImage} />}
         </span>
       </>
     )

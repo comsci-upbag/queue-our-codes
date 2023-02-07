@@ -3,7 +3,12 @@ import Image from "next/image";
 
 import styles from "@/styles/WebCam.module.css";
 
-export default function WebCam() {
+interface Props {
+  buttonLabel: string,
+  callback: (image: string) => void
+}
+
+export default function WebCam({ buttonLabel, callback } : Props) {
   const webcamContainer = useRef<HTMLDivElement>(null);
   const video = useRef<HTMLVideoElement>(null);
 
@@ -64,7 +69,7 @@ export default function WebCam() {
     });
   }
 
-  async function submitImageToBackend() {
+  async function takePicture() {
 
     const getImageFromVideo = () => {
       let canvas = document.createElement('canvas');
@@ -81,13 +86,7 @@ export default function WebCam() {
 
     const image = getImageFromVideo();
 
-    const result = await fetch("api/validateImage", {
-      method: 'POST',
-      body: JSON.stringify({ image })
-    })
-
-    console.log(result);
-
+    callback(image);
   }
 
   return (
@@ -107,14 +106,14 @@ export default function WebCam() {
                   <Image src="/switch-front.svg" alt="switch camera" width={32} height={32} />
                 }
               </button>
-              <button onClick={submitImageToBackend}>
+              <button onClick={takePicture}>
                   <Image src="/switch-rear.svg" alt="switch camera" width={32} height={32} />
               </button>
             </div>
             :
             <button className={styles.EnableButton} onClick={async () => {
               await enableCamera();
-            }}>Start Looking</button>
+            }}>{buttonLabel}</button>
         }
       </div>
     </>
