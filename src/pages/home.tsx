@@ -12,10 +12,11 @@ import AlertBox from "@/components/AlertBox";
 import { PrismaClient } from "@prisma/client";
 import { useEffect, useRef, useState } from "react";
 
-import { puzzleAnswers } from "@/globals/puzzleAnswers"
-
 export async function getServerSideProps(context: NextPageContext) {
   const session = await getSession(context);
+  const { textAnswers } = await import( "@/globals/answers");
+
+  const previousAnswers = textAnswers.map(answer => answer.answer);
 
   if (!session) {
     return {
@@ -57,7 +58,7 @@ export async function getServerSideProps(context: NextPageContext) {
       userName: session.user.name,
       userImage: session.user.image,
       currentPuzzle: participant.current_puzzle,
-      previousAnswers: puzzleAnswers.slice(0, participant.current_puzzle - 1)
+      previousAnswers: previousAnswers.slice(0, participant.current_puzzle - 1)
     },
   }
 }
