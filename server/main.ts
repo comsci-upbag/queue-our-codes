@@ -1,12 +1,10 @@
 import express, { Express, Request, Response } from "express";
 import * as tf from "@tensorflow/tfjs-node"
-// import { PrismaClient } from "@prisma/client"
 
 const app: Express = express();
 const port = 8080;
 
 let model: tf.GraphModel | null = null;
-// let prisma: PrismaClient | null = null;
 
 const labels = [
   "random-image",
@@ -24,17 +22,21 @@ const labels = [
   "up-background",
 ]
 
-app.get('/predict', async (req: Request, res: Response) => {
+app.get('/', async (req: Request, res: Response) => {
 
-  // Initialize Model and Prisma
+  // Initialize Model
   if (!model)
-    model = await tf.loadGraphModel("data/upb-cat-detector/model.json");
-  // if (!prisma)
-  //   prisma = new PrismaClient();
+    model = await tf.loadGraphModel(`./data/upb-cat-detector/model.json`);
 
   const { image: rawImage } = JSON.parse(req.body);
 
   const image = preprocessImage(rawImage);
+
+  if (!image) {
+    res.status(404).json({message: "request is not a valid image"});
+    return;
+  }
+
   const prediction = model.predict(image) as tf.Tensor;
   const { label, probability } = await getLabelAndProbability(prediction);
 
@@ -45,16 +47,22 @@ app.get('/predict', async (req: Request, res: Response) => {
 })
 
 app.listen(port, () => {
-  console.log("[server]: Server is ready.");
+  console.log(`[server]: Server is ready at port: ${port}`);
 })
 
-function preprocessImage(rawImage: string): tf.Tensor {
+function preprocessImage(rawImage: string): tf.Tensor | null {
 
   // strip the headers
   // https://stackoverflow.com/a/57886214
   const image = rawImage.split(';base64,').pop();
   const imageBuffer = Buffer.from(image!, 'base64');
-  const imageTensor = tf.node.decodeImage(imageBuffer) as tf.Tensor3D;
+
+  let imageTensor= null;
+  try {
+    imageTensor = tf.node.decodeImage(imageBuffer) as tf.Tensor3D;
+  } catch(_) {
+    return null;
+  }
 
   // crop the image
   const croppedImage = cropImage(imageTensor, 384);
@@ -86,3 +94,4 @@ async function getLabelAndProbability(prediction: tf.Tensor): Promise<{ label: s
 
   return {label: labels[index], probability};
 }
+
