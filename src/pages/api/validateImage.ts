@@ -18,9 +18,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return;
   }
 
-  const participant = await prisma.participantStatus.findUnique({ where: { email: session.user.email }})
-  const result = await fetch(process.env.IMAGE_VALIDATION_SERVER, { body: req.body} );
+  const participant = await prisma.participantStatus.findUnique({ where: { email: session.user.email } })
+  const result = await fetch(process.env.IMAGE_VALIDATION_SERVER + '/', { method: "POST", headers: { "Content-Type": "application/json" }, body: req.body });
 
   const { label, probability } = await result.json() as Prediction;
 
+  res.status(200).json({ label, probability });
 }
