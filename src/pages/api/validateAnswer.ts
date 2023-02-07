@@ -3,13 +3,15 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { PrismaClient } from '@prisma/client'
 
 import { getSession } from "next-auth/react"
-import { puzzleAnswers } from "../../globals/puzzleAnswers";
+import { isAnswerCorrect } from "../../globals/answers";
 
 
 interface PuzzleAnswer {
   puzzleId: number,
   answer: string,
 }
+
+const prisma = new PrismaClient();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
@@ -21,7 +23,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return;
   }
 
-  const prisma = new PrismaClient();
   const participant = await prisma.participantStatus.findUnique({
     where: {
       email: session.user.email
@@ -36,7 +37,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const puzzleId = participant.current_puzzle;
 
-  if (puzzleAnswers[puzzleId - 1] != answer) {
+  if (isAnswerCorrect("text", puzzleId, answer)) {
     res.status(200).json({ isAnswerCorrect: false });
     return;
   }
