@@ -1,92 +1,27 @@
-import WebCam from "@/components/WebCam"
-import Dialogue from "@/components/Dialogue";
-import Maze from "@/components/Maze";
-import { QrScanner } from "@yudiel/react-qr-scanner";
 
-import { useState } from "react";
 
-import styles from "@/styles/Home.module.css";
+import Puzzle1 from "@/puzzles/Puzzle1";
+import Puzzle2 from "@/puzzles/Puzzle2";
+import Puzzle3 from "@/puzzles/Puzzle3";
 
 interface Props {
   puzzleId: number;
   currentPuzzle: number;
 }
 
-
 function Puzzle({ puzzleId, currentPuzzle }: Props) {
-  const [label, setLabel] = useState<string | null>(null);
-  const [probability, setProbability] = useState<number | null>(null);
-  const [qrCode, setQrCode] = useState<string | null>(null);
 
-  const validateImage = async (image: string) => {
-    const result = await fetch("api/validateImage", {
-      method: 'POST',
-      body: JSON.stringify({ image })
-    })
-    const { label, probability } = await result.json();
-    setLabel(label);
-    setProbability(probability);
-    return result;
-  }
 
-  if (puzzleId == 1) {
-    return (
-      <>
-        <span id={styles.cluecont}>
-          To use me, break me <br /><br />
-          I am in front, but you can’t see me <br /><br />
-          By the Laws of Physics, what goes up but never goes down? <br /><br />
-          I get bigger the more is taken away
-        </span>
-      </>
-    )
-  }
+  if (puzzleId == 1)
+    return <Puzzle1 puzzleId={puzzleId} currentPuzzle={currentPuzzle}/>
 
-  if (puzzleId == 2) {
-    return (
-      <>
-        <span id={styles.cluecont}>
-          <Dialogue sender="Mr. Cat" senderImage="/logo.svg" script={[
-            { type: "send", message: "I want you to look for someone with a white fur and a yellow head." },
-            { type: "reply", message: "Where should I look?" },
-            { type: "send", message: "Why should I tell you?" },
-            { type: "send", message: "It's up to you to find them." },
-            { type: "reply", message: "I see. I'll start looking then!" },
-          ]}
-            isFinished={currentPuzzle !== puzzleId} />
-          {currentPuzzle === puzzleId && <WebCam buttonLabel="Start Looking" callback={validateImage} />}
-          {currentPuzzle === puzzleId && <QrScanner onResult={(data) => { setQrCode(data.getText()) }} onError={(err) => { console.log(err) }} />}
-          {qrCode && <span>QR Code: {qrCode}</span>}
-          {label && <span>Label: {label}</span>}
-          {probability && <span>Probability: {probability}</span>}
-        </span>
-      </>
-    )
-  }
+  if (puzzleId == 2)
+    return <Puzzle2 puzzleId={puzzleId} currentPuzzle={currentPuzzle}/>
+  
+  if (puzzleId == 3)
+    return <Puzzle3 puzzleId={puzzleId} currentPuzzle={currentPuzzle}/>
 
-  if (puzzleId == 3) {
-    return (
-      <>
-        <span id={styles.cluecont}>
-          <Dialogue sender="Mr. Cat" senderImage="/logo.svg" script={[
-            { type: "send", message: "Ey yo, what's good chief." },
-            { type: "send", message: "Word is some kitten on the prowl for a dirty chicken crook." },
-            { type: "send", message: "Can't have no filthy fowl filcher messing up good cats' rep, so I'll be rootin' for you." },
-            { type: "reply", message: "Do you have any idea who the thief is?" },
-            { type: "send", message: "Now I don't know who the thief is, but I may just know who does... but I ain't no squealer!" },
-            { type: "send", message: "However, on a completely unrelated note, I got my paws on this here maze, hint hint." },
-            { type: "reply", message: "Huh? Would solving this maze lead me to something?" },
-          ]}
-            isFinished={currentPuzzle !== puzzleId} />
-          {currentPuzzle === puzzleId && <Maze />}
-        </span>
-      </>
-    )
-  }
-
-  return (
-    <></>
-  )
+  return <></>
 
 }
 
