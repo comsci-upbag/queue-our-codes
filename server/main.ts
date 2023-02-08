@@ -24,7 +24,6 @@ const labels = [
 
 app.use(express.json({ limit: '50mb' }))
 app.use(express.urlencoded({ limit: '50mb', extended: true }))
-app.use(express.static('public'))
 
 app.post('/', async (req: Request, res: Response) => {
 
@@ -32,7 +31,7 @@ app.post('/', async (req: Request, res: Response) => {
 
   // Initialize Model
   if (!model)
-    model = await tf.loadGraphModel(fullUrl + `/data/upb-cat-detector/model.json`);
+    model = await tf.loadGraphModel('file://public/data/upb-cat-detector/model.json');
 
   const { image: rawImage } = req.body;
 
