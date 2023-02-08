@@ -24,19 +24,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const { decodedText } = JSON.parse(req.body) as { decodedText: string };
 
-  if (!isAnswerCorrect("qrcode", participant!.current_puzzle, decodedText )) {
-    res.status(200).json({ isAnswerCorrect: false } );
+  if (!isAnswerCorrect("qrcode", participant!.current_puzzle, decodedText)) {
+    res.status(200).json({ isAnswerCorrect: false });
     return;
   }
 
-  await prisma.participantStatus.update({
-    where: {
-      email: session.user.email,
-    },
-    data: {
-      current_puzzle: participant.current_puzzle + 1,
-    }
-  })
-
-  res.status(200).json({ isAnswerCorrect: true});
+  res.status(200).json({ isAnswerCorrect: true });
 }
