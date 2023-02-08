@@ -33,7 +33,7 @@ export default function Dialogue({ sender, senderImage, script, isFinished }: Pr
   }
 
   const MessageBlock = (message: Message) => {
-    return <TypeAnimation sequence={["", 1000
+    return <TypeAnimation sequence={["", 2000
       , message.message, 1000]} />
   }
 
