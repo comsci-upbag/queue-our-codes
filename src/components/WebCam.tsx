@@ -5,7 +5,7 @@ import styles from "@/styles/WebCam.module.css";
 
 interface Props {
   buttonLabel: string,
-  callback: (image: string) => void
+  callback: (image: string) => Promise<Response>
 }
 
 export default function WebCam({ buttonLabel, callback }: Props) {
@@ -86,7 +86,7 @@ export default function WebCam({ buttonLabel, callback }: Props) {
 
     const image = getImageFromVideo();
 
-    callback(image);
+    await callback(image);
   }
 
   return (
