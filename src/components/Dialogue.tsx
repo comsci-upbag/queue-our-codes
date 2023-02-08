@@ -14,9 +14,10 @@ interface Props {
   senderImage: string;
   script: Message[];
   isFinished: boolean;
+  setIsDialogueFinished?: (isDialogueFinished: boolean) => void;
 }
 
-export default function Dialogue({ sender, senderImage, script, isFinished }: Props) {
+export default function Dialogue({ sender, senderImage, script, isFinished, setIsDialogueFinished }: Props) {
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
   const [isTyping, setIsTyping] = useState(Array(script.length).fill(true));
 
@@ -26,10 +27,14 @@ export default function Dialogue({ sender, senderImage, script, isFinished }: Pr
     if (index < script.length && script[index].type !== "reply")
       index++;
 
-    if (index < script.length)
+    if (index < script.length) {
       setCurrentMessageIndex(index);
-    else
+    } else {
       setCurrentMessageIndex(script.length);
+
+      if (setIsDialogueFinished)
+        setIsDialogueFinished(true);
+    }
   }
 
   const MessageBlock = (message: Message) => {
