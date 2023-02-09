@@ -37,7 +37,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const puzzleId = participant.current_puzzle;
 
-  if (isAnswerCorrect("text", puzzleId, answer)) {
+  if (!isAnswerCorrect("text", puzzleId, answer)) {
     res.status(200).json({ isAnswerCorrect: false });
     return;
   }
