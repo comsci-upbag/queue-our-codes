@@ -9,7 +9,7 @@ interface Props {
   currentPuzzle: number;
 }
 
-export default function Puzzle2({ puzzleId, currentPuzzle }: Props) {
+export default function Puzzle3({ puzzleId, currentPuzzle }: Props) {
   return (
     <>
       <span id={styles.cluecont}>
