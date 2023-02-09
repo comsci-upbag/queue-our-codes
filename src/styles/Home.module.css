@@ -22,8 +22,8 @@
     text-align: center;
     padding: 20px;
     border-radius: 20px;
-    background: var(--color1);
-    box-shadow: 0px 10px 10px var(--color3);
+    background: var(--background-color1);
+    box-shadow: 0px 10px 10px var(--shadow-color2);
 }
 
 #UserContainer {
@@ -43,7 +43,7 @@
 #userpic {
     height: 32px;
     width: 32px;
-    border: 1px solid var(--color1);
+    border: 1px solid var(--background-color1);
     border-radius: 50%;
 }
 
@@ -71,8 +71,8 @@
     padding: 20px;
     border-radius: 20px;
     width: 100%;
-    background-color: var(--color1);
-    color: var(--color7);
+    background-color: var(--background-color1);
+    color: var(--button-color2);
     font-family: Sniglet;
     font-size: 18px;
     font-weight: 800;
@@ -89,13 +89,13 @@
 }
 
 #NavigationContainer button:hover:not(:disabled) {
-    background-color: var(--color1);
-    color: var(--color4);
-    box-shadow: 0px 10px 10px var(--color3);
+    background-color: var(--background-color1);
+    color: var(--text-color1);
+    box-shadow: 0px 10px 10px var(--shadow-color2);
 }
 
 #NavigationContainer button:disabled {
-    color: var(--color3);
+    color: var(--shadow-color2);
     cursor: not-allowed;
 }
 
@@ -104,8 +104,8 @@
     text-align: center;
     padding: 20px;
     border-radius: 20px;
-    background: var(--color1);
-    box-shadow: 0px 10px 10px var(--color3);
+    background: var(--background-color1);
+    box-shadow: 0px 10px 10px var(--shadow-color2);
 
     display: flex;
     flex-direction: row;
@@ -164,7 +164,7 @@
     border: none;
     outline-width: 0;
     font: 100 18px/1.5 "Sniglet";
-    color: var(--color4);
+    color: var(--text-color1);
     width: 85%;
     background: transparent;
 }
@@ -177,14 +177,14 @@
 }
 
 #SubmitButtonImage path {
-    color: var(--color1);
+    color: var(--background-color1);
 }
 
 .PredictionBar {
     margin: 20px 0 20px 0;
-    border: 1px solid var(--color1);
+    border: 1px solid var(--background-color1);
     border-radius: 20px;
-    background: var(--color7);
+    background: var(--button-color2);
     box-sizing: content-box;
 }
 
@@ -196,13 +196,13 @@
     top: 2px;
     height: 20px;
     border-radius: 20px;
-    background: linear-gradient(to left, var(--color1), var(--color5));
+    background: linear-gradient(to left, var(--background-color1), var(--gradient2));
 }
 
 .ProgressBar {
     margin: 20px 0 20px 0;
     border-radius: 20px;
-    background: var(--color6);
+    background: var(--button-color1);
     box-sizing: content-box;
     margin-bottom: 10vh;
 }
@@ -215,7 +215,7 @@
     top: 2px;
     height: 20px;
     border-radius: 20px;
-    background: linear-gradient(to left, var(--color8), var(--color5));
+    background: linear-gradient(to left, var(--gradient1), var(--gradient2));
 }
 
 .Footer {
@@ -237,7 +237,7 @@
     height: 100vh;
     width: 100vw;
 
-    background: var(--color3);
+    background: var(--shadow-color2);
     /* mix-blend-mode: hard-light; */
     filter: blur(500px);
 }

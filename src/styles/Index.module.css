@@ -17,8 +17,8 @@
 
     margin: 20px 0 20px 0;
     border-radius: 20px;
-    background: var(--color1);
-    box-shadow: 0px 10px 10px var(--color3);
+    background: var(--background-color1);
+    box-shadow: 0px 10px 10px var(--shadow-color2);
 }
 
 .container::-webkit-scrollbar {
@@ -59,14 +59,14 @@
     margin-top: 30px;
     padding: 20px;
     border-radius: 20px;
-    background: var(--color9);
-    color: var(--color10);
-    box-shadow: 0px 5px var(--color2);
+    background: var(--button-color3);
+    color: var(--text-color2);
+    box-shadow: 0px 5px var(--shadow-color1);
     cursor: pointer;
 }
 
 .LoginButton:active {
-    background-color: var(--color2);
+    background-color: var(--shadow-color1);
     transform: translateY(5px);
     box-shadow: 0px 0px;
 }
@@ -78,7 +78,7 @@
 .ProgressBar {
     margin: 20px 0 20px 0;
     border-radius: 20px;
-    background: var(--color6);
+    background: var(--button-color1);
     box-sizing: content-box;
     margin-bottom: 10vh;
 }
@@ -91,7 +91,7 @@
     top: 2px;
     height: 20px;
     border-radius: 20px;
-    background: linear-gradient(to left, var(--color8), var(--color5));
+    background: linear-gradient(to left, var(--gradient1), var(--gradient2));
 }
 
 .Footer {
@@ -112,7 +112,7 @@
     height: 100vh;
     width: 100vw;
 
-    background: var(--color3);
+    background: var(--shadow-color2);
     /* mix-blend-mode: hard-light; */
     filter: blur(500px);
 }

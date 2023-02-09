@@ -9,10 +9,10 @@
   text-align: center;
   padding: 20px;
   border-radius: 20px;
-  box-shadow: 0px 5px var(--color2);
-  background-color: var(--color6) !important;
+  box-shadow: 0px 5px var(--shadow-color1);
+  background-color: var(--button-color1) !important;
   max-width: 60%;
-  color: var(--color11);
+  color: var(--white);
   font-family: Sniglet;
   font-size: 16px;
   border: none;
@@ -39,8 +39,8 @@
   background: transparent;
   cursor: pointer;
   border-radius: 20px;
-  box-shadow: 0px 7px 5px var(--color2);
-  background-color: var(--color6) !important;
+  box-shadow: 0px 7px 5px var(--shadow-color1);
+  background-color: var(--button-color1) !important;
   margin: 10px;
 }
 
@@ -56,8 +56,8 @@
   align-items: center;
   justify-content: center;
   margin-top: 20px;
-  background: var(--color1);
-  box-shadow: 0px 10px 10px var(--color3);
+  background: var(--background-color1);
+  box-shadow: 0px 10px 10px var(--shadow-color2);
 }
 
 .Maze {
@@ -81,5 +81,5 @@
 }
 
 .Visited {
-  background-color: var(--color2);
+  background-color: var(--shadow-color1);
 }
