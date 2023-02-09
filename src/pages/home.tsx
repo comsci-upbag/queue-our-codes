@@ -5,11 +5,8 @@ import { signOut, getSession } from "next-auth/react"
 import { NextPageContext } from "next";
 
 import styles from "@/styles/Home.module.css"
+import PuzzleContainer from "@/components/PuzzleContainer"
 
-import Puzzle from "./api/puzzle"
-import AlertBox from "@/components/AlertBox";
-
-import { useEffect, useRef, useState } from "react";
 import { prisma } from "@/globals/prisma"
 
 export async function getServerSideProps(context: NextPageContext) {
@@ -68,45 +65,11 @@ interface props {
   previousAnswers: string[],
 }
 
-export default function Home({ userName, userImage, currentPuzzle, previousAnswers }: props) {
-
-  const inputField = useRef<HTMLInputElement>(null);
-  const puzzlesContainer = useRef<HTMLDivElement>(null);
-
-  const [visiblePuzzle, setVisiblePuzzle] = useState<number>(currentPuzzle);
-  const [showAlert, setShowAlert] = useState<boolean>(false);
-
-  const handleSubmitAnswer = (e: React.MouseEvent<HTMLElement>) => {
-    e.preventDefault();
-
-    const request = {
-      answer: inputField.current!.value
-    };
-
-    fetch("/api/validateAnswer", {
-      method: "POST",
-      body: JSON.stringify(request),
-    }).then(data => data.json())
-      .then(data => data.isAnswerCorrect)
-      .then(isAnswerCorrect => {
-        // TODO: handle popup
-        if (isAnswerCorrect) {
-          window.location.reload();
-        } else {
-          setShowAlert(true);
-        }
-      })
-  }
-
-
-  useEffect(() => {
-    puzzlesContainer.current!.scrollTo(puzzlesContainer.current!.scrollWidth, 0);
-  }, [])
+export default function Home({ currentPuzzle, previousAnswers, userName, userImage }: props) {
 
 
   return (
     <>
-      {showAlert && <AlertBox title="Wrong Answer" message="Please try again" type="danger" show={setShowAlert} />}
       <div id={styles.home}>
         <span id={styles.title}> Queue Our Codes </span><br />
         <div className={styles.HomeContainer} id={styles.UserContainer}>
@@ -116,34 +79,7 @@ export default function Home({ userName, userImage, currentPuzzle, previousAnswe
           </div>
           <Image id={styles.logout} src="/logout.svg" width={25} height={25} alt="Picture of the user" onClick={() => signOut()} />
         </div>
-        <div ref={puzzlesContainer}>
-          <div className={styles.PuzzleCard} key={visiblePuzzle}>
-            <div className={styles.HomeContainer} id={styles.ClueContainer}>
-              <span id={styles.cluenum}> Clue #{visiblePuzzle} </span>
-              <Puzzle puzzleId={visiblePuzzle} currentPuzzle={currentPuzzle} />
-            </div>
-            {
-              visiblePuzzle === currentPuzzle
-                ?
-                <div className={styles.HomeContainer} id={styles.InputContainer}>
-                  <input ref={inputField} id={styles.InputField} type="text" placeholder="Answer" />
-                  <Image id={styles.SubmitButtonImage} src="submit.svg" alt="Picture of the user" width={25} height={25} onClick={handleSubmitAnswer} />
-                </div>
-                :
-                <div className={styles.HomeContainer} id={styles.InputContainer}>
-                  <input id={styles.InputField} type="text" placeholder={`Answer for #${visiblePuzzle} is ${previousAnswers[visiblePuzzle - 1]}`} disabled />
-                </div>
-            }
-          </div>
-        </div>
-        <div id={styles.NavigationContainer}>
-          <button onClick={() => setVisiblePuzzle(visiblePuzzle - 1)} disabled={visiblePuzzle === 1}> &lt; PREV </button>
-          <button onClick={() => setVisiblePuzzle(visiblePuzzle + 1)} disabled={visiblePuzzle === currentPuzzle}> NEXT &gt; </button>
-        </div>
-        <div className={styles.ProgressBar}>
-          <div className={styles.Progress} style={{ width: `calc((${currentPuzzle}/ 10) * 100% - 4px)` }}></div >
-        </div>
-        <div className={styles.Footer}>COMSCI@UP.BAG 2023</div>
+        <PuzzleContainer currentPuzzle={currentPuzzle} previousAnswers={previousAnswers}/>
       </div>
 
       <div className={styles.cover}>
