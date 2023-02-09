@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import Image from "next/image";
+import ConditionalShow from "@/components/ConditionalShow"
 
 import styles from "@/styles/WebCam.module.css";
 
@@ -93,28 +94,31 @@ export default function WebCam({ buttonLabel, callback }: Props) {
     <>
       <div ref={webcamContainer} className={styles.WebCamContainer}>
         <video ref={video} autoPlay playsInline muted width="100%" height="100%" style={{ display: "none" }} />
-        {
-          isCameraEnabled ?
-            <div className={styles.CameraControls}>
-              <button onClick={stopCurrentCamera}>
-                <Image src="/stop-camera.svg" alt="stop camera" width={32} height={32} />
-              </button>
-              <button onClick={switchCamera}>
-                {currentCamera === "user" ?
-                  <Image src="/switch-rear.svg" alt="switch camera" width={32} height={32} />
-                  :
-                  <Image src="/switch-front.svg" alt="switch camera" width={32} height={32} />
-                }
-              </button>
-              <button onClick={takePicture}>
+
+        <ConditionalShow shouldShow={isCameraEnabled}>
+          <div className={styles.CameraControls}>
+            <button onClick={stopCurrentCamera}>
+              <Image src="/stop-camera.svg" alt="stop camera" width={32} height={32} />
+            </button>
+            <button onClick={switchCamera}>
+              {currentCamera === "user" ?
                 <Image src="/switch-rear.svg" alt="switch camera" width={32} height={32} />
-              </button>
-            </div>
-            :
-            <button className={styles.EnableButton} onClick={async () => {
-              await enableCamera();
-            }}>{buttonLabel}</button>
-        }
+                :
+                <Image src="/switch-front.svg" alt="switch camera" width={32} height={32} />
+              }
+            </button>
+            <button onClick={takePicture}>
+              <Image src="/switch-rear.svg" alt="switch camera" width={32} height={32} />
+            </button>
+          </div>
+        </ConditionalShow>
+
+        <ConditionalShow shouldShow={!isCameraEnabled}>
+          <button className={styles.EnableButton} onClick={async () => {
+            await enableCamera();
+          }}>{buttonLabel}</button>
+        </ConditionalShow>
+
       </div>
     </>
   )
