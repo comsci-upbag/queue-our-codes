@@ -4,11 +4,11 @@ import ConditionalShow from "@/components/ConditionalShow"
 import styles from "@/styles/QRCode.module.css"
 
 interface Props {
-  onResultCallback: (decodedText: string) => Promise<void>,
+  onResultCallback: (decodedText: string) => Promise<Response>,
   buttonLabel: string,
 }
 
-export default function QRCode({ buttonLabel, onResultCallback } : Props) {
+export default function QRCode({ buttonLabel, onResultCallback }: Props) {
 
   const [isCameraEnabled, setIsCameraEnabled] = useState(false);
 
@@ -16,11 +16,11 @@ export default function QRCode({ buttonLabel, onResultCallback } : Props) {
     <div className={styles.QRCodeContainer}>
 
       <ConditionalShow shouldShow={isCameraEnabled} >
-        <QrScanner onResult={async (data) => { await onResultCallback(data.getText()) }} 
-                   onError={(err) => { console.log(err) }} />
+        <QrScanner onResult={async (data) => { await onResultCallback(data.getText()) }}
+          onError={(err) => { console.log(err) }} />
       </ConditionalShow>
 
-      <button className={styles.EnableButton} onClick={() => setIsCameraEnabled(!isCameraEnabled)}> {buttonLabel}  </button>
+      {!isCameraEnabled && <button className={styles.EnableButton} onClick={() => setIsCameraEnabled(!isCameraEnabled)}> {buttonLabel}  </button>}
     </div>
   )
 
