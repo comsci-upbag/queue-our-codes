@@ -75,8 +75,8 @@ export default function WebCam({ buttonLabel, callback }: Props) {
     const getImageFromVideo = () => {
       let canvas = document.createElement('canvas');
 
-      canvas.width = webcamContainer.current!.clientWidth;
-      canvas.height = webcamContainer.current!.clientWidth;
+      canvas.width = Math.max(video.current!.clientWidth, 384);
+      canvas.height = Math.max(video.current!.clientWidth, 384);
 
       let ctx = canvas.getContext('2d');
       ctx?.drawImage(video.current!, 0, 0, canvas.width, canvas.height);
