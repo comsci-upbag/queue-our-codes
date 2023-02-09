@@ -6,7 +6,7 @@ interface AlertProps {
   message: string,
   type: "success" | "danger" | "warning" | "info",
   show: (x: boolean) => void,
-  showWhen: boolean,
+  showWhen: boolean | null,
 }
 
 

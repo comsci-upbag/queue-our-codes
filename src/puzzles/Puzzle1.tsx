@@ -55,13 +55,13 @@ export default function Puzzle1({ puzzleId, currentPuzzle }: Props) {
           ]}
             isFinished={currentPuzzle !== puzzleId} />
         </Show>
-        
+
         <Show when={currentPuzzle === puzzleId && isDialogueFinished && !isAnswerCorrect} >
           <WebCam buttonLabel="Start Looking" callback={validateImage} />
         </Show>
 
         <AlertBox showWhen={showAlert && !isAnswerCorrect} title="Wrong answer!" message="Sadly, this is not the cat we are looking for." type="warning" show={setShowAlert} />
-        <AlertBox showWhen={showAlert && !isAnswerCorrect} title={"Congratulations!"} message={"You've found {cat name}!"} type={"success"} show={setShowAlert} />
+        <AlertBox showWhen={showAlert && isAnswerCorrect} title={"Congratulations!"} message={"You've found {cat name}!"} type={"success"} show={setShowAlert} />
       </span>
     </>
   )
