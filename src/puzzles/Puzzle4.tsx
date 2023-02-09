@@ -22,5 +22,5 @@ export default function Puzzle4(_ : Props) {
       console.error("Wrong qrcode");
   }
 
-  return <QRCode onResultCallback={validateQrCode}/>
+  return <QRCode onResultCallback={validateQrCode} buttonLabel="Start Looking"/>
 }

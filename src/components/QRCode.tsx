@@ -5,9 +5,10 @@ import styles from "@/styles/QRCode.module.css"
 
 interface Props {
   onResultCallback: (decodedText: string) => Promise<void>,
+  buttonLabel: string,
 }
 
-export default function QRCode({ onResultCallback } : Props) {
+export default function QRCode({ buttonLabel, onResultCallback } : Props) {
 
   const [isCameraEnabled, setIsCameraEnabled] = useState(false);
 
@@ -19,7 +20,7 @@ export default function QRCode({ onResultCallback } : Props) {
                    onError={(err) => { console.log(err) }} />
       </ConditionalShow>
 
-      <button className={styles.EnableButton} onClick={() => setIsCameraEnabled(true)}/>
+      <button className={styles.EnableButton} onClick={() => setIsCameraEnabled(!isCameraEnabled)}> {buttonLabel}  </button>
     </div>
   )
 
