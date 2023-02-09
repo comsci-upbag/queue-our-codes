@@ -51,17 +51,6 @@ export default function Dialogue({ sender, senderImage, script, isFinished, setI
         return newIsTyping;
       });
     }, 1000);
-  }, [])
-
-  useEffect(() => {
-    setTimeout(() => {
-      updateCurrentMessageIndex();
-      setIsTyping(() => {
-        let newIsTyping = [...isTyping];
-        newIsTyping[currentMessageIndex - 1] = false;
-        return newIsTyping;
-      });
-    }, 1000);
   }, [currentMessageIndex])
 
   if (!isFinished)
@@ -118,7 +107,8 @@ export default function Dialogue({ sender, senderImage, script, isFinished, setI
             {currentMessageIndex < script.length && script[currentMessageIndex].type === "reply" ? MessageBlock(script[currentMessageIndex]) : <p></p>}
           </div>
           <Image src="/submit.svg" onClick={() => {
-            setCurrentMessageIndex(currentMessageIndex + 1);
+            if (!isTyping[currentMessageIndex - 1])
+              setCurrentMessageIndex(currentMessageIndex + 1);
           }} width={32} height={32} alt="Arrow" />
         </div>
       </>
