@@ -6,6 +6,7 @@ import Puzzle3 from "@/puzzles/Puzzle3";
 import Puzzle4 from "@/puzzles/Puzzle4";
 
 import Puzzle6 from "@/puzzles/Puzzle6";
+import Puzzle7 from "@/puzzles/Puzzle7";
 
 interface Props {
   puzzleId: number;
@@ -29,6 +30,9 @@ function Puzzle({ puzzleId, currentPuzzle }: Props) {
 
   if (puzzleId == 6)
     return <Puzzle6 puzzleId={puzzleId} currentPuzzle={currentPuzzle} />
+
+  if (puzzleId == 7)
+    return <Puzzle7 puzzleId={puzzleId} currentPuzzle={currentPuzzle} />
 
   return <></>
 

@@ -3,12 +3,12 @@ import dynamic from "next/dynamic";
 const AlertBox = dynamic(() => import("@/components/AlertBox"));
 
 import Dialogue from "@/components/Dialogue"
-import WebCam from "@/components/WebCam"
 import ConditionalShow from "@/components/ConditionalShow";
 
 import styles from "@/styles/Home.module.css"
 
 import { useState } from "react";
+import QRCode from "@/components/QRCode";
 
 interface Props {
   puzzleId: number;
@@ -20,10 +20,10 @@ export default function Puzzle1({ puzzleId, currentPuzzle }: Props) {
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [isDialogueFinished, setIsDialogueFinished] = useState<boolean>(false);
 
-  const validateImage = async (image: string) => {
-    const result = await fetch("api/validateImage", {
+  const validateQRCode = async (decodedText: string) => {
+    const result = await fetch("api/validateQRCode", {
       method: 'POST',
-      body: JSON.stringify({ image })
+      body: JSON.stringify({ decodedText })
     })
     const { isAnswerCorrect } = await result.json();
     setIsAnswerCorrect(isAnswerCorrect);
@@ -55,7 +55,7 @@ export default function Puzzle1({ puzzleId, currentPuzzle }: Props) {
           ]}
             isFinished={currentPuzzle !== puzzleId} />
         </ConditionalShow>
-        {currentPuzzle === puzzleId && isDialogueFinished && !isAnswerCorrect && <WebCam buttonLabel="Start Looking" callback={validateImage} />}
+        {currentPuzzle === puzzleId && isDialogueFinished && !isAnswerCorrect && <QRCode buttonLabel="Start Scanning" onResultCallback={validateQRCode} />}
         {showAlert && !isAnswerCorrect && <AlertBox title={"Wrong answer!"} message={"Sadly, this is not the cat we are looking for."} type={"warning"} show={setShowAlert} />}
         {showAlert && isAnswerCorrect && <AlertBox title={"Congratulations!"} message={"You've found {cat name}!"} type={"success"} show={setShowAlert} />}
       </span>
