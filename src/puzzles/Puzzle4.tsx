@@ -1,16 +1,13 @@
-
-import { QrScanner } from "@yudiel/react-qr-scanner";
+import QRCode from "@/components/QRCode"
 
 interface Props {
   puzzleId: number;
   currentPuzzle: number;
 }
 
-export default function Puzzle4({ puzzleId, currentPuzzle }: Props) {
-
+export default function Puzzle4(_ : Props) {
 
   const validateQrCode = async (decodedText: string) => {
-
     if (!decodedText)
       return;
 
@@ -23,12 +20,7 @@ export default function Puzzle4({ puzzleId, currentPuzzle }: Props) {
 
     if (!isAnswerCorrect)
       console.error("Wrong qrcode");
-
-    // TODO: state handling here
-
-
   }
 
-  return <QrScanner onResult={(data) => { validateQrCode(data.getText()) }} onError={(err) => { console.log(err) }} />
-
+  return <QRCode onResultCallback={validateQrCode}/>
 }
