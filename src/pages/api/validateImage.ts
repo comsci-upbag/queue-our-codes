@@ -1,9 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { PrismaClient } from '@prisma/client'
 import { getSession } from "next-auth/react"
 import { isAnswerCorrect } from "@/globals/answers";
+import { prisma } from "@/globals/prisma"
 
-const prisma = new PrismaClient();
 
 interface Prediction {
   label: string,

@@ -9,8 +9,8 @@ import styles from "@/styles/Home.module.css"
 import Puzzle from "./api/puzzle"
 import AlertBox from "@/components/AlertBox";
 
-import { PrismaClient } from "@prisma/client";
 import { useEffect, useRef, useState } from "react";
+import { prisma } from "@/globals/prisma"
 
 export async function getServerSideProps(context: NextPageContext) {
   const session = await getSession(context);
@@ -26,8 +26,6 @@ export async function getServerSideProps(context: NextPageContext) {
       },
     }
   }
-
-  const prisma = new PrismaClient();
 
   const participant = await prisma.participantStatus.findUnique({
     where: {
