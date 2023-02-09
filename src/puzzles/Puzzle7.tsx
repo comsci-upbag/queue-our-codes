@@ -62,7 +62,7 @@ export default function Puzzle7({ puzzleId, currentPuzzle }: Props) {
         </Show>
 
         <AlertBox showWhen={showAlert && !isAnswerCorrect} title={"Wrong answer!"} message={"Sadly, this is not the cat we are looking for."} type={"warning"} show={setShowAlert} />
-        <AlertBox showWhen={showAlert && !isAnswerCorrect} title={"Co{showAlert && isAnswerCorrect && ngratulations!"} message={"You've found {cat name}!"} type={"success"} show={setShowAlert} />
+        <AlertBox showWhen={showAlert && isAnswerCorrect} title={"Co{showAlert && isAnswerCorrect && ngratulations!"} message={"You've found {cat name}!"} type={"success"} show={setShowAlert} />
       </span>
     </>
   )
