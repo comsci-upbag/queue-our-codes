@@ -114,8 +114,8 @@ export default function Maze() {
   }, [x, y, z])
 
   return <div className={styles.Container}>
-    {isPlayerAtEnd &&
-      <AlertBox title={"You won!"} message={"You've reached the end."} type={"success"} show={setIsPlayerAtEnd} />}
+    <AlertBox showWhen={isPlayerAtEnd} title={"You won!"} message={"You've reached the end."} type={"success"} show={setIsPlayerAtEnd} />
+
     {startGame ? <>
       <div className={styles.MazeContainer} key={String(z + " ")}>
         {maze[z].map((row, i) => {

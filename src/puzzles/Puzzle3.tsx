@@ -1,6 +1,7 @@
 
 import Dialogue from "@/components/Dialogue";
 import Maze from "@/components/Maze";
+import Show from "@/components/Show"
 
 import styles from "@/styles/Home.module.css";
 
@@ -23,7 +24,10 @@ export default function Puzzle3({ puzzleId, currentPuzzle }: Props) {
           { type: "reply", message: "Huh? Would solving this maze lead me to something?" },
         ]}
           isFinished={currentPuzzle !== puzzleId} />
-        {currentPuzzle === puzzleId && <Maze />}
+        
+        <Show when={currentPuzzle === puzzleId}>
+          <Maze />
+        </Show>
       </span>
     </>
   )

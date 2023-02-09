@@ -45,7 +45,7 @@ export default function PuzzleContainer({currentPuzzle, previousAnswers }: props
 
   return (
     <>
-      {showAlert && <AlertBox title="Wrong Answer" message="Please try again" type="danger" show={setShowAlert} />}
+      <AlertBox showWhen={showAlert} title="Wrong Answer" message="Please try again" type="danger" show={setShowAlert} />
       <div ref={puzzlesContainer}>
         <div className={styles.PuzzleCard} key={visiblePuzzle}>
           <div className={styles.HomeContainer} id={styles.ClueContainer}>

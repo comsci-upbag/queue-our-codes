@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { QrScanner } from "@yudiel/react-qr-scanner";
-import ConditionalShow from "@/components/ConditionalShow"
+import Show from "@/components/Show"
 import styles from "@/styles/QRCode.module.css"
 
 interface Props {
@@ -15,12 +15,14 @@ export default function QRCode({ buttonLabel, onResultCallback }: Props) {
   return (
     <div className={styles.QRCodeContainer}>
 
-      <ConditionalShow shouldShow={isCameraEnabled} >
+      <Show when={isCameraEnabled} >
         <QrScanner onResult={async (data) => { await onResultCallback(data.getText()) }}
           onError={(err) => { console.log(err) }} />
-      </ConditionalShow>
+      </Show>
 
-      {!isCameraEnabled && <button className={styles.EnableButton} onClick={() => setIsCameraEnabled(!isCameraEnabled)}> {buttonLabel}  </button>}
+      <Show when={!isCameraEnabled}>
+        <button className={styles.EnableButton} onClick={() => setIsCameraEnabled(!isCameraEnabled)}> {buttonLabel}  </button>
+      </Show>
     </div>
   )
 

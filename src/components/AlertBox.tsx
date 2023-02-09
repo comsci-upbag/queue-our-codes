@@ -1,15 +1,20 @@
 import styles from "@/styles/AlertBox.module.css"
+import { useRef } from "react"
 
 interface AlertProps {
   title: string,
   message: string,
   type: "success" | "danger" | "warning" | "info",
-  show: (x: boolean) => void
+  show: (x: boolean) => void,
+  showWhen: boolean,
 }
 
-import { useRef } from "react"
 
-export default function AlertBox({ title, message, type, show }: AlertProps) {
+export default function AlertBox({ title, message, type, show, showWhen }: AlertProps) {
+
+  if (!showWhen)
+    return <></>
+
   const alertRef = useRef<HTMLDivElement>(null)
 
   const closeAlert = (e: React.MouseEvent) => {

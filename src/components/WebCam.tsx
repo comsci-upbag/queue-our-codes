@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import Image from "next/image";
-import ConditionalShow from "@/components/ConditionalShow"
+import Show from "@/components/Show"
 
 import styles from "@/styles/WebCam.module.css";
 
@@ -95,7 +95,7 @@ export default function WebCam({ buttonLabel, callback }: Props) {
       <div ref={webcamContainer} className={styles.WebCamContainer}>
         <video ref={video} autoPlay playsInline muted width="100%" height="100%" style={{ display: "none" }} />
 
-        <ConditionalShow shouldShow={isCameraEnabled}>
+        <Show when={isCameraEnabled}>
           <div className={styles.CameraControls}>
             <button onClick={stopCurrentCamera}>
               <Image src="/stop-camera.svg" alt="stop camera" width={32} height={32} />
@@ -111,13 +111,13 @@ export default function WebCam({ buttonLabel, callback }: Props) {
               <Image src="/switch-rear.svg" alt="switch camera" width={32} height={32} />
             </button>
           </div>
-        </ConditionalShow>
+        </Show>
 
-        <ConditionalShow shouldShow={!isCameraEnabled}>
+        <Show when={!isCameraEnabled}>
           <button className={styles.EnableButton} onClick={async () => {
             await enableCamera();
           }}>{buttonLabel}</button>
-        </ConditionalShow>
+        </Show>
 
       </div>
     </>
