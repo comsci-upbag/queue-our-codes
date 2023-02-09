@@ -15,7 +15,7 @@ interface Props {
   currentPuzzle: number;
 }
 
-export default function Puzzle1({ puzzleId, currentPuzzle }: Props) {
+export default function Puzzle7({ puzzleId, currentPuzzle }: Props) {
   const [isAnswerCorrect, setIsAnswerCorrect] = useState<boolean | null>(null);
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [isDialogueFinished, setIsDialogueFinished] = useState<boolean>(false);
@@ -28,7 +28,6 @@ export default function Puzzle1({ puzzleId, currentPuzzle }: Props) {
     const { isAnswerCorrect } = await result.json();
     setIsAnswerCorrect(isAnswerCorrect);
     setShowAlert(true);
-    return result;
   }
 
   return (
@@ -45,7 +44,7 @@ export default function Puzzle1({ puzzleId, currentPuzzle }: Props) {
             isFinished={currentPuzzle !== puzzleId}
             setIsDialogueFinished={setIsDialogueFinished} />
         </ConditionalShow>
-        <ConditionalShow shouldShow={isAnswerCorrect!}>
+        <ConditionalShow shouldShow={isAnswerCorrect! || currentPuzzle !== puzzleId}>
           <Dialogue sender="Mr. Cat 2" senderImage="/logo.svg" script={[
             { type: "send", message: "I want you to look for someone with a white fur and a yellow head." },
             { type: "reply", message: "Where should I look?" },

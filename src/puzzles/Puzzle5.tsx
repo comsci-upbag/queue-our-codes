@@ -4,7 +4,7 @@ interface Props {
   currentPuzzle: number;
 }
 
-export default function Puzzle4({ puzzleId, currentPuzzle }: Props) {
+export default function Puzzle5({ puzzleId, currentPuzzle }: Props) {
   return (
     <></>
   )

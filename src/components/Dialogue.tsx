@@ -142,14 +142,5 @@ export default function Dialogue({ sender, senderImage, script, isFinished, setI
         )
       }
     )}
-    <div className={styles.inputMessage}>
-      <div className={styles.inputWrapper}>
-        <p></p>
-      </div>
-      <Image src="/submit.svg" onClick={() => {
-        if (isTyping.every(status => status === true))
-          setCurrentMessageIndex(currentMessageIndex + 1);
-      }} width={32} height={32} alt="Arrow" />
-    </div>
   </>
 }

@@ -4,7 +4,7 @@ import ConditionalShow from "@/components/ConditionalShow"
 import styles from "@/styles/QRCode.module.css"
 
 interface Props {
-  onResultCallback: (decodedText: string) => Promise<Response>,
+  onResultCallback: (decodedText: string) => Promise<void>,
   buttonLabel: string,
 }
 

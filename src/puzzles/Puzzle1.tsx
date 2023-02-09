@@ -45,7 +45,7 @@ export default function Puzzle1({ puzzleId, currentPuzzle }: Props) {
             isFinished={currentPuzzle !== puzzleId}
             setIsDialogueFinished={setIsDialogueFinished} />
         </ConditionalShow>
-        <ConditionalShow shouldShow={isAnswerCorrect!}>
+        <ConditionalShow shouldShow={isAnswerCorrect! || currentPuzzle !== puzzleId}>
           <Dialogue sender="Mr. Cat 2" senderImage="/logo.svg" script={[
             { type: "send", message: "I want you to look for someone with a white fur and a yellow head." },
             { type: "reply", message: "Where should I look?" },
