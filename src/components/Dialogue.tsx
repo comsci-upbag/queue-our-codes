@@ -76,11 +76,11 @@ export default function Dialogue({ sender, senderImage, script, isFinished, setI
                   <div className={styles.sender}>
                     {isTyping[index] ?
                       <p key={index + "loading"}>
-                        <div className={styles.typingAnimation}>
-                          <div className={styles.typingAnimationDot}></div>
-                          <div className={styles.typingAnimationDot}></div>
-                          <div className={styles.typingAnimationDot}></div>
-                        </div>
+                        <span className={styles.typingAnimation}>
+                          <span className={styles.typingAnimationDot}></span>
+                          <span className={styles.typingAnimationDot}></span>
+                          <span className={styles.typingAnimationDot}></span>
+                        </span>
                       </p>
                       : <p key={index}>{message.message}</p>
                     }
@@ -93,11 +93,11 @@ export default function Dialogue({ sender, senderImage, script, isFinished, setI
                     <h1>{sender}</h1>
                     {isTyping[index] ?
                       <p key={index + "loading"}>
-                        <div className={styles.typingAnimation}>
-                          <div className={styles.typingAnimationDot}></div>
-                          <div className={styles.typingAnimationDot}></div>
-                          <div className={styles.typingAnimationDot}></div>
-                        </div>
+                        <span className={styles.typingAnimation}>
+                          <span className={styles.typingAnimationDot}></span>
+                          <span className={styles.typingAnimationDot}></span>
+                          <span className={styles.typingAnimationDot}></span>
+                        </span>
                       </p>
                       : <p key={index}>{message.message}</p>
                     }
