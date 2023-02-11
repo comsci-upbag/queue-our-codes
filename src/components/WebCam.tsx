@@ -14,7 +14,6 @@ export default function WebCam({ buttonLabel, callback }: Props) {
   const video = useRef<HTMLVideoElement>(null);
 
   const [isCameraEnabled, setIsCameraEnabled] = useState<boolean>(false);
-  const [currentCamera, setCurrentCamera] = useState<"user" | "environment">("environment");
 
   async function enableCamera() {
     if (!(!!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia))) {
@@ -24,7 +23,7 @@ export default function WebCam({ buttonLabel, callback }: Props) {
 
     // getUsermedia parameters.
     const constraints = {
-      video: { facingMode: currentCamera },
+      video: { facingMode: "environment" },
       width: webcamContainer.current?.clientWidth,
       height: webcamContainer.current?.clientWidth,
     };
@@ -35,12 +34,6 @@ export default function WebCam({ buttonLabel, callback }: Props) {
     await video.current!.play();
     video.current!.style.display = "block";
 
-    // get the actual video facing mode
-    const track = video.current!.srcObject!.getTracks()[0];
-    const settings = track.getSettings();
-    const facingMode = settings.facingMode;
-
-    setCurrentCamera(facingMode === "user" ? "user" : "environment");
     setIsCameraEnabled(true);
   }
 
@@ -58,16 +51,6 @@ export default function WebCam({ buttonLabel, callback }: Props) {
 
       setIsCameraEnabled(false);
     }
-  }
-
-  async function switchCamera() {
-    setCurrentCamera(() => {
-      if (currentCamera === "user") {
-        return "environment";
-      } else {
-        return "user";
-      }
-    });
   }
 
   async function takePicture() {
@@ -100,15 +83,8 @@ export default function WebCam({ buttonLabel, callback }: Props) {
             <button onClick={stopCurrentCamera}>
               <Image src="/stop-camera.svg" alt="stop camera" width={32} height={32} />
             </button>
-            <button onClick={switchCamera}>
-              {currentCamera === "user" ?
-                <Image src="/switch-rear.svg" alt="switch camera" width={32} height={32} />
-                :
-                <Image src="/switch-front.svg" alt="switch camera" width={32} height={32} />
-              }
-            </button>
             <button onClick={takePicture}>
-              <Image src="/switch-rear.svg" alt="switch camera" width={32} height={32} />
+              <Image src="/submit.svg" alt="submit picture" width={32} height={32} />
             </button>
           </div>
         </Show>
