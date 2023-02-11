@@ -2,16 +2,11 @@ import dynamic from "next/dynamic";
 
 const AlertBox = dynamic(() => import("@/components/AlertBox"));
 
-import Dialogue from "@/components/Dialogue"
 import WebCam from "@/components/WebCam"
-import Show from "@/components/Show";
 
-import styles from "@/styles/Home.module.css"
+import styles from "@/styles/Puzzle.module.css"
 
-import { useEffect, useState } from "react";
-import { useSetRecoilState } from "recoil";
-
-import { answerBoxVisibilityState } from "@/globals/states"
+import { useState } from "react";
 
 interface Props {
   puzzleId: number;
@@ -21,7 +16,6 @@ interface Props {
 export default function Puzzle1({ puzzleId, currentPuzzle }: Props) {
   const [isAnswerCorrect, setIsAnswerCorrect] = useState<boolean | null>(null);
   const [showAlert, setShowAlert] = useState<boolean>(false);
-  const [isDialogueFinished, setIsDialogueFinished] = useState<boolean>(false);
 
   const validateImage = async (image: string) => {
     const result = await fetch("api/validateImage", {
@@ -29,6 +23,11 @@ export default function Puzzle1({ puzzleId, currentPuzzle }: Props) {
       body: JSON.stringify({ image })
     })
     const { isAnswerCorrect } = await result.json();
+    if (isAnswerCorrect) {
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 1000);
+    }
 
     setIsAnswerCorrect(isAnswerCorrect);
     setShowAlert(true);
@@ -37,36 +36,19 @@ export default function Puzzle1({ puzzleId, currentPuzzle }: Props) {
 
   return (
     <>
-      <span id={styles.cluecont}>
-        <Show when={!isAnswerCorrect!}>
-          <Dialogue sender="Mr. Cat 1" senderImage="/logo.svg" script={[
-            { type: "send", message: "I want you to look for someone with a white fur and a yellow head." },
-            { type: "reply", message: "Where should I look?" },
-            { type: "send", message: "Why should I tell you?" },
-            { type: "send", message: "It's up to you to find them." },
-            { type: "reply", message: "I see. I'll start looking then!" },
-          ]}
-            isFinished={currentPuzzle !== puzzleId}
-            setIsDialogueFinished={setIsDialogueFinished} />
-        </Show>
-        <Show when={isAnswerCorrect! || currentPuzzle !== puzzleId}>
-          <Dialogue sender="Mr. Cat 2" senderImage="/logo.svg" script={[
-            { type: "send", message: "I want you to look for someone with a white fur and a yellow head." },
-            { type: "reply", message: "Where should I look?" },
-            { type: "send", message: "Why should I tell you?" },
-            { type: "send", message: "It's up to you to find them." },
-            { type: "reply", message: "I see. I'll start looking then!" },
-          ]}
-            isFinished={currentPuzzle !== puzzleId} />
-        </Show>
+      <div className={styles.container}>
+        <div className={styles.narration}>
+          While searching for this place, you found something odd — a cream-colored fur. Delighted, you have decided to ask the cats their testimonies and alibis.
+        </div>
+        <div className={styles.direction}>
+          Use the button below to scan the picture of the cat. This will run an AI model to validate that the cat you are investigating is correct. While scanning a cat, make sure that no other cats are in view of your camera.
+        </div>
 
-        <Show when={currentPuzzle === puzzleId && isDialogueFinished && !isAnswerCorrect} >
-          <WebCam buttonLabel="Start Looking" callback={validateImage} />
-        </Show>
+        <WebCam buttonLabel="Start Looking" callback={validateImage} />
 
         <AlertBox showWhen={showAlert && !isAnswerCorrect} title="Wrong answer!" message="Sadly, this is not the cat we are looking for." type="warning" show={setShowAlert} />
-        <AlertBox showWhen={showAlert && isAnswerCorrect} title={"Congratulations!"} message={"You've found {cat name}!"} type={"success"} show={setShowAlert} />
-      </span>
+        <AlertBox showWhen={showAlert && isAnswerCorrect} title={"Congratulations!"} message={"You've found Tonton!"} type={"success"} show={setShowAlert} />
+      </div>
     </>
   )
 }
