@@ -7,6 +7,7 @@ interface Props {
 }
 
 export default function Puzzle2({ puzzleId, currentPuzzle }: Props) {
+
   return (
     <>
       <span id={styles.cluecont}>

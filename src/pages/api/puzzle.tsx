@@ -16,7 +16,7 @@ interface Props {
   currentPuzzle: number;
 }
 
-function Puzzle({ puzzleId, currentPuzzle }: Props) {
+function Puzzle({ puzzleId, currentPuzzle, }: Props) {
 
 
   if (puzzleId == 1)

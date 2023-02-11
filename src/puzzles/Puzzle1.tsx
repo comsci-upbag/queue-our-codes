@@ -8,7 +8,10 @@ import Show from "@/components/Show";
 
 import styles from "@/styles/Home.module.css"
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSetRecoilState } from "recoil";
+
+import { answerBoxVisibilityState } from "@/globals/states"
 
 interface Props {
   puzzleId: number;
@@ -26,6 +29,7 @@ export default function Puzzle1({ puzzleId, currentPuzzle }: Props) {
       body: JSON.stringify({ image })
     })
     const { isAnswerCorrect } = await result.json();
+
     setIsAnswerCorrect(isAnswerCorrect);
     setShowAlert(true);
     return result;
