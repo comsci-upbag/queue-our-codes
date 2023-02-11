@@ -23,10 +23,7 @@ export default function AlertBox({ title, message, type, show, showWhen }: Alert
   }
 
   return (
-    <div className={styles.container} onClick={closeAlert} style={{
-      width: document.body.clientWidth,
-      height: document.body.clientHeight
-    }}>
+    <div onClick={closeAlert} className={styles.container}>
       <div ref={alertRef} className={`${styles.alert} ${styles.alert}-type`} role="alert">
         <div id="note">
           <p id={styles.notetitle}> {title} </p>

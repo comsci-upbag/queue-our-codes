@@ -1,22 +1,22 @@
 .container {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
-  background-color: rgba(0, 0, 0, .1);
-  display: grid;
-  place-items: center;
+  width: 100vw;
+  height: 100vh;
   z-index: 3;
-  backdrop-filter: blur(5px);
 }
 
 .alert {
   display: flex;
+  position: relative;
   top: 10;
   right: 10;
-  z-index: 3;
-  margin: auto;
   padding: 15px;
   border-radius: 20px;
+  margin-left: 100vw;
+  width: fit-content;
+  translate: -110% 10px;
   text-align: center;
   opacity: 1;
   color: var(--white);
@@ -27,10 +27,13 @@
 #notetitle {
   font-size: 20px;
   font-weight: 800;
+  text-align: left;
+  width: max-content;
 }
 
 #notemessg {
   font-size: 16px;
+  width: max-content;
 }
 
 .alert-success {
