@@ -5,6 +5,7 @@ import styles from "@/styles/Dialogue.module.css"
 import { useEffect, useState } from "react";
 import { useSetRecoilState } from "recoil";
 import { currentComponentState } from "@/globals/states";
+import Show from "./Show";
 
 interface Message {
   type: "send" | "reply";
@@ -22,6 +23,7 @@ interface Props {
 export default function Dialogue({ sender, senderImage, script, isFinished, setIsDialogueFinished }: Props) {
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
   const [isTyping, setIsTyping] = useState(Array(script.length).fill(true));
+  const [showInputBox, setShowInputBox] = useState(true);
 
   const setCurrentComponentFinished = useSetRecoilState(currentComponentState);
 
@@ -36,6 +38,7 @@ export default function Dialogue({ sender, senderImage, script, isFinished, setI
     } else {
       setCurrentMessageIndex(script.length);
       setCurrentComponentFinished(true);
+      setShowInputBox(false);
 
       if (setIsDialogueFinished) {
         setIsDialogueFinished(true);
@@ -44,8 +47,7 @@ export default function Dialogue({ sender, senderImage, script, isFinished, setI
   }
 
   const MessageBlock = (message: Message) => {
-    return <TypeAnimation sequence={["", 2000
-      , message.message, 1000]} />
+    return <TypeAnimation sequence={[message.message, 1000]} />
   }
 
   useEffect(() => {
@@ -60,9 +62,8 @@ export default function Dialogue({ sender, senderImage, script, isFinished, setI
   }, [currentMessageIndex])
 
   if (!isFinished)
-
     return (
-      <>
+      <div className={styles.DialogueContainer}>
         {script.slice(0, currentMessageIndex).map(
           (message, index) => {
             if (message.type === "send") {
@@ -108,45 +109,49 @@ export default function Dialogue({ sender, senderImage, script, isFinished, setI
             )
           }
         )}
-        <div className={styles.inputMessage}>
-          <div className={styles.inputWrapper}>
-            {currentMessageIndex < script.length && script[currentMessageIndex].type === "reply" ? MessageBlock(script[currentMessageIndex]) : <p></p>}
+        <Show when={showInputBox}>
+          <div className={styles.inputMessage}>
+            <div key={currentMessageIndex} className={styles.inputWrapper}>
+              {currentMessageIndex < script.length && script[currentMessageIndex].type === "reply" ? MessageBlock(script[currentMessageIndex]) : <p></p>}
+            </div>
+            <Image src="/submit.svg" onClick={() => {
+              if (!isTyping[currentMessageIndex - 1])
+                setCurrentMessageIndex(currentMessageIndex + 1);
+            }} width={20} height={20} alt="Arrow" />
           </div>
-          <Image src="/submit.svg" onClick={() => {
-            if (!isTyping[currentMessageIndex - 1])
-              setCurrentMessageIndex(currentMessageIndex + 1);
-          }} width={20} height={20} alt="Arrow" />
-        </div>
-      </>
+        </Show>
+      </div>
     )
 
-  return <>
-    {script.map(
-      (message, index) => {
-        if (message.type === "send") {
-          if (index > 0 && script[index - 1].type === "send" && script[index].type === "send") {
-            return <div key={index} className={styles.container}>
-              <div className={styles.sender}>
-                <p key={index}>{message.message}</p>
+  return (
+    <div className={styles.DialogueContainer}>
+      {script.map(
+        (message, index) => {
+          if (message.type === "send") {
+            if (index > 0 && script[index - 1].type === "send" && script[index].type === "send") {
+              return <div key={index} className={styles.container}>
+                <div className={styles.sender}>
+                  <p key={index}>{message.message}</p>
+                </div>
               </div>
-            </div>
-          } else {
-            return <div key={index} className={styles.container}>
-              <div className={styles.sender}>
-                <Image src={senderImage} width={32} height={32} alt="Picture of the sender" />
-                <h1>{sender}</h1>
-                <p key={index}>{message.message}</p>
+            } else {
+              return <div key={index} className={styles.container}>
+                <div className={styles.sender}>
+                  <Image src={senderImage} width={32} height={32} alt="Picture of the sender" />
+                  <h1>{sender}</h1>
+                  <p key={index}>{message.message}</p>
+                </div>
               </div>
-            </div>
+            }
           }
-        }
 
-        return (
-          <div key={index} className={styles.receiver}>
-            <p>{message.message}</p>
-          </div>
-        )
-      }
-    )}
-  </>
+          return (
+            <div key={index} className={styles.receiver}>
+              <p>{message.message}</p>
+            </div>
+          )
+        }
+      )}
+    </div>
+  )
 }
