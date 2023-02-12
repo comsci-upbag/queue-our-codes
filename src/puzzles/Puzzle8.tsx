@@ -1,4 +1,5 @@
 import Dialogue from "@/components/Dialogue";
+import Sequential from "@/components/Sequential"
 
 interface Props {
   puzzleId: number;
@@ -7,7 +8,7 @@ interface Props {
 
 export default function Puzzle8({ puzzleId, currentPuzzle }: Props) {
   return (
-    <>
+    <Sequential>
       <Dialogue sender="Mr. Cat" senderImage="/logo.svg" isFinished={currentPuzzle !== puzzleId} script={[
         { type: "send", message: "Greetings! I see you have come searching for a butternut-furred cat. meow Perhaps one has come to pay respects to my greatness?" },
         { type: "reply", message: "Uh… I heard you knew something about a food-stealing cat”" },
@@ -33,6 +34,7 @@ export default function Puzzle8({ puzzleId, currentPuzzle }: Props) {
         { type: "send", message: "I did not do it to be thanked." }
         ]}
       />
-    </>
+
+    </Sequential>
   )
 }

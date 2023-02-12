@@ -3,6 +3,8 @@ import { TypeAnimation } from "react-type-animation";
 
 import styles from "@/styles/Dialogue.module.css"
 import { useEffect, useState } from "react";
+import { useSetRecoilState } from "recoil";
+import { currentComponentState } from "@/globals/states";
 
 interface Message {
   type: "send" | "reply";
@@ -21,6 +23,8 @@ export default function Dialogue({ sender, senderImage, script, isFinished, setI
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
   const [isTyping, setIsTyping] = useState(Array(script.length).fill(true));
 
+  const setCurrentComponentFinished = useSetRecoilState(currentComponentState);
+
   const updateCurrentMessageIndex = () => {
     let index = currentMessageIndex;
 
@@ -31,9 +35,11 @@ export default function Dialogue({ sender, senderImage, script, isFinished, setI
       setCurrentMessageIndex(index);
     } else {
       setCurrentMessageIndex(script.length);
+      setCurrentComponentFinished(true);
 
-      if (setIsDialogueFinished)
+      if (setIsDialogueFinished) {
         setIsDialogueFinished(true);
+      }
     }
   }
 
