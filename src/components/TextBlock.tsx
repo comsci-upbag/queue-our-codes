@@ -7,12 +7,20 @@ import styles from "@/styles/TextBlock.module.css"
 interface Props {
   message: string
   callback: (x: boolean) => void | null;
-  type: "narration" | "instruction";
+  type: "narration" | "instruction" | "note" | "quote";
 }
 
 export default function TextBlock({ message, callback, type }: Props) {
+
+  const styleMap = new Map([
+    ["narration", styles.narration],
+    ["instruction", styles.instruction],
+    ["quote", styles.quote],
+    ["note", styles.note],
+  ])
+
   return (
-    <div className={type === "narration" ? styles.narration : styles.instruction}>
+    <div className={styleMap.get(type)}>
       <TypeAnimation
         sequence={[0, message, () => {
           callback(true);
