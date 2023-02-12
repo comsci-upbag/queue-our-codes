@@ -5,6 +5,7 @@ import Show from "@/components/Show"
 import Sequential from "@/components/Sequential"
 
 import styles from "@/styles/Puzzle.module.css";
+import TextBlock from "@/components/TextBlock";
 
 interface Props {
   puzzleId: number;
@@ -16,6 +17,7 @@ export default function Puzzle3({ puzzleId, currentPuzzle }: Props) {
     <>
       <div className={styles.container}>
         <Sequential>
+          <TextBlock type="instruction" message="You successfully solved the puzzle and went to the second cat. It appeared to have been expecting you." />
           <Dialogue sender="Mr. Cat" senderImage="/logo.svg" 
             script={[
               { type: "send", message: "meow Who do we have here?" },
@@ -23,9 +25,7 @@ export default function Puzzle3({ puzzleId, currentPuzzle }: Props) {
               { type: "send", message: "I know a lot of things. meow But I never tell them directly. Since you were able to answer my note, I trust that you can also answer this riddle. meow" },
             ]}
             />
-          <Show when={currentPuzzle === puzzleId}>
-            <Maze />
-          </Show>
+          <TextBlock type="instruction" message="Guess the answer to the riddle. Type your answer in the box below. Answers are not case-sensitive but don’t put extra spaces." />
         </Sequential>
       </div>
     </>

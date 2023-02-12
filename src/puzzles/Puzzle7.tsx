@@ -40,15 +40,6 @@ export default function Puzzle7({ puzzleId, currentPuzzle }: Props) {
             { type: "send", message: "Well, if you insist, I guess I can work with that. *meow*" },
             { type: "send", message: "So I’ve been trying to learn human words and slang for quite some time now. I’m trying to do so through crossword-like puzzles. *meow* It was going well but I got stuck with this specific item. Solving the following riddles reveals a 4-letter word as a final answer." }
           ]} />
-          <Dialogue sender="Mr. Cat 2" senderImage="/logo.svg"
-            script={[
-              { type: "send", message: "Finally! Thank you for helping me out. Sike is the human slang that means something like “just kidding.” meow" },
-              { type: "send", message: "Meowkay. Right, you needed information about something right? meow" },
-              { type: "reply", message: "Yeah, I’m trying to find this chicken thief that is said to be a cat. Do you know anything about it?" },
-              { type: "send", message: "I hate to break this to you after helping me and all but… SIKE! Haha! I really have no idea. meow I’ve been so busy that I didn’t notice anything at all! I’m not even Butternut! I’m Tonyo." },
-              { type: "reply", message: "You wasted my time!" },
-              { type: "send", message: "MEOW, WAIT! I do know someone who might help. meow I’ll call them for you. It’s my thanks for having you help me. meow" },
-            ]} />
 
           <QRCode buttonLabel="Start Scanning" onResultCallback={validateQRCode} />
         </Sequential>

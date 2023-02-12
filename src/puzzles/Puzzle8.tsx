@@ -1,5 +1,7 @@
 import Dialogue from "@/components/Dialogue";
 import Sequential from "@/components/Sequential"
+import TextBlock from "@/components/TextBlock"
+import WebCam from "@/components/WebCam";
 
 import styles from "@/styles/Puzzle.module.css"
 
@@ -13,6 +15,18 @@ export default function Puzzle8({ puzzleId, currentPuzzle }: Props) {
     <>
       <div className={styles.container}>
         <Sequential>
+          <Dialogue sender="Mr. Cat 2" senderImage="/logo.svg"
+            script={[
+              { type: "send", message: "Finally! Thank you for helping me out. Sike is the human slang that means something like “just kidding.” meow" },
+              { type: "send", message: "Meowkay. Right, you needed information about something right? meow" },
+              { type: "reply", message: "Yeah, I’m trying to find this chicken thief that is said to be a cat. Do you know anything about it?" },
+              { type: "send", message: "I hate to break this to you after helping me and all but… SIKE! Haha! I really have no idea. meow I’ve been so busy that I didn’t notice anything at all! I’m not even Butternut! I’m Tonyo." },
+              { type: "reply", message: "You wasted my time!" },
+              { type: "send", message: "MEOW, WAIT! I do know someone who might help. meow I’ll call them for you. It’s my thanks for having you help me. meow" },
+            ]} />
+          
+          <TextBlock type="narration" message="Out of nowhere, a cat appeared in front of you, laughing. "/>
+
           <Dialogue sender="Mr. Cat" senderImage="/logo.svg" script={[
             { type: "send", message: "Greetings! I see you have come searching for a butternut-furred cat. meow Perhaps one has come to pay respects to my greatness?" },
             { type: "reply", message: "Uh… I heard you knew something about a food-stealing cat”" },
@@ -30,15 +44,8 @@ export default function Puzzle8({ puzzleId, currentPuzzle }: Props) {
           ]}
           />
 
-          <Dialogue sender="Mr. Cat" senderImage="/logo.svg" script={[
-            { type: "send", message: "Quite intriguing indeed, don’t you think? meow This fur, it is unmistakable. It belongs to Gray." },
-            { type: "reply", message: "Oh, thanks! Didn’t think you’d go out of your way to help me." },
-            { type: "send", message: "Do not think of yourself so highly, two-legged one. meow I simply wanted to see the sight for myself! One would never feel pity as to go out of my way to provide personal assistance. meow" },
-            { type: "reply", message: "Alright, alright, thanks for the help, your greatness!" },
-            { type: "send", message: "I did not do it to be thanked." }
-          ]}
-          />
-
+          <TextBlock type="instruction" message="Uncover the secret of her greatness and discover the truth. Scan it using the camera. Make sure that the lighting is clear and that nothing is obstructing the view." />
+          { /* TODO: ADD WHATEVER THE FUCK IS THIS */}
         </Sequential>
       </div>
     </>

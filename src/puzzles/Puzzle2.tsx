@@ -34,6 +34,8 @@ export default function Puzzle2({ puzzleId, currentPuzzle }: Props) {
           { type: "send", message: "I’m not going to tell you other cats’ secrets, but I know some shady cat who might. *meow* You can reach them through this note:" },
           { type: "send", message: "EDGAR ALLAN POE knows of a SUPERSTITION about BALL SPORTS." },
         ]} />
+
+        <TextBlock type="instruction" message="Decipher the text written in the note. Type your answer in the box below. Answers are not case-sensitive but don’t put extra spaces."/>
       </Sequential>
     </div>
   )
