@@ -1,0 +1,9 @@
+.narration {
+  margin-bottom: 12px;
+}
+
+.instruction {
+  opacity: 50%;
+  font-style: italic;
+  margin-bottom: 12px;
+}

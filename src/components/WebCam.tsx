@@ -6,7 +6,7 @@ import styles from "@/styles/WebCam.module.css";
 
 interface Props {
   buttonLabel: string,
-  callback: (image: string) => Promise<Response>
+  callback: (image: string) => void
 }
 
 export default function WebCam({ buttonLabel, callback }: Props) {
