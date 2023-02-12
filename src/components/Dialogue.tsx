@@ -109,7 +109,7 @@ export default function Dialogue({ sender, senderImage, script, isFinished, setI
           <Image src="/submit.svg" onClick={() => {
             if (!isTyping[currentMessageIndex - 1])
               setCurrentMessageIndex(currentMessageIndex + 1);
-          }} width={32} height={32} alt="Arrow" />
+          }} width={20} height={20} alt="Arrow" />
         </div>
       </>
     )
