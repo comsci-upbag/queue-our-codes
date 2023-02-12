@@ -9,6 +9,19 @@ interface Prediction {
   probability: number,
 }
 
+const context = new Map([
+  [1, true],
+  [2, false],
+  [3, false],
+  [4, false],
+  [5, false],
+  [6, false],
+  [7, false],
+  [8, false],
+  [9, false],
+  [10, false],
+])
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   const session = await getSession({ req });
@@ -33,6 +46,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return;
   }
 
+  // update participant data
+  if (context.get(participant.current_puzzle)) {
+    await prisma.participantStatus.update({
+      where: {
+        email: session.user.email,
+      },
+      data: {
+        current_puzzle: participant.current_puzzle + 1,
+      }
+    })
+  }
 
   res.status(200).json({ isAnswerCorrect: true });
 }

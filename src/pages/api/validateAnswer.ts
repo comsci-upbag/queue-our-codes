@@ -10,6 +10,18 @@ interface PuzzleAnswer {
   answer: string,
 }
 
+const context = new Map([
+  [1, false],
+  [2, true],
+  [3, true],
+  [4, true],
+  [5, true],
+  [6, true],
+  [7, true],
+  [8, true],
+  [9, true],
+  [10, true],
+])
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
@@ -41,14 +53,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   // update participant data
-  await prisma.participantStatus.update({
-    where: {
-      email: session.user.email,
-    },
-    data: {
-      current_puzzle: participant.current_puzzle + 1,
-    }
-  })
+  if (context.get(participant.current_puzzle)) {
+    await prisma.participantStatus.update({
+      where: {
+        email: session.user.email,
+      },
+      data: {
+        current_puzzle: participant.current_puzzle + 1,
+      }
+    })
+  }
 
   res.status(200).json({ isAnswerCorrect: true });
 }
