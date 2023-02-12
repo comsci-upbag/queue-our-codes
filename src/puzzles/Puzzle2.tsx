@@ -1,5 +1,7 @@
-
-import styles from "@/styles/Home.module.css";
+import styles from "@/styles/Puzzle.module.css"
+import Dialogue from "@/components/Dialogue"
+import { useState } from "react";
+import Show from "@/components/Show";
 
 interface Props {
   puzzleId: number;
@@ -8,19 +10,38 @@ interface Props {
 
 export default function Puzzle2({ puzzleId, currentPuzzle }: Props) {
 
+  const [isDialogueFinished, setIsDialogueFinished] = useState(false);
+
   return (
     <>
-      <span id={styles.cluecont}>
-        From this ancient dwelling, our names rest. <br /> <br />
-        Your ancestors has built them <br /> <br />
-        To safekeep their crops from the same pest we hunt. <br /> <br />
-        <br /> <br />
-        Let our presence guide you to your lofty quest; <br /> <br />
-        'Cause I know one of us had a delightful feast. <br /> <br />
-        <br /> <br />
-        Remember, we are not one, but among many you will see. <br /> <br />
-        <div style={{ textAlign: "right", width: "100%" }}>- The Fale Sleeper </div>
-      </span>
+      <div className={styles.container}>
+        <div className={styles.narration}>
+          You finally found the first cat! The cat is currently resting but 
+          since this is a very urgent matter, you decided to wake them up. 
+          They seemed very grumpy because of what you did.
+        </div>
+
+        <Dialogue sender="Mr. Cat" senderImage="/logo.svg" 
+                  isFinished={currentPuzzle !== puzzleId}
+                  script={[
+                    { type: "send", message: "Why are you here? *meow*" },
+                    { type: "send", message: "Why are people disturbing my sleep? *meow*" }, 
+                    { type: "reply", message: "Hello, can I ask why you were around the (PLACE)? What were you doing there?" }, 
+                    { type: "send", message: "Why do you care? *meow* I go everywhere, that place is nothing special to me."},
+                    { type: "reply", message: "I am investigating what happened in that place. Right now, you’re the only cat we know who has been there."},
+                    { type: "send", message: "Meowkay. *meow* How do I prove my innocence?" },
+                    { type: "send", message: "I’m not going to tell you other cats’ secrets, but I know some shady cat who might. *meow* You can reach them through this note:" },
+                  ]}
+                  setIsDialogueFinished={setIsDialogueFinished}
+        />
+
+        <Show when={isDialogueFinished}>
+          <div className={styles.narration}>
+            EDGAR ALLAN POE knows of a SUPERSTITION about BALL SPORTS.
+          </div>
+        </Show>
+
+      </div>
     </>
   )
 }

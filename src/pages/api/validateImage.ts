@@ -33,15 +33,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return;
   }
 
-  // update participant data
-  await prisma.participantStatus.update({
-    where: {
-      email: session.user.email,
-    },
-    data: {
-      current_puzzle: participant.current_puzzle + 1,
-    }
-  })
 
   res.status(200).json({ isAnswerCorrect: true });
 }
