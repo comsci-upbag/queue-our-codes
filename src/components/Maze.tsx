@@ -3,6 +3,8 @@ import AlertBox from "./AlertBox"
 
 
 import styles from "@/styles/Maze.module.css"
+import { answerBoxVisibilityState } from "@/globals/states"
+import { useSetRecoilState } from "recoil"
 
 // 3d array of the maze
 const maze = [
@@ -57,6 +59,8 @@ const maze = [
 let visited: string[] = ['0-1-0']
 
 export default function Maze() {
+
+  const setShowAnswerBox = useSetRecoilState(answerBoxVisibilityState)
   const [startGame, setStartGame] = useState(false)
   const [x, setX] = useState(0)
   const [y, setY] = useState(1)
@@ -113,8 +117,14 @@ export default function Maze() {
     }
   }, [x, y, z])
 
+  useEffect(() => {
+    if (isPlayerAtEnd) {
+      setShowAnswerBox(true)
+    }
+  }, [isPlayerAtEnd])
+
   return <div className={styles.Container}>
-    <AlertBox showWhen={isPlayerAtEnd} title={"You won!"} message={"You've reached the end."} type={"success"} show={setIsPlayerAtEnd} />
+    <AlertBox showWhen={isPlayerAtEnd} title={"You've reached the end!"} message={"Now that you've reached the end, keep it at your prime as you are now on your own."} type={"success"} show={setIsPlayerAtEnd} />
 
     {startGame ? <>
       <div className={styles.MazeContainer} key={String(z + " ")}>

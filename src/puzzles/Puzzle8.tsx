@@ -1,4 +1,5 @@
 import Dialogue from "@/components/Dialogue";
+import QRCode from "@/components/QRCode";
 import Sequential from "@/components/Sequential"
 import TextBlock from "@/components/TextBlock"
 import WebCam from "@/components/WebCam";
@@ -24,8 +25,8 @@ export default function Puzzle8({ puzzleId, currentPuzzle }: Props) {
               { type: "reply", message: "You wasted my time!" },
               { type: "send", message: "MEOW, WAIT! I do know someone who might help. meow I’ll call them for you. It’s my thanks for having you help me. meow" },
             ]} />
-          
-          <TextBlock type="narration" message="Out of nowhere, a cat appeared in front of you, laughing. "/>
+
+          <TextBlock type="narration" message="Out of nowhere, a cat appeared in front of you, laughing. " />
 
           <Dialogue sender="Mr. Cat" senderImage="/logo.svg" script={[
             { type: "send", message: "Greetings! I see you have come searching for a butternut-furred cat. meow Perhaps one has come to pay respects to my greatness?" },
@@ -45,7 +46,7 @@ export default function Puzzle8({ puzzleId, currentPuzzle }: Props) {
           />
 
           <TextBlock type="instruction" message="Uncover the secret of her greatness and discover the truth. Scan it using the camera. Make sure that the lighting is clear and that nothing is obstructing the view." />
-          { /* TODO: ADD WHATEVER THE FUCK IS THIS */}
+          <QRCode onResultCallback={async () => { window.location.reload }} buttonLabel="Start Scanning" />
         </Sequential>
       </div>
     </>

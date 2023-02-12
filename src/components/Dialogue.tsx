@@ -39,16 +39,19 @@ export default function Dialogue({ sender, senderImage, script }: Props) {
       setCurrentMessageIndex(index);
     } else {
       setCurrentMessageIndex(script.length);
-      setCurrentComponentFinished(true);
-      setShowInputBox(false);
+      setTimeout(() => {
+        setShowInputBox(false);
+      }, 1000);
     }
   }
 
   const MessageBlock = (message: Message) => {
-    return <TypeAnimation sequence={[message.message, 1000]} />
+    return <TypeAnimation sequence={["", 2000, message.message, 1000]} />
   }
 
   useEffect(() => {
+    if (currentMessageIndex == script.length)
+      setCurrentComponentFinished(true);
     setTimeout(() => {
       updateCurrentMessageIndex();
       setIsTyping(() => {
@@ -117,6 +120,7 @@ export default function Dialogue({ sender, senderImage, script }: Props) {
       </div>
     )
 
+  setCurrentComponentFinished(true);
   return (
     <div className={styles.DialogueContainer} ref={dialogueContainer}>
       {script.map(

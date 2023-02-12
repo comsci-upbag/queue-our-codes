@@ -2,7 +2,9 @@
 import Dialogue from "@/components/Dialogue"
 import Sequential from "@/components/Sequential"
 import TextBlock from "@/components/TextBlock"
+import { answerBoxVisibilityState } from "@/globals/states";
 import styles from "@/styles/Puzzle.module.css"
+import { useSetRecoilState } from "recoil";
 
 interface Props {
   puzzleId: number;
@@ -10,11 +12,13 @@ interface Props {
 }
 
 export default function Puzzle9({ puzzleId, currentPuzzle }: Props) {
+
+  const setShowAnswerBox = useSetRecoilState(answerBoxVisibilityState)
   return (
     <>
       <div className={styles.container}>
-        <Sequential>
-          <TextBlock type="narration" message="You find traces of fur around the area, and crumbs that clearly fell from the fried chicken. However, you cannot seem to get any more hints of who the perpetrators may be."/>
+        <Sequential onFinished={() => setShowAnswerBox(true)}>
+          <TextBlock type="narration" message="You find traces of fur around the area, and crumbs that clearly fell from the fried chicken. However, you cannot seem to get any more hints of who the perpetrators may be." />
 
           <Dialogue sender="Mr. Cat" senderImage="/logo.svg" script={[
             { type: "send", message: "Quite intriguing indeed, don’t you think? meow This fur, it is unmistakable. It belongs to Gray." },
@@ -24,7 +28,7 @@ export default function Puzzle9({ puzzleId, currentPuzzle }: Props) {
             { type: "send", message: "I did not do it to be thanked." }
           ]} />
 
-          <TextBlock type="narration" message="You were already exhausted from investigating from cat to cat but you knew that you were close to completing all the puzzles! It was almost as if a voice was telling you that this was the second-to-the-last puzzle. You were determined to finish it at all costs! You pursued the cat named Gray."/>
+          <TextBlock type="narration" message="You were already exhausted from investigating from cat to cat but you knew that you were close to completing all the puzzles! It was almost as if a voice was telling you that this was the second-to-the-last puzzle. You were determined to finish it at all costs! You pursued the cat named Gray." />
 
           <Dialogue sender="Mr. Cat" senderImage="/logo.svg" script={[
             { type: "send", message: "Ohh… hey, human. meow Wh-what exactly were you doing?" },
@@ -37,7 +41,7 @@ export default function Puzzle9({ puzzleId, currentPuzzle }: Props) {
             { type: "send", message: "Here you go! Good luck!" },
           ]} />
 
-          <TextBlock type="instruction" message="Decipher the text written in the note. Type your answer in the box below. Answers are not case-sensitive but don’t put extra spaces."/>
+          <TextBlock type="instruction" message="Decipher the text written in the note. Type your answer in the box below. Answers are not case-sensitive but don’t put extra spaces." />
         </Sequential>
       </div>
     </>
