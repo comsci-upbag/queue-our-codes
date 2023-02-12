@@ -14,15 +14,12 @@ export default function Puzzle3({ puzzleId, currentPuzzle }: Props) {
   return (
     <>
       <span id={styles.cluecont}>
-        <Dialogue sender="Mr. Cat" senderImage="/logo.svg" script={[
-          { type: "send", message: "Ey yo, what's good chief." },
-          { type: "send", message: "Word is some kitten on the prowl for a dirty chicken crook." },
-          { type: "send", message: "Can't have no filthy fowl filcher messing up good cats' rep, so I'll be rootin' for you." },
-          { type: "reply", message: "Do you have any idea who the thief is?" },
-          { type: "send", message: "Now I don't know who the thief is, but I may just know who does... but I ain't no squealer!" },
-          { type: "send", message: "However, on a completely unrelated note, I got my paws on this here maze, hint hint." },
-          { type: "reply", message: "Huh? Would solving this maze lead me to something?" },
-        ]}
+        <Dialogue sender="Mr. Cat" senderImage="/logo.svg" 
+          script={[
+            { type: "send", message: "meow Who do we have here?" },
+            { type: "reply", message: "Hello, some cat told me that you might know a few things about this place." },
+            { type: "send", message: "I know a lot of things. meow But I never tell them directly. Since you were able to answer my note, I trust that you can also answer this riddle. meow" },
+          ]}
           isFinished={currentPuzzle !== puzzleId} />
         
         <Show when={currentPuzzle === puzzleId}>
