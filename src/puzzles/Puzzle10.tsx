@@ -1,4 +1,6 @@
 
+import styles from "@/styles/Puzzle.module.css"
+
 interface Props {
   puzzleId: number;
   currentPuzzle: number;
@@ -6,6 +8,9 @@ interface Props {
 
 export default function Puzzle10({ puzzleId, currentPuzzle }: Props) {
   return (
-    <></>
+    <>
+      <div className={styles.container}>
+      </div>
+    </>
   )
 }

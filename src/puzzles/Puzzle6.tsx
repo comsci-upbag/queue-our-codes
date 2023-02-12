@@ -3,7 +3,7 @@ import Dialogue from "@/components/Dialogue";
 import Maze from "@/components/Maze";
 import Show from "@/components/Show"
 
-import styles from "@/styles/Home.module.css";
+import styles from "@/styles/Puzzle.module.css";
 
 interface Props {
   puzzleId: number;
@@ -13,8 +13,8 @@ interface Props {
 export default function Puzzle6({ puzzleId, currentPuzzle }: Props) {
   return (
     <>
-      <span id={styles.cluecont}>
-        <Dialogue sender="Mr. Cat" senderImage="/logo.svg" 
+      <div className={styles.container}>
+        <Dialogue sender="Mr. Cat" senderImage="/logo.svg"
           script={[
             { type: "send", message: "Ey yo, it’s Quatro! What’s good, chief? Meow on the street is some kitten on the prowl for a dirty chicken crook. Can’t have no filthy fowl filcher messing up good cats’ rep, so I’ll be rootin’ for you. meow" },
             { type: "reply", message: "Do you know who the thief is? Wait, how did you know about the chi— " },
@@ -24,13 +24,12 @@ export default function Puzzle6({ puzzleId, currentPuzzle }: Props) {
             { type: "reply", message: "Uhh, yeah, got it... I guess." },
             { type: "send", message: "Good good. meow Just keep that muzzle muted, you feel? If anyone come sniffin’, you never seen me, aight? Aight." },
             { type: "send", message: "Oh, and uhhh, pop out some paper, might help to write stuff down. Have a good one, G!" },
-          ]}
-          isFinished={currentPuzzle !== puzzleId} />
+          ]} />
 
         <Show when={currentPuzzle === puzzleId}>
           <Maze />
         </Show>
-      </span>
+      </div>
     </>
   )
 }
