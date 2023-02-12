@@ -2,7 +2,7 @@ import Image from "next/image";
 import { TypeAnimation } from "react-type-animation";
 
 import styles from "@/styles/Dialogue.module.css"
-import { useEffect, useState } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useSetRecoilState } from "recoil";
 import { currentComponentState } from "@/globals/states";
 import Show from "./Show";
@@ -17,10 +17,10 @@ interface Props {
   senderImage: string;
   script: Message[];
   isFinished: boolean;
-  setIsDialogueFinished?: (isDialogueFinished: boolean) => void;
 }
 
-export default function Dialogue({ sender, senderImage, script, isFinished, setIsDialogueFinished }: Props) {
+export default function Dialogue({ sender, senderImage, script, isFinished }: Props) {
+  const dialogueContainer = useRef<HTMLDivElement>(null);
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
   const [isTyping, setIsTyping] = useState(Array(script.length).fill(true));
   const [showInputBox, setShowInputBox] = useState(true);
@@ -39,10 +39,6 @@ export default function Dialogue({ sender, senderImage, script, isFinished, setI
       setCurrentMessageIndex(script.length);
       setCurrentComponentFinished(true);
       setShowInputBox(false);
-
-      if (setIsDialogueFinished) {
-        setIsDialogueFinished(true);
-      }
     }
   }
 
@@ -58,48 +54,37 @@ export default function Dialogue({ sender, senderImage, script, isFinished, setI
         newIsTyping[currentMessageIndex - 1] = false;
         return newIsTyping;
       });
+      setTimeout(() => {
+        if (dialogueContainer.current)
+          dialogueContainer.current.scrollTop = dialogueContainer.current.scrollHeight;
+      }, 100);
     }, 1000);
   }, [currentMessageIndex])
 
   if (!isFinished)
     return (
-      <div className={styles.DialogueContainer}>
+      <div className={styles.DialogueContainer} ref={dialogueContainer}>
         {script.slice(0, currentMessageIndex).map(
           (message, index) => {
             if (message.type === "send") {
-              if (index > 0 && script[index - 1].type === "send" && script[index].type === "send") {
-                return <div key={index} className={styles.container}>
-                  <div className={styles.sender}>
-                    {isTyping[index] ?
-                      <p key={index + "loading"}>
-                        <span className={styles.typingAnimation}>
-                          <span className={styles.typingAnimationDot}></span>
-                          <span className={styles.typingAnimationDot}></span>
-                          <span className={styles.typingAnimationDot}></span>
-                        </span>
-                      </p>
-                      : <p key={index}>{message.message}</p>
-                    }
-                  </div>
-                </div>
-              } else {
-                return <div key={index} className={styles.container}>
-                  <div className={styles.sender}>
+              return <div key={index} className={styles.container}>
+                <div className={styles.sender}>
+                  {index > 0 && script[index - 1].type === "send" && script[index].type === "send" ? <></> : <>
                     <Image src={senderImage} width={32} height={32} alt="Picture of the sender" />
                     <h1>{sender}</h1>
-                    {isTyping[index] ?
-                      <p key={index + "loading"}>
-                        <span className={styles.typingAnimation}>
-                          <span className={styles.typingAnimationDot}></span>
-                          <span className={styles.typingAnimationDot}></span>
-                          <span className={styles.typingAnimationDot}></span>
-                        </span>
-                      </p>
-                      : <p key={index}>{message.message}</p>
-                    }
-                  </div>
+                  </>}
+                  {isTyping[index] ?
+                    <p key={index + "loading"}>
+                      <span className={styles.typingAnimation}>
+                        <span className={styles.typingAnimationDot}></span>
+                        <span className={styles.typingAnimationDot}></span>
+                        <span className={styles.typingAnimationDot}></span>
+                      </span>
+                    </p>
+                    : <p key={index}>{message.message}</p>
+                  }
                 </div>
-              }
+              </div>
             }
 
             return (
@@ -115,8 +100,13 @@ export default function Dialogue({ sender, senderImage, script, isFinished, setI
               {currentMessageIndex < script.length && script[currentMessageIndex].type === "reply" ? MessageBlock(script[currentMessageIndex]) : <p></p>}
             </div>
             <Image src="/submit.svg" onClick={() => {
-              if (!isTyping[currentMessageIndex - 1])
+              if (!isTyping[currentMessageIndex - 1]) {
                 setCurrentMessageIndex(currentMessageIndex + 1);
+                setTimeout(() => {
+                  if (dialogueContainer.current)
+                    dialogueContainer.current.scrollTop = dialogueContainer.current.scrollHeight;
+                }, 100);
+              }
             }} width={20} height={20} alt="Arrow" />
           </div>
         </Show>
@@ -124,25 +114,19 @@ export default function Dialogue({ sender, senderImage, script, isFinished, setI
     )
 
   return (
-    <div className={styles.DialogueContainer}>
+    <div className={styles.DialogueContainer} ref={dialogueContainer}>
       {script.map(
         (message, index) => {
           if (message.type === "send") {
-            if (index > 0 && script[index - 1].type === "send" && script[index].type === "send") {
-              return <div key={index} className={styles.container}>
-                <div className={styles.sender}>
-                  <p key={index}>{message.message}</p>
-                </div>
-              </div>
-            } else {
-              return <div key={index} className={styles.container}>
-                <div className={styles.sender}>
+            return <div key={index} className={styles.container}>
+              <div className={styles.sender}>
+                {index > 0 && script[index - 1].type === "send" && script[index].type === "send" ? <></> : <>
                   <Image src={senderImage} width={32} height={32} alt="Picture of the sender" />
                   <h1>{sender}</h1>
-                  <p key={index}>{message.message}</p>
-                </div>
+                </>}
+                <p key={index}>{message.message}</p>
               </div>
-            }
+            </div>
           }
 
           return (
