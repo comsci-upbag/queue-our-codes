@@ -3,14 +3,17 @@
 import { TypeAnimation } from "react-type-animation";
 
 import styles from "@/styles/TextBlock.module.css"
+import { currentComponentState } from "@/globals/states"
+import { useSetRecoilState } from "recoil"
 
 interface Props {
   message: string
-  callback: (x: boolean) => void | null;
   type: "narration" | "instruction" | "note" | "quote";
 }
 
-export default function TextBlock({ message, callback, type }: Props) {
+export default function TextBlock({ message, type }: Props) {
+
+  const setCurrentComponentFinished = useSetRecoilState(currentComponentState);
 
   const styleMap = new Map([
     ["narration", styles.narration],
@@ -23,7 +26,7 @@ export default function TextBlock({ message, callback, type }: Props) {
     <div className={styleMap.get(type)}>
       <TypeAnimation
         sequence={[0, message, () => {
-          callback(true);
+          setCurrentComponentFinished(true)
         }]}
         cursor={false}
         speed={75}
