@@ -4,6 +4,8 @@ import { useState, useRef, useEffect } from "react"
 import AnswerBox from "@/components/AnswerBox"
 
 import AlertBox from "@/components/AlertBox"
+import { useSetRecoilState } from "recoil"
+import { visibilePuzzleState } from "@/globals/states"
 
 interface props {
   currentPuzzle: number,
@@ -16,12 +18,12 @@ export default function PuzzleContainer({ currentPuzzle, previousAnswers } : pro
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [visiblePuzzle, setVisiblePuzzle] = useState<number>(currentPuzzle);
 
-  useEffect(() => {
-    puzzlesContainer.current!.scrollTo(puzzlesContainer.current!.scrollWidth, 0);
-  }, [])
+  const setIsFinished = useSetRecoilState(visibilePuzzleState)
 
   useEffect(() => {
-  }, [currentPuzzle])
+    setIsFinished(currentPuzzle !== visiblePuzzle)
+    puzzlesContainer.current!.scrollTo(puzzlesContainer.current!.scrollWidth, 0);
+  }, [visiblePuzzle])
 
   return (
     <>

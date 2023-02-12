@@ -6,4 +6,5 @@ export const answerBoxValueState = atom({ key: "answerBoxValueState", default: "
 
 
 export const currentComponentState = atom({ key: "currentComponentState", default: false})
+export const visibilePuzzleState = atom({ key: "visiblePuzzleState", default: false})
 

@@ -3,8 +3,9 @@
 import { TypeAnimation } from "react-type-animation";
 
 import styles from "@/styles/TextBlock.module.css"
-import { currentComponentState } from "@/globals/states"
-import { useSetRecoilState } from "recoil"
+import { currentComponentState, visibilePuzzleState } from "@/globals/states"
+import { useRecoilValue, useSetRecoilState } from "recoil"
+import { div } from "@tensorflow/tfjs";
 
 interface Props {
   message: string
@@ -14,6 +15,7 @@ interface Props {
 export default function TextBlock({ message, type }: Props) {
 
   const setCurrentComponentFinished = useSetRecoilState(currentComponentState);
+  const isFinished = useRecoilValue(visibilePuzzleState);
 
   const styleMap = new Map([
     ["narration", styles.narration],
@@ -21,6 +23,15 @@ export default function TextBlock({ message, type }: Props) {
     ["quote", styles.quote],
     ["note", styles.note],
   ])
+
+  if (isFinished) {
+    setCurrentComponentFinished(true)
+    return (
+      <div className={styleMap.get(type)}>
+        {message}
+      </div>
+    )
+  }
 
   return (
     <div className={styleMap.get(type)}>

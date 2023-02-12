@@ -2,9 +2,9 @@ import Image from "next/image";
 import { TypeAnimation } from "react-type-animation";
 
 import styles from "@/styles/Dialogue.module.css"
-import { useRef, useEffect, useState } from "react";
-import { useSetRecoilState } from "recoil";
-import { currentComponentState } from "@/globals/states";
+import { useEffect, useState, useRef } from "react";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { currentComponentState, visibilePuzzleState } from "@/globals/states";
 import Show from "./Show";
 
 interface Message {
@@ -16,16 +16,18 @@ interface Props {
   sender: string;
   senderImage: string;
   script: Message[];
-  isFinished: boolean;
 }
 
-export default function Dialogue({ sender, senderImage, script, isFinished }: Props) {
+
+export default function Dialogue({ sender, senderImage, script }: Props) {
   const dialogueContainer = useRef<HTMLDivElement>(null);
+
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
   const [isTyping, setIsTyping] = useState(Array(script.length).fill(true));
   const [showInputBox, setShowInputBox] = useState(true);
 
   const setCurrentComponentFinished = useSetRecoilState(currentComponentState);
+  const isFinished = useRecoilValue(visibilePuzzleState)
 
   const updateCurrentMessageIndex = () => {
     let index = currentMessageIndex;

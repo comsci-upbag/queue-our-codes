@@ -23,7 +23,7 @@ export default function Puzzle2({ puzzleId, currentPuzzle }: Props) {
           They seemed very grumpy because of what you did."
           type="narration"
           />
-        <Dialogue sender="Mr. Cat" senderImage="/logo.svg" isFinished={currentPuzzle !== puzzleId} script={[
+        <Dialogue sender="Mr. Cat" senderImage="/logo.svg" script={[
           { type: "send", message: "Why are you here? *meow*" },
           { type: "send", message: "Why are people disturbing my sleep? *meow*" },
           { type: "reply", message: "Hello, can I ask why you were around the (PLACE)?" },
