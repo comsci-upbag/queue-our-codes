@@ -65,37 +65,39 @@ export default function Dialogue({ sender, senderImage, script }: Props) {
 
   if (!isFinished)
     return (
-      <div className={styles.DialogueContainer} ref={dialogueContainer}>
-        {script.slice(0, currentMessageIndex).map(
-          (message, index) => {
-            if (message.type === "send") {
-              return <div key={index} className={styles.container}>
-                <div className={styles.sender}>
-                  {index > 0 && script[index - 1].type === "send" && script[index].type === "send" ? <></> : <>
-                    <Image src={senderImage} width={32} height={32} alt="Picture of the sender" />
-                    <h1>{sender}</h1>
-                  </>}
-                  {isTyping[index] ?
-                    <p key={index + "loading"}>
-                      <span className={styles.typingAnimation}>
-                        <span className={styles.typingAnimationDot}></span>
-                        <span className={styles.typingAnimationDot}></span>
-                        <span className={styles.typingAnimationDot}></span>
-                      </span>
-                    </p>
-                    : <p key={index}>{message.message}</p>
-                  }
+      <div>
+        <div className={styles.DialogueContainer} ref={dialogueContainer}>
+          {script.slice(0, currentMessageIndex).map(
+            (message, index) => {
+              if (message.type === "send") {
+                return <div key={index} className={styles.container}>
+                  <div className={styles.sender}>
+                    {index > 0 && script[index - 1].type === "send" && script[index].type === "send" ? <></> : <>
+                      <Image src={senderImage} width={32} height={32} alt="Picture of the sender" />
+                      <h1>{sender}</h1>
+                    </>}
+                    {isTyping[index] ?
+                      <p key={index + "loading"}>
+                        <span className={styles.typingAnimation}>
+                          <span className={styles.typingAnimationDot}></span>
+                          <span className={styles.typingAnimationDot}></span>
+                          <span className={styles.typingAnimationDot}></span>
+                        </span>
+                      </p>
+                      : <p key={index}>{message.message}</p>
+                    }
+                  </div>
                 </div>
-              </div>
-            }
+              }
 
-            return (
-              <div key={index} className={styles.receiver}>
-                <p>{message.message}</p>
-              </div>
-            )
-          }
-        )}
+              return (
+                <div key={index} className={styles.receiver}>
+                  <p>{message.message}</p>
+                </div>
+              )
+            }
+          )}
+        </div>
         <Show when={showInputBox}>
           <div className={styles.inputMessage}>
             <div key={currentMessageIndex} className={styles.inputWrapper}>
