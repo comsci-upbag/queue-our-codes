@@ -1,8 +1,8 @@
 
 
 export const textAnswers = [
-  { number: 1, answer: "TEST1" },
-  { number: 2, answer: "TEST2" },
+  { number: 1, answer: "a picture of Tonton" },
+  { number: 2, answer: "Kobe" },
   { number: 3, answer: "TEST3" },
   { number: 4, answer: "TEST4" },
   { number: 5, answer: "TEST5" },
@@ -13,7 +13,7 @@ export const textAnswers = [
 ]
 
 
-export const imageAnswers = [
+const imageAnswers = [
   { number: 1, answer: "white-cat-yellow-head" },
   { number: 2, answer: "TEST2" },
   { number: 3, answer: "TEST3" },
@@ -25,7 +25,7 @@ export const imageAnswers = [
   { number: 9, answer: "TEST9" },
 ]
 
-export const qrcodeAnswers = [
+const qrcodeAnswers = [
   { number: 1, answer: "TEST1" },
   { number: 2, answer: "TEST2" },
   { number: 3, answer: "TEST3" },
