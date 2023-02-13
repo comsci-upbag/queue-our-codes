@@ -10,19 +10,6 @@ interface PuzzleAnswer {
   answer: string,
 }
 
-const context = new Map([
-  [1, false],
-  [2, true],
-  [3, true],
-  [4, true],
-  [5, true],
-  [6, true],
-  [7, true],
-  [8, true],
-  [9, true],
-  [10, true],
-])
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   const { answer } = JSON.parse(req.body) as PuzzleAnswer;
@@ -36,8 +23,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const participant = await prisma.participantStatus.findUnique({
     where: {
       email: session.user.email
+    },
+    include: {
+      puzzleStatus: true
     }
   })
+
 
   // handle when participant is not registered to the database
   if (!participant) {
@@ -48,21 +39,45 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const puzzleId = participant.current_puzzle;
 
   if (!isAnswerCorrect("text", puzzleId, answer)) {
+    if (puzzleId === 4 && participant.puzzleStatus!.tries >= 3) {
+      await prisma.participantStatus.update({
+        where: {
+          email: session.user.email,
+        },
+        data: {
+          current_puzzle: 1,
+        }
+      })
+    }
+    if (puzzleId === 5 && participant.puzzleStatus!.tries >= 2) {
+      await prisma.participantStatus.update({
+        where: {
+          id: participant.id
+        },
+        data: {
+          puzzleStatus: {
+            update: {
+              tries: participant.puzzleStatus!.tries + 1
+            }
+          }
+        }
+      })
+      res.status(200).json({ isAnswerCorrect: false, participantCanSubmit: false });
+      return;
+    }
     res.status(200).json({ isAnswerCorrect: false });
     return;
   }
 
   // update participant data
-  if (context.get(participant.current_puzzle)) {
-    await prisma.participantStatus.update({
-      where: {
-        email: session.user.email,
-      },
-      data: {
-        current_puzzle: participant.current_puzzle + 1,
-      }
-    })
-  }
+  await prisma.participantStatus.update({
+    where: {
+      email: session.user.email,
+    },
+    data: {
+      current_puzzle: participant.current_puzzle + 1,
+    }
+  })
 
   res.status(200).json({ isAnswerCorrect: true });
 }

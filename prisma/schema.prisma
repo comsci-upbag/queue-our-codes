@@ -8,8 +8,18 @@ datasource db {
 }
 
 model ParticipantStatus {
-  id             Int    @id @default(autoincrement())
-  current_puzzle Int    @default(1)
-  email          String @unique
+  id             Int           @id @default(autoincrement())
+  current_puzzle Int           @default(1)
+  email          String        @unique
   name           String
+  puzzleStatus   PuzzleStatus?
+}
+
+model PuzzleStatus {
+  id            Int               @id @default(autoincrement())
+  participant   ParticipantStatus @relation(fields: [participantID], references: [id])
+  participantID Int               @unique
+  puzzle        Int
+  tries         Int               @default(0)
+  lastSubmitted DateTime          @updatedAt
 }

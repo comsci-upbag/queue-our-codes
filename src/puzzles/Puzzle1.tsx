@@ -26,6 +26,7 @@ export default function Puzzle1({ puzzleId, currentPuzzle }: Props) {
   const [showLoading, setShowLoading] = useState<boolean>(false);
 
   const setShowAnswerBox = useSetRecoilState(answerBoxVisibilityState)
+  setShowAnswerBox(true)
 
   const validateImage = (image: string) => {
     setShowLoading(true);
@@ -54,7 +55,7 @@ export default function Puzzle1({ puzzleId, currentPuzzle }: Props) {
   return (
     <>
       <div className={styles.container}>
-        <Sequential onFinished={() => setShowAnswerBox(true)}>
+        <Sequential>
           <TextBlock
             message="While searching for this place, you found something odd — an orange and black locks of fur. Delighted, you have decided to ask the cats their testimonies and alibis."
             type="narration" />
