@@ -14,18 +14,20 @@ export default function TapGame() {
 
   useEffect(() => {
 
-    const request = { answer: debouncedValue }
+    const request = { answer: debouncedValue.toString() }
+    console.log(request.answer)
 
     fetch("api/validateAnswer", {
       method: "POST",
       body: JSON.stringify(request),
-    }).then((data) => data.json())
-      .then((data) => {
-        // if (data.isAnswerCorrect) {
-        //   // do something
-        // } else {
-        //   // do something
-        // }
+    }).then(data => data.json())
+      .then(data => data.isAnswerCorrect)
+      .then(isAnswerCorrect => {
+        if (isAnswerCorrect) {
+          window.location.reload();
+        } else {
+          setNumClicked(0);
+        }
       })
 
   }, [debouncedValue])
