@@ -1,40 +1,43 @@
 
 
 export const textAnswers = [
-  { number: 1, answer: "a picture of Tonton" },
-  { number: 2, answer: "Kobe" },
-  { number: 3, answer: "TEST3" },
-  { number: 4, answer: "TEST4" },
+  { number: 1, answer: "" },
+  { number: 2, answer: "BLACKCAT" },
+  { number: 3, answer: "IFUGAOHOUSE" },
+  { number: 4, answer: "MUMSHIE" },
   { number: 5, answer: "13" },
-  { number: 6, answer: "TEST6" },
-  { number: 7, answer: "TEST7" },
-  { number: 8, answer: "TEST8" },
-  { number: 9, answer: "TEST9" },
+  { number: 6, answer: "BUTTERNUT" },
+  { number: 7, answer: "SIKE" },
+  { number: 8, answer: "" },
+  { number: 9, answer: "VIGNERECIPHER" },
+  { number: 9, answer: "" },
 ]
 
 
 const imageAnswers = [
   { number: 1, answer: "white-cat-yellow-head" },
-  { number: 2, answer: "TEST2" },
-  { number: 3, answer: "TEST3" },
-  { number: 4, answer: "TEST4" },
-  { number: 5, answer: "TEST5" },
-  { number: 6, answer: "TEST6" },
-  { number: 7, answer: "TEST7" },
-  { number: 8, answer: "TEST8" },
-  { number: 9, answer: "TEST9" },
+  { number: 2, answer: "" },
+  { number: 3, answer: "" },
+  { number: 4, answer: "" },
+  { number: 5, answer: "" },
+  { number: 6, answer: "" },
+  { number: 7, answer: "" },
+  { number: 8, answer: "" },
+  { number: 9, answer: "" },
+  { number: 10, answer: "" },
 ]
 
 const qrcodeAnswers = [
-  { number: 1, answer: "TEST1" },
-  { number: 2, answer: "TEST2" },
-  { number: 3, answer: "TEST3" },
-  { number: 4, answer: "TEST4" },
-  { number: 5, answer: "TEST5" },
-  { number: 6, answer: "TEST6" },
-  { number: 7, answer: "TEST7" },
-  { number: 8, answer: "TEST8" },
-  { number: 9, answer: "TEST9" },
+  { number: 1, answer: "" },
+  { number: 2, answer: "" },
+  { number: 3, answer: "" },
+  { number: 4, answer: "" },
+  { number: 5, answer: "" },
+  { number: 6, answer: "" },
+  { number: 7, answer: "" },
+  { number: 8, answer: "6dbAv@d%3TsqG^&aL#DS^&&XN#3&6zB#" },
+  { number: 9, answer: "" },
+  { number: 10, answer: "" },
 ]
 
 export function isAnswerCorrect(type: "qrcode" | "image" | "text", puzzleId: number, answer: string): boolean {
@@ -51,7 +54,7 @@ export function isAnswerCorrect(type: "qrcode" | "image" | "text", puzzleId: num
 
   if (type == "text") {
     const correctAnswer = textAnswers.filter(answer => answer.number == puzzleId)[0].answer;
-    return correctAnswer === answer;
+    return correctAnswer.toLowerCase() === answer.toLowerCase();
   }
 
   return false;
