@@ -29,7 +29,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
   })
 
-
   // handle when participant is not registered to the database
   if (!participant) {
     res.status(404).json({ messages: "Account is not registered." });
@@ -38,33 +37,41 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const puzzleId = participant.current_puzzle;
 
-  if (!isAnswerCorrect("text", puzzleId, answer)) {
-    if (puzzleId === 4 && participant.puzzleStatus!.tries >= 3) {
-      await prisma.participantStatus.update({
-        where: {
-          email: session.user.email,
-        },
-        data: {
-          current_puzzle: 1,
-        }
-      })
-    }
-    if (puzzleId === 5 && participant.puzzleStatus!.tries >= 2) {
-      await prisma.participantStatus.update({
-        where: {
-          id: participant.id
-        },
-        data: {
-          puzzleStatus: {
-            update: {
-              tries: participant.puzzleStatus!.tries + 1
-            }
-          }
-        }
-      })
-      res.status(200).json({ isAnswerCorrect: false, participantCanSubmit: false });
+  if (participant.puzzleStatus) {
+    const FIFTEEN_MINS_IN_MS = 900_000
+    const elapsedTimeSinceLastSubmit = Date.now() - participant.puzzleStatus!.lastSubmitted.valueOf() 
+
+    if (elapsedTimeSinceLastSubmit > FIFTEEN_MINS_IN_MS && puzzleId === 5) {
+      res.status(200).json({ isAnswerCorrect: false, participantCanSubmitIn: elapsedTimeSinceLastSubmit })
       return;
     }
+
+  }
+
+  if (puzzleId === 4 && participant.puzzleStatus!.tries >= 3) {
+    await prisma.participantStatus.update({
+      where: {
+        email: session.user.email,
+      },
+      data: {
+        current_puzzle: 1,
+      }
+    })
+  }
+
+  if (!isAnswerCorrect("text", puzzleId, answer)) {
+    await prisma.participantStatus.update({
+      where: {
+        id: participant.id
+      },
+      data: {
+        puzzleStatus: {
+          update: {
+            tries: participant.puzzleStatus!.tries + 1
+          }
+        }
+      }
+    })
     res.status(200).json({ isAnswerCorrect: false });
     return;
   }
