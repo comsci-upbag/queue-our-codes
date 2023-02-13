@@ -23,9 +23,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const participant = await prisma.participantStatus.findUnique({
     where: {
       email: session.user.email
-    },
-    include: {
-      puzzleStatus: true
     }
   })
 
@@ -37,41 +34,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const puzzleId = participant.current_puzzle;
 
-  if (participant.puzzleStatus) {
-    const FIFTEEN_MINS_IN_MS = 900_000
-    const elapsedTimeSinceLastSubmit = Date.now() - participant.puzzleStatus.lastSubmitted.valueOf()
+  if (puzzleId === 4 && participant.lastSubmitted) {
+    const FIVE_MINS_IN_MS = 300_000
+    const elapsedTimeSinceLastSubmit = Date.now() - participant.lastSubmitted!.valueOf()
 
-    if (participant.puzzleStatus!.tries >= 2 && elapsedTimeSinceLastSubmit > FIFTEEN_MINS_IN_MS && puzzleId === 4) {
-      await prisma.participantStatus.update({
-        where: {
-          id: participant.id
-        },
-        data: {
-          puzzleStatus: {
-            update: {
-              tries: 0
-            }
-          }
-        }
-      })
-      res.status(200).json({ isAnswerCorrect: false, participantCanSubmitIn: elapsedTimeSinceLastSubmit })
+    if (elapsedTimeSinceLastSubmit > FIVE_MINS_IN_MS && puzzleId === 4) {
+      res.status(200).json({ timeTillParticipantSubmit: FIVE_MINS_IN_MS - elapsedTimeSinceLastSubmit })
       return;
     }
 
   }
 
-  if (puzzleId === 5 && participant.puzzleStatus!.tries >= 2) {
+  if (puzzleId === 5 && participant.tries >= 2) {
     await prisma.participantStatus.update({
       where: {
         email: session.user.email,
       },
       data: {
         current_puzzle: 1,
-        puzzleStatus: {
-          update: {
-            tries: 0
-          }
-        }
+        tries: 0,
       }
     })
   }
@@ -82,11 +63,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         id: participant.id
       },
       data: {
-        puzzleStatus: {
-          update: {
-            tries: participant.puzzleStatus!.tries + 1
-          }
-        }
+        tries: participant.tries + 1
       }
     })
     res.status(200).json({ isAnswerCorrect: false });
@@ -100,11 +77,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     },
     data: {
       current_puzzle: participant.current_puzzle + 1,
-      puzzleStatus: {
-        update: {
-          tries: 0
-        }
-      }
+      tries: 0
     }
   })
 
