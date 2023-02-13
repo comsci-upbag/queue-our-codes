@@ -95,7 +95,7 @@ export default function Dialogue({ sender, senderImage, script }: Props) {
               if (message.type === "send") {
                 return <div key={index} className={styles.container}>
                   <div className={styles.sender}>
-                    {index > 0 && script[index - 1].type === "send" && script[index].type === "send" ? <></> : <>
+                    {index > 0 && (script[index - 1].type === "send" || script[index - 1].type === "image") && script[index].type === "send" ? <></> : <>
                       <Image src={senderImage} className={styles.profileImage} width={32} height={32} alt="Picture of the sender" />
                       <h1>{sender}</h1>
                     </>}
@@ -160,7 +160,7 @@ export default function Dialogue({ sender, senderImage, script }: Props) {
           if (message.type === "send") {
             return <div key={index} className={styles.container}>
               <div className={styles.sender}>
-                {index > 0 && script[index - 1].type === "send" && script[index].type === "send" ? <></> : <>
+                {index > 0 && (script[index - 1].type === "send" || script[index - 1].type === "image") && script[index].type === "send" ? <></> : <>
                   <Image src={senderImage} className={styles.profileImage} width={32} height={32} alt="Picture of the sender" />
                   <h1>{sender}</h1>
                 </>}
