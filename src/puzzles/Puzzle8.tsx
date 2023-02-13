@@ -16,7 +16,7 @@ export default function Puzzle8({ puzzleId, currentPuzzle }: Props) {
     <>
       <div className={styles.container}>
         <Sequential>
-          <Dialogue sender="Mr. Cat 2" senderImage="/logo.svg"
+          <Dialogue sender="Tonyo" senderImage="/cats/8-tonyo.png"
             script={[
               { type: "send", message: "Finally! Thank you for helping me out. Sike is the human slang that means something like “just kidding.” meow" },
               { type: "send", message: "Meowkay. Right, you needed information about something right? meow" },
@@ -28,7 +28,7 @@ export default function Puzzle8({ puzzleId, currentPuzzle }: Props) {
 
           <TextBlock type="narration" message="Out of nowhere, a cat appeared in front of you, laughing. " />
 
-          <Dialogue sender="Mr. Cat" senderImage="/logo.svg" script={[
+          <Dialogue sender="Eve" senderImage="/cats/6-eve" script={[
             { type: "send", message: "Greetings! I see you have come searching for a butternut-furred cat. meow Perhaps one has come to pay respects to my greatness?" },
             { type: "reply", message: "Uh… I heard you knew something about a food-stealing cat”" },
             { type: "send", message: "Hmph! The audacity! meow One clearly doesn’t know proper decorum when speaking to one as great as moi! Although…" },

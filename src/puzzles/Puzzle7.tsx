@@ -18,7 +18,7 @@ export default function Puzzle7({ puzzleId, currentPuzzle }: Props) {
       <div className={styles.container}>
         <Sequential>
           <TextBlock type="narration" message="You didn’t know what to do with “BUTTERNUT” so you tried asking around. You approached the nearest cat to ask whether or not they knew anything about it." />
-          <Dialogue sender="Mr. Cat 1" senderImage="/logo.svg" script={[
+          <Dialogue sender="Tonyo" senderImage="/cats/8-tonyo.png" script={[
             { type: "send", message: "Excuse me, do you happen to know about Butternut?" },
             { type: "send", message: "Butternut? What butternut? *meow* OH. Oh yes, I am Butternut, but as you can see, I’m quite busy right meow." },
             { type: "reply", message: "Umm, how about I help you with what you’re working on and in return, you’ll give me information about something I’m trying to find. Deal?" },

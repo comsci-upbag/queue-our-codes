@@ -23,7 +23,7 @@ export default function Puzzle3({ puzzleId, currentPuzzle }: Props) {
       <div className={styles.container}>
         <Sequential onFinished={() => setShowAnswerBox(true)}>
           <TextBlock type="narration" message="You successfully solved the puzzle and went to the second cat. It appeared to have been expecting you." />
-          <Dialogue sender="Mr. Cat" senderImage="/logo.svg"
+          <Dialogue sender="Kobe" senderImage="/cats/2-kobe.png"
             script={[
               { type: "send", message: "Who do we have here? *meow*" },
               { type: "reply", message: "Hello, some cat told me that you might know a few things about this place." },

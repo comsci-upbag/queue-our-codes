@@ -19,7 +19,7 @@ export default function Puzzle6({ puzzleId, currentPuzzle }: Props) {
       <div className={styles.container}>
         <Sequential>
           <TextBlock type="narration" message="Mumshie told her friend about you and the new cat understood it immediately. After Mumshie fulfilled her promise, she promptly left and let her friend take over." />
-          <Dialogue sender="Mr. Cat" senderImage="/logo.svg"
+          <Dialogue sender="Quatro" senderImage="/cats/5-quatro.png"
             script={[
               { type: "send", message: "Ey yo, it’s Quatro! What’s good, chief?" },
               { type: "send", message: "Meow on the street is some kitten on the prowl for a dirty chicken crook." },
