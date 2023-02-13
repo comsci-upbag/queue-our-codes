@@ -39,22 +39,39 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   if (participant.puzzleStatus) {
     const FIFTEEN_MINS_IN_MS = 900_000
-    const elapsedTimeSinceLastSubmit = Date.now() - participant.puzzleStatus!.lastSubmitted.valueOf() 
+    const elapsedTimeSinceLastSubmit = Date.now() - participant.puzzleStatus.lastSubmitted.valueOf()
 
-    if (elapsedTimeSinceLastSubmit > FIFTEEN_MINS_IN_MS && puzzleId === 5) {
+    if (participant.puzzleStatus!.tries >= 2 && elapsedTimeSinceLastSubmit > FIFTEEN_MINS_IN_MS && puzzleId === 4) {
+      await prisma.participantStatus.update({
+        where: {
+          id: participant.id
+        },
+        data: {
+          puzzleStatus: {
+            update: {
+              tries: 0
+            }
+          }
+        }
+      })
       res.status(200).json({ isAnswerCorrect: false, participantCanSubmitIn: elapsedTimeSinceLastSubmit })
       return;
     }
 
   }
 
-  if (puzzleId === 4 && participant.puzzleStatus!.tries >= 3) {
+  if (puzzleId === 5 && participant.puzzleStatus!.tries >= 2) {
     await prisma.participantStatus.update({
       where: {
         email: session.user.email,
       },
       data: {
         current_puzzle: 1,
+        puzzleStatus: {
+          update: {
+            tries: 0
+          }
+        }
       }
     })
   }
@@ -83,6 +100,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     },
     data: {
       current_puzzle: participant.current_puzzle + 1,
+      puzzleStatus: {
+        update: {
+          tries: 0
+        }
+      }
     }
   })
 
