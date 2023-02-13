@@ -30,6 +30,7 @@ export default function Puzzle3({ puzzleId, currentPuzzle }: Props) {
               { type: "send", message: "I know a lot of things. *meow*" },
               { type: "send", message: "But I never tell them directly." },
               { type: "send", message: "Since you were able to answer my note, I trust that you can also answer this riddle. *meow*" },
+              { type: "image", message: "/clues/3.png" },
             ]}
           />
           <TextBlock type="instruction" message="Guess the answer to the riddle. Type your answer in the box below. Answers are not case-sensitive but don’t put extra spaces." />

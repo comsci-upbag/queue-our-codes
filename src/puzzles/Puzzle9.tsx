@@ -39,6 +39,7 @@ export default function Puzzle9({ puzzleId, currentPuzzle }: Props) {
             { type: "reply", message: "This exchange doesn’t have to be one-sided. I’ve already helped out some of your buddies in exchange for information." },
             { type: "send", message: "Alrighty then. I’ll confess something. meow I was at the scene of the crime and I saw this note. I don’t know if I should give it to you but I can’t understand it anyway." },
             { type: "send", message: "Here you go! Good luck!" },
+            { type: "image", message: "/clues/9.png" },
           ]} />
 
           <TextBlock type="instruction" message="Decipher the text written in the note. Type your answer in the box below. Answers are not case-sensitive but don’t put extra spaces." />
