@@ -22,7 +22,9 @@ export default function Puzzle8({ puzzleId, currentPuzzle }: Props) {
       .then(data => data.isAnswerCorrect)
       .then(isAnswerCorrect => {
         if (isAnswerCorrect)
-          window.location.reload();
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
       })
   }
 
