@@ -39,7 +39,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const elapsedTimeSinceLastSubmit = Date.now() - participant.lastSubmitted!.valueOf()
 
     if (elapsedTimeSinceLastSubmit > FIVE_MINS_IN_MS && puzzleId === 4) {
-      res.status(200).json({ timeTillParticipantSubmit: FIVE_MINS_IN_MS - elapsedTimeSinceLastSubmit })
+      res.status(200).json({ timeUntilCanSubmit: FIVE_MINS_IN_MS - elapsedTimeSinceLastSubmit })
       return;
     }
 
