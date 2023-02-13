@@ -2,6 +2,8 @@
 import { useDebounce } from "@/globals/hooks"
 import { useEffect, useState } from "react"
 
+import styles from "@/styles/TapGame.module.css"
+
 export default function TapGame() {
 
   const [numClicked, setNumClicked] = useState(0);
@@ -32,5 +34,7 @@ export default function TapGame() {
 
   }, [debouncedValue])
 
-  return <button onClick={onClick}> 🐱 </button>
+  return <div className={styles.container}>
+    <button onClick={onClick} className={styles.button}> 🐱 </button>
+  </div>
 }
