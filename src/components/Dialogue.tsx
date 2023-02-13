@@ -8,7 +8,7 @@ import { currentComponentState, visibilePuzzleState } from "@/globals/states";
 import Show from "./Show";
 
 interface Message {
-  type: "send" | "reply";
+  type: "send" | "reply" | "image";
   message: string;
 }
 
@@ -72,11 +72,31 @@ export default function Dialogue({ sender, senderImage, script }: Props) {
         <div className={styles.DialogueContainer} ref={dialogueContainer}>
           {script.slice(0, currentMessageIndex).map(
             (message, index) => {
+              if (message.type === "image") {
+                return <div key={index} className={styles.container}>
+                  <div className={styles.sender}>
+                    {index > 0 && script[index - 1].type === "send" && script[index].type === "image" ? <></> : <>
+                      <Image src={senderImage} className={styles.profileImage} width={32} height={32} alt="Picture of the sender" />
+                      <h1>{sender}</h1>
+                    </>}
+                    {isTyping[index] ?
+                      <p key={index + "loading"}>
+                        <span className={styles.typingAnimation}>
+                          <span className={styles.typingAnimationDot}></span>
+                          <span className={styles.typingAnimationDot}></span>
+                          <span className={styles.typingAnimationDot}></span>
+                        </span>
+                      </p>
+                      : <Image key={index} className={styles.sentImage} src={message.message} width={300} height={300} alt="image clue" />
+                    }
+                  </div>
+                </div>
+              }
               if (message.type === "send") {
                 return <div key={index} className={styles.container}>
                   <div className={styles.sender}>
                     {index > 0 && script[index - 1].type === "send" && script[index].type === "send" ? <></> : <>
-                      <Image src={senderImage} width={32} height={32} alt="Picture of the sender" />
+                      <Image src={senderImage} className={styles.profileImage} width={32} height={32} alt="Picture of the sender" />
                       <h1>{sender}</h1>
                     </>}
                     {isTyping[index] ?
@@ -125,11 +145,23 @@ export default function Dialogue({ sender, senderImage, script }: Props) {
     <div className={styles.DialogueContainer} ref={dialogueContainer}>
       {script.map(
         (message, index) => {
+          if (message.type === "image") {
+            return <div key={index} className={styles.container}>
+              <div className={styles.sender}>
+                {index > 0 && script[index - 1].type === "send" && script[index].type === "image" ? <></> : <>
+                  <Image src={senderImage} className={styles.profileImage} width={32} height={32} alt="Picture of the sender" />
+                  <h1>{sender}</h1>
+                </>}
+                <Image key={index} className={styles.sentImage} src={message.message} width={200} height={200} alt="image clue" />
+              </div>
+            </div>
+          }
+
           if (message.type === "send") {
             return <div key={index} className={styles.container}>
               <div className={styles.sender}>
                 {index > 0 && script[index - 1].type === "send" && script[index].type === "send" ? <></> : <>
-                  <Image src={senderImage} width={32} height={32} alt="Picture of the sender" />
+                  <Image src={senderImage} className={styles.profileImage} width={32} height={32} alt="Picture of the sender" />
                   <h1>{sender}</h1>
                 </>}
                 <p key={index}>{message.message}</p>
