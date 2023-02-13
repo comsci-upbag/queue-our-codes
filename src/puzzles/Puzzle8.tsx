@@ -12,6 +12,20 @@ interface Props {
 }
 
 export default function Puzzle8({ puzzleId, currentPuzzle }: Props) {
+
+  const handleQRCodeResult = async (decodedText: string) => {
+    const request = { answer: decodedText }
+    fetch("/api/validateQRCode", {
+      method: "POST",
+      body: JSON.stringify(request),
+    }).then(data => data.json())
+      .then(data => data.isAnswerCorrect)
+      .then(isAnswerCorrect => {
+        if (isAnswerCorrect)
+          window.location.reload();
+      })
+  }
+
   return (
     <>
       <div className={styles.container}>
@@ -46,7 +60,7 @@ export default function Puzzle8({ puzzleId, currentPuzzle }: Props) {
           />
 
           <TextBlock type="instruction" message="Uncover the secret of her greatness and discover the truth. Scan it using the camera. Make sure that the lighting is clear and that nothing is obstructing the view." />
-          <QRCode onResultCallback={async () => { window.location.reload }} buttonLabel="Start Scanning" />
+          <QRCode onResultCallback={handleQrCode} buttonLabel="Start Scanning" />
         </Sequential>
       </div>
     </>
