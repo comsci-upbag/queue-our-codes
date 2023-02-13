@@ -12,7 +12,7 @@ interface props {
   previousAnswers: string[],
 }
 
-export default function PuzzleContainer({ currentPuzzle, previousAnswers } : props) {
+export default function PuzzleContainer({ currentPuzzle, previousAnswers }: props) {
 
   const puzzlesContainer = useRef<HTMLDivElement>(null);
   const [showAlert, setShowAlert] = useState<boolean>(false);
@@ -34,7 +34,7 @@ export default function PuzzleContainer({ currentPuzzle, previousAnswers } : pro
             <span id={styles.cluenum}> Clue #{visiblePuzzle} </span>
             <Puzzle puzzleId={visiblePuzzle} currentPuzzle={currentPuzzle} />
           </div>
-            <AnswerBox isAnswered={currentPuzzle !== visiblePuzzle} puzzleId={currentPuzzle} answer={previousAnswers[currentPuzzle]} />
+          <AnswerBox isAnswered={currentPuzzle !== visiblePuzzle} puzzleId={visiblePuzzle} answer={previousAnswers[visiblePuzzle - 1]} />
         </div>
       </div>
       <div id={styles.NavigationContainer}>
