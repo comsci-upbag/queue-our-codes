@@ -2,7 +2,7 @@ import Image from "next/image";
 import styles from "@/styles/Home.module.css"
 
 import { useRef } from "react"
-import {  useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 
 import { answerBoxVisibilityState } from "@/globals/states";
 
@@ -13,7 +13,7 @@ interface Props {
 }
 
 
-export default function AnswerBox({  isAnswered, answer, puzzleId } : Props) {
+export default function AnswerBox({ isAnswered, answer, puzzleId }: Props) {
 
   const isAnswerBoxShown = useRecoilValue(answerBoxVisibilityState);
   const inputField = useRef<HTMLInputElement>(null);
@@ -31,12 +31,7 @@ export default function AnswerBox({  isAnswered, answer, puzzleId } : Props) {
     }).then(data => data.json())
       .then(data => data.isAnswerCorrect)
       .then(isAnswerCorrect => {
-        // TODO: handle popup
-        // if (isAnswerCorrect) {
-        //   window.location.reload();
-        // } else {
-        //   setShowAlert(true);
-        // }
+        window.location.reload;
       })
   }
 
