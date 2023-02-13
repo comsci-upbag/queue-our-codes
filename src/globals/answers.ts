@@ -1,7 +1,7 @@
 
 
 export const textAnswers = [
-  { number: 1, answer: "" },
+  { number: 1, answer: "MCAT" },
   { number: 2, answer: "BLACKCAT" },
   { number: 3, answer: "IFUGAOHOUSE" },
   { number: 4, answer: "MUMSHIE" },
