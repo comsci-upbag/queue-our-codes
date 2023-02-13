@@ -8,9 +8,9 @@ export const textAnswers = [
   { number: 5, answer: "13" },
   { number: 6, answer: "BUTTERNUT" },
   { number: 7, answer: "SIKE" },
-  { number: 8, answer: "" },
+  { number: 8, answer: "AT THE INANG BAYAN" },
   { number: 9, answer: "VIGNERECIPHER" },
-  { number: 9, answer: "" },
+  { number: 10, answer: "BRAM" },
 ]
 
 
