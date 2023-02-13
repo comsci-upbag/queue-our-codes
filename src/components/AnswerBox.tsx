@@ -31,7 +31,8 @@ export default function AnswerBox({ isAnswered, answer, puzzleId }: Props) {
     }).then(data => data.json())
       .then(data => data.isAnswerCorrect)
       .then(isAnswerCorrect => {
-        window.location.reload;
+        if (isAnswerCorrect)
+          window.location.reload();
       })
   }
 

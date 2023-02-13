@@ -5,7 +5,7 @@ export const textAnswers = [
   { number: 2, answer: "Kobe" },
   { number: 3, answer: "TEST3" },
   { number: 4, answer: "TEST4" },
-  { number: 5, answer: "TEST5" },
+  { number: 5, answer: "13" },
   { number: 6, answer: "TEST6" },
   { number: 7, answer: "TEST7" },
   { number: 8, answer: "TEST8" },
