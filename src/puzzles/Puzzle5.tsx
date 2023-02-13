@@ -42,7 +42,7 @@ export default function Puzzle5({ puzzleId, currentPuzzle }: Props) {
               { type: "send", message: "If you get it wrong, I’ll have you repeat everything." },
               { type: "send", message: "If you get it right, then meow will lead you to my friend immediately. *meow*" },
             ]} />
-          <TextBlock type="instruction" message="Click the ball icon the correct number of times (13). If you give the wrong answer, you will have to restart your investigation." />
+          <TextBlock type="instruction" message="Click the ball icon the correct number of times. If you give the wrong answer, you will have to restart your investigation." />
           <TextBlock type="instruction" message="[NOTE: You only have two tries for this puzzle.]" />
           <TapGame />
         </Sequential>
