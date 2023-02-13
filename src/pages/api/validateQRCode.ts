@@ -34,9 +34,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return;
   }
 
-  const { decodedText } = JSON.parse(req.body) as { decodedText: string };
+  const { answer } = JSON.parse(req.body) as { answer: string };
 
-  if (!isAnswerCorrect("qrcode", participant!.current_puzzle, decodedText)) {
+  if (!isAnswerCorrect("qrcode", participant!.current_puzzle, answer)) {
     res.status(200).json({ isAnswerCorrect: false });
     return;
   }
