@@ -56,7 +56,7 @@ export default function Puzzle1({ puzzleId, currentPuzzle }: Props) {
       <div className={styles.container}>
         <Sequential onFinished={() => setShowAnswerBox(true)}>
           <TextBlock
-            message="While searching for this place, you found something odd — a cream-colored fur. Delighted, you have decided to ask the cats their testimonies and alibis."
+            message="While searching for this place, you found something odd — an orange and black locks of fur. Delighted, you have decided to ask the cats their testimonies and alibis."
             type="narration" />
           <TextBlock
             message="Use the button below to scan the picture of the cat. This will run an AI model to validate that the cat you are investigating is correct. While scanning a cat, make sure that no other cats are in view of your camera."
