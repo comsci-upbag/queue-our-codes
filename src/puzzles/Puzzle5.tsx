@@ -22,13 +22,13 @@ export default function Puzzle5({ puzzleId, currentPuzzle }: Props) {
           <div style={{
             height: "100px",
           }}>
-            <Dialogue sender="Anonymous Cat" senderImage="/3-hidden-cat.png"
+            <Dialogue sender="Anonymous Cat" senderImage="/cats/3-hidden-cat.png"
               script={[
                 { type: "send", message: "I see you are a cat friend. You may come in now." },
               ]} />
           </div>
           <TextBlock type="narration" message="You decided to ask around the place. There were a few cats lying around, some of them were playing while others were simply minding their own business. You were already making significant progress in your investigation and you were already halfway there! One cat was staring at you and inviting you to come near." />
-          <Dialogue sender="Mumshie" senderImage="/4-mumshie.png"
+          <Dialogue sender="Mumshie" senderImage="/cats/4-mumshie.png"
             script={[
               { type: "send", message: "Meow knows what you want. *meow*" },
               { type: "send", message: "One of my friends did something, didn’t they?" },

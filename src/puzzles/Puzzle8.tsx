@@ -28,7 +28,7 @@ export default function Puzzle8({ puzzleId, currentPuzzle }: Props) {
 
           <TextBlock type="narration" message="Out of nowhere, a cat appeared in front of you, laughing. " />
 
-          <Dialogue sender="Eve" senderImage="/cats/6-eve" script={[
+          <Dialogue sender="Eve" senderImage="/cats/6-eve.png" script={[
             { type: "send", message: "Greetings! I see you have come searching for a butternut-furred cat. meow Perhaps one has come to pay respects to my greatness?" },
             { type: "reply", message: "Uh… I heard you knew something about a food-stealing cat”" },
             { type: "send", message: "Hmph! The audacity! meow One clearly doesn’t know proper decorum when speaking to one as great as moi! Although…" },
