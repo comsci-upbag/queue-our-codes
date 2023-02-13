@@ -22,7 +22,7 @@
   border: none;
   float: left;
   display: grid;
-  grid-template-columns: 30px 1fr;
+  grid-template-columns: 40px 1fr;
 }
 
 .sender h1 {
