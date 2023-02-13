@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@jaredreisinger/react-crossword": "^5.2.0",
     "@next/font": "13.1.5",
     "@prisma/client": "^4.9.0",
     "@yudiel/react-qr-scanner": "^1.1.4",
