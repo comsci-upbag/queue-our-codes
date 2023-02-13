@@ -72,7 +72,6 @@ export default function Puzzle1({ puzzleId, currentPuzzle }: Props) {
           <LoadingIndicator />
         </Show>
 
-        <AlertBox showWhen={showAlert && !isAnswerCorrect} title="Wrong answer!" message="Sadly, this is not the cat we are looking for." type="warning" show={setShowAlert} />
         <AlertBox showWhen={showAlert && isAnswerCorrect} title={"Congratulations!"} message={"You've found Mcat!"} type={"success"} show={setShowAlert} />
       </div>
     </>

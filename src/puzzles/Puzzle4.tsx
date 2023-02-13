@@ -20,7 +20,7 @@ export default function Puzzle4({ puzzleId, currentPuzzle }: Props) {
           <TextBlock type="narration" message="Through Kobe’s hint, you discovered the place where the other cats are located. At the entrance of the place, you see a sign with weird writings on it." />
           <TextBlock type="instruction" message="(GO TO THE PLACE TO THE FIND THE ACTUAL SIGN.) " />
           <TextBlock type="narration" message="The door opened ajar and a cat whispered through the opening. " />
-          <Dialogue sender="Anonymous Cat" senderImage="/3-hidden-cat.png"
+          <Dialogue sender="Anonymous Cat" senderImage="/cats/3-hidden-cat.png"
             script={[
               { type: "send", message: "What’s the password? *meow*" },
               { type: "reply", message: "The password?" },

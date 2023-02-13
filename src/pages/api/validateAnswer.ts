@@ -33,16 +33,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   const puzzleId = participant.current_puzzle;
+  const currentTime = Date.now();
 
-  if (puzzleId === 4 && participant.lastSubmitted) {
+  if (puzzleId === 4 && participant.lastSubmitted > 0) {
     const FIVE_MINS_IN_MS = 300_000
-    const elapsedTimeSinceLastSubmit = Date.now() - participant.lastSubmitted!.valueOf()
+    const elapsedTimeSinceLastSubmit = currentTime - participant.lastSubmitted
 
-    if (elapsedTimeSinceLastSubmit > FIVE_MINS_IN_MS && puzzleId === 4) {
+    if (elapsedTimeSinceLastSubmit < FIVE_MINS_IN_MS && puzzleId === 4) {
       res.status(200).json({ timeUntilCanSubmit: FIVE_MINS_IN_MS - elapsedTimeSinceLastSubmit })
       return;
     }
+  }
 
+  if (puzzleId === 4 && participant.tries >= 3 && participant.lastSubmitted === 0) {
+    await prisma.participantStatus.update({
+      where: {
+        email: session.user.email,
+      },
+      data: {
+        lastSubmitted: currentTime
+      }
+    })
   }
 
   if (puzzleId === 5 && participant.tries >= 2) {
@@ -77,7 +88,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     },
     data: {
       current_puzzle: participant.current_puzzle + 1,
-      tries: 0
+      tries: 0,
+      lastSubmitted: 0
     }
   })
 
