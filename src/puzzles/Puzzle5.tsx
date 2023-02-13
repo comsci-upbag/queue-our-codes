@@ -3,7 +3,9 @@ import Dialogue from "@/components/Dialogue"
 import Sequential from "@/components/Sequential";
 import TapGame from "@/components/TapGame";
 import TextBlock from "@/components/TextBlock";
+import { answerBoxVisibilityState } from "@/globals/states";
 import styles from "@/styles/Puzzle.module.css"
+import { useSetRecoilState } from "recoil";
 
 interface Props {
   puzzleId: number;
@@ -12,10 +14,11 @@ interface Props {
 
 export default function Puzzle5({ puzzleId, currentPuzzle }: Props) {
 
+  const setShowAnswerBox = useSetRecoilState(answerBoxVisibilityState)
   return (
     <>
       <div className={styles.container}>
-        <Sequential onFinished={() => { }}>
+        <Sequential onFinished={() => setShowAnswerBox(true)}>
           <div style={{
             height: "100px",
           }}>
