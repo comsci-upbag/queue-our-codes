@@ -3,9 +3,17 @@ import { useDebounce } from "@/globals/hooks"
 import { useEffect, useState } from "react"
 
 import styles from "@/styles/TapGame.module.css"
+import dynamic from "next/dynamic";
+
+const AlertBox = dynamic(() => import("./AlertBox"), {
+  ssr: false,
+})
 
 export default function TapGame() {
 
+  const [shouldShowAlertBox, setShouldShowAlertBox] = useState(false)
+  const [isAnswerCorrect, setIsAnswerCorrect] = useState(false)
+  const [triesLeft, setTriesLeft] = useState(2)
   const [numClicked, setNumClicked] = useState(0);
   const debouncedValue = useDebounce(numClicked, 1000);
 
@@ -23,10 +31,15 @@ export default function TapGame() {
       method: "POST",
       body: JSON.stringify(request),
     }).then(data => data.json())
-      .then(data => data.isAnswerCorrect)
-      .then(isAnswerCorrect => {
+      .then(data => {
+        const { isAnswerCorrect, triesLeft } = data
+        setIsAnswerCorrect(isAnswerCorrect)
+        setTriesLeft(triesLeft)
+        if (triesLeft === 0) {
+          window.location.href = "/"
+        }
         if (isAnswerCorrect) {
-          window.location.reload();
+          setShouldShowAlertBox(true)
         } else {
           setNumClicked(0);
         }
@@ -35,6 +48,8 @@ export default function TapGame() {
   }, [debouncedValue])
 
   return <div className={styles.container}>
+    <AlertBox showWhen={shouldShowAlertBox && isAnswerCorrect} title="Congratulations!" message="Good job! That is indeed the answer to this puzzle!" type="success" show={setShouldShowAlertBox} callbackWhenClosed={() => window.location.href = "/"} />
+    <AlertBox showWhen={shouldShowAlertBox && !isAnswerCorrect} title="Wrong answer!" message={"Sadly, this is not the answer we are looking for. You have " + triesLeft + (triesLeft === 1 ? " try left." : " tries left.")} type="warning" show={setShouldShowAlertBox} />
     <button onClick={onClick} className={styles.button}> 🐱 </button>
   </div>
 }

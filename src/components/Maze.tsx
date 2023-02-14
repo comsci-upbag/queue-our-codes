@@ -124,7 +124,7 @@ export default function Maze() {
   }, [isPlayerAtEnd])
 
   return <div className={styles.Container}>
-    <AlertBox showWhen={isPlayerAtEnd} title={"You've reached the end!"} message={"Now that you've reached the end, keep it at your prime as you are now on your own."} type={"success"} show={setIsPlayerAtEnd} />
+    <AlertBox showWhen={isPlayerAtEnd} title={"You've reached the end!"} message={"Now that you've reached the end, keep it at your prime as you are now on your own."} type="info" show={setIsPlayerAtEnd} />
 
     {startGame ? <>
       <div className={styles.MazeContainer} key={String(z + " ")}>
