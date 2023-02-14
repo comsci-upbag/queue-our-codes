@@ -7,19 +7,12 @@ const port = 5500;
 let model: tf.GraphModel | null = null;
 
 const labels = [
-  "random-image",
-  "white-cat-yellow-head",
-  "cat12",
-  "black-cat",
-  "white-cat-black-head",
-  "white-cat-black-ears",
-  "white-cat-black-tail",
-  "cat6",
-  "cat7",
-  "cat8",
-  "not-up-cat",
-  "random-image",
-  "up-background",
+  "bram",
+  "mcat",
+  "non_up_cat",
+  "random_images",
+  "upb_background"
+
 ]
 
 app.use(express.json({ limit: '50mb' }))
@@ -31,7 +24,7 @@ app.post('/', async (req: Request, res: Response) => {
 
   // Initialize Model
   if (!model)
-    model = await tf.loadGraphModel('file://public/data/upb-cat-detector/model.json');
+    model = await tf.loadGraphModel('file://data/upb-cat-detector/model.json');
 
   const { image: rawImage } = req.body;
 
