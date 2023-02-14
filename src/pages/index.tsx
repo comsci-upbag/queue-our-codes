@@ -103,7 +103,7 @@ export default function Index() {
           <b>Q: Can anyone play this game?</b><br /><br />
           A: Yes! Anyone can play this game as long as they have a Google account.<br /><br />
           <b>Q: When will the game start and until when will it be open?</b> <br /><br />
-          A: The event will start on February 14, 2023, at 9:00 AM and end on February 15, 2023, at 5:00 PM.<br /><br />
+          A: The event will start on February 15, 2023, at 9:00 AM and end on February 15, 2023, at 5:00 PM.<br /><br />
           <b>Q: What should I do to participate in this event?</b><br /><br />
           A: Participants will be required to pay 10 pesos for the registration fee.<br /><br />
           <b>Q: What will be the prize for the winning participants?</b><br /><br />
