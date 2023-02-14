@@ -67,6 +67,7 @@ export default function AnswerBox({ isAnswered, answer, puzzleId }: Props) {
     }).then(data => data.json())
       .then(data => data as { isAnswerCorrect: boolean, timeUntilCanSubmit: number | null, triesLeft: number, shouldReload: boolean })
       .then(data => {
+        setShowLoading(false)
         setIsAnswerCorrect(data.isAnswerCorrect)
         setTriesLeft(triesLeft)
         if (data.timeUntilCanSubmit !== null)
@@ -84,7 +85,6 @@ export default function AnswerBox({ isAnswered, answer, puzzleId }: Props) {
         }
 
         setShouldShowAlertBox(true)
-        setShowLoading(false)
       })
   }
 

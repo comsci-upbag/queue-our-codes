@@ -95,8 +95,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         tries: participant.tries + 1 < 3 ? participant.tries + 1 : 3
       }
     })
-    res.status(200).json({ isAnswerCorrect: false, triesLeft: 2 - participant.tries });
-    return;
+    if (puzzleId === 4) {
+      res.status(200).json({ isAnswerCorrect: false, triesLeft: 3 - participant.tries });
+      return;
+    } else if (puzzleId === 5) {
+      res.status(200).json({ isAnswerCorrect: false, triesLeft: 2 - participant.tries });
+      return;
+    }
+    res.status(200).json({ isAnswerCorrect: false });
+    return
   }
 
   // update participant data
