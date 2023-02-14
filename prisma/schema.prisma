@@ -8,10 +8,10 @@ datasource db {
 }
 
 model ParticipantStatus {
-  id             Int    @id @default(autoincrement())
-  current_puzzle Int    @default(1)
-  email          String @unique
+  id             Int       @id @default(autoincrement())
+  current_puzzle Int       @default(1)
+  email          String    @unique
   name           String
-  tries          Int    @default(0)
-  lastSubmitted  Int    @default(0)
+  tries          Int       @default(0)
+  lastSubmitted  DateTime?
 }
