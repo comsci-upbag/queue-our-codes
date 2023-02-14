@@ -7,10 +7,11 @@ interface AlertProps {
   type: "success" | "danger" | "warning" | "info",
   show: (x: boolean) => void,
   showWhen: boolean | null,
+  callbackWhenClosed?: () => void,
 }
 
 
-export default function AlertBox({ title, message, type, show, showWhen }: AlertProps) {
+export default function AlertBox({ title, message, type, show, showWhen, callbackWhenClosed }: AlertProps) {
 
   if (!showWhen)
     return <></>
@@ -19,6 +20,7 @@ export default function AlertBox({ title, message, type, show, showWhen }: Alert
 
   const closeAlert = (e: React.MouseEvent) => {
     if (e.target == alertRef.current) return
+    if (callbackWhenClosed) callbackWhenClosed()
     show(false)
   }
 

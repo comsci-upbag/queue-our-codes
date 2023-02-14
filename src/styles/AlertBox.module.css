@@ -1,22 +1,23 @@
 .container {
   position: fixed;
+  display: flex;
+  justify-items: center;
+  align-items: center;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
+  background-color: rgba(0, 0, 0, 0.2);
   z-index: 3;
 }
 
 .alert {
   display: flex;
-  position: relative;
-  top: 10;
-  right: 10;
   padding: 15px;
   border-radius: 20px;
-  margin-left: 100vw;
-  width: fit-content;
-  translate: -110% 10px;
+  margin: auto;
+  width: 300px;
+  height: fit-content;
   text-align: center;
   opacity: 1;
   color: var(--white);
@@ -28,12 +29,13 @@
   font-size: 20px;
   font-weight: 800;
   text-align: left;
-  width: max-content;
+  width: 100%;
 }
 
 #notemessg {
   font-size: 16px;
-  width: max-content;
+  text-align: left;
+  width: 100%;
 }
 
 .alert-success {
