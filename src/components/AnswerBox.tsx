@@ -49,9 +49,11 @@ export default function AnswerBox({ isAnswered, answer, puzzleId }: Props) {
   const [shouldShowAlertBox, setShouldShowAlertBox] = useState(false);
   const [isAnswerCorrect, setIsAnswerCorrect] = useState(false);
   const [triesLeft, setTriesLeft] = useState(-1)
+  const [showLoading, setShowLoading] = useState(false)
 
   const onSubmit = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
+    setShowLoading(true);
 
     const request = {
       answer: inputField.current?.value
@@ -77,7 +79,7 @@ export default function AnswerBox({ isAnswered, answer, puzzleId }: Props) {
         }
 
         setShouldShowAlertBox(true)
-
+        setShowLoading(false)
       })
   }
 
@@ -91,10 +93,9 @@ export default function AnswerBox({ isAnswered, answer, puzzleId }: Props) {
   if (isAnswerBoxShown)
     return (
       <>
-        <AlertBox showWhen={shouldShowAlertBox && isAnswerCorrect} title="Congratulations!" message="Good job! That is indeed the answer to this puzzle!" type="success" show={setShouldShowAlertBox} callbackWhenClosed={() => window.location.href = "/"} />
-        <AlertBox showWhen={shouldShowAlertBox && !isAnswerCorrect && triesLeft > 0 && timeUntilCanSubmit === null} title="Wrong answer!" message={"Sadly, this is not the answer we are looking for. You have " + triesLeft + (triesLeft === 1 ? " try left." : " tries left.")} type="warning" show={setShouldShowAlertBox} />
-        <AlertBox showWhen={shouldShowAlertBox && !isAnswerCorrect && timeUntilCanSubmit === null} title="Wrong answer!" message={"Sadly, this is not the answer we are looking for."} type="warning" show={setShouldShowAlertBox} />
-        <AlertBox showWhen={shouldShowAlertBox && timeUntilCanSubmit! > 0} title="Uh oh!" message={`You have to wait ${msToHMS(timeUntilCanSubmit!)} to answer this puzzle once again.`} type="warning" show={setShouldShowAlertBox} />
+        <Show when={showLoading}>
+          <LoadingIndicator />
+        </Show>
         <div className={styles.HomeContainer} id={styles.InputContainer}>
           <input ref={inputField} id={styles.InputField} type="text" placeholder="Answer" />
           <Image id={styles.SubmitButtonImage} src="submit.svg" alt="Submit Button" width={25} height={25} onClick={onSubmit} />
