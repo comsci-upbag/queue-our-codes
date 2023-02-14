@@ -2,9 +2,14 @@ import Dialogue from "@/components/Dialogue";
 import QRCode from "@/components/QRCode";
 import Sequential from "@/components/Sequential"
 import TextBlock from "@/components/TextBlock"
-import WebCam from "@/components/WebCam";
 
 import styles from "@/styles/Puzzle.module.css"
+import { useState } from "react";
+import dynamic from "next/dynamic";
+
+const AlertBox = dynamic(() => import("@/components/AlertBox"), {
+  ssr: false,
+})
 
 interface Props {
   puzzleId: number;
@@ -12,6 +17,7 @@ interface Props {
 }
 
 export default function Puzzle8({ puzzleId, currentPuzzle }: Props) {
+  const [shouldShowAlertBox, setShouldShowAlertBox] = useState(false)
 
   const handleQRCodeResult = async (decodedText: string) => {
     const request = { answer: decodedText }
@@ -21,12 +27,11 @@ export default function Puzzle8({ puzzleId, currentPuzzle }: Props) {
     }).then(data => data.json())
       .then(data => data.isAnswerCorrect)
       .then(isAnswerCorrect => {
-        if (isAnswerCorrect)
-          setTimeout(() => {
-            window.location.reload();
-          }, 1000);
+        if (isAnswerCorrect) setShouldShowAlertBox(true)
       })
   }
+
+
 
   return (
     <>
@@ -63,6 +68,8 @@ export default function Puzzle8({ puzzleId, currentPuzzle }: Props) {
 
           <TextBlock type="instruction" message="Uncover the secret of her greatness and discover the truth. Scan it using the camera. Make sure that the lighting is clear and that nothing is obstructing the view." />
           <QRCode onResultCallback={handleQRCodeResult} buttonLabel="Start Scanning" />
+
+          <AlertBox showWhen={shouldShowAlertBox} title="Congratulations!" message="Good job! That is indeed the answer to this puzzle!" type="success" show={setShouldShowAlertBox} callbackWhenClosed={() => window.location.href = "/"} />
         </Sequential>
       </div>
     </>

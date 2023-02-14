@@ -7,7 +7,7 @@ import LoadingIndicator from "@/components/LoadingIndicator";
 
 import styles from "@/styles/Puzzle.module.css"
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import TextBlock from "@/components/TextBlock";
 import Show from "@/components/Show";
@@ -38,12 +38,6 @@ export default function Puzzle1({ puzzleId, currentPuzzle }: Props) {
       result.json().then(
         (result) => {
           const { isAnswerCorrect } = result;
-          if (isAnswerCorrect) {
-            setTimeout(() => {
-              window.location.href = "/";
-            }, 1000);
-          }
-
           setIsAnswerCorrect(isAnswerCorrect);
           setShowAlert(true);
           return result;
@@ -71,8 +65,6 @@ export default function Puzzle1({ puzzleId, currentPuzzle }: Props) {
         <Show when={showLoading}>
           <LoadingIndicator />
         </Show>
-
-        <AlertBox showWhen={showAlert && isAnswerCorrect} title={"Congratulations!"} message={"You've found Mcat!"} type={"success"} show={setShowAlert} />
       </div>
     </>
   )
