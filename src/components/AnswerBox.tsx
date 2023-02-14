@@ -7,6 +7,8 @@ import { useRecoilValue } from "recoil";
 import { answerBoxVisibilityState } from "@/globals/states";
 
 import dynamic from "next/dynamic";
+import LoadingIndicator from "./LoadingIndicator";
+import Show from "./Show";
 const AlertBox = dynamic(() => import("./AlertBox"), {
   ssr: false,
 })
@@ -67,7 +69,10 @@ export default function AnswerBox({ isAnswered, answer, puzzleId }: Props) {
       .then(data => {
         setIsAnswerCorrect(data.isAnswerCorrect)
         setTriesLeft(triesLeft)
-        setTimeUntilCanSubmit(data.timeUntilCanSubmit);
+        if (data.timeUntilCanSubmit !== null)
+          setTimeUntilCanSubmit(data.timeUntilCanSubmit);
+        else
+          setTimeUntilCanSubmit(null);
 
         if (data.isAnswerCorrect) {
           setShouldShowAlertBox(true)
@@ -96,6 +101,10 @@ export default function AnswerBox({ isAnswered, answer, puzzleId }: Props) {
         <Show when={showLoading}>
           <LoadingIndicator />
         </Show>
+        <AlertBox showWhen={shouldShowAlertBox && isAnswerCorrect} title="Congratulations!" message="Good job! That is indeed the answer to this puzzle!" type="success" show={setShouldShowAlertBox} callbackWhenClosed={() => window.location.href = "/"} />
+        {triesLeft > 0 ? <AlertBox showWhen={shouldShowAlertBox && !isAnswerCorrect && triesLeft > 0 && timeUntilCanSubmit === null} title="Wrong answer!" message={"Sadly, this is not the answer we are looking for. You have " + triesLeft + (triesLeft === 1 ? " try left." : " tries left.")} type="warning" show={setShouldShowAlertBox} />
+          : <AlertBox showWhen={shouldShowAlertBox && !isAnswerCorrect} title="Wrong answer!" message={"Sadly, this is not the answer we are looking for."} type="warning" show={setShouldShowAlertBox} />}
+        <AlertBox showWhen={shouldShowAlertBox && timeUntilCanSubmit! > 0} title="Uh oh!" message={`You have to wait ${msToHMS(timeUntilCanSubmit!)} to answer this puzzle once again.`} type="warning" show={setShouldShowAlertBox} />
         <div className={styles.HomeContainer} id={styles.InputContainer}>
           <input ref={inputField} id={styles.InputField} type="text" placeholder="Answer" />
           <Image id={styles.SubmitButtonImage} src="submit.svg" alt="Submit Button" width={25} height={25} onClick={onSubmit} />
