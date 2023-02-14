@@ -15,7 +15,7 @@ export const textAnswers = [
 
 
 const imageAnswers = [
-  { number: 1, answer: "white-cat-yellow-head" },
+  { number: 1, answer: "mcat" },
   { number: 2, answer: "" },
   { number: 3, answer: "" },
   { number: 4, answer: "" },
