@@ -2,7 +2,7 @@
 
 export const textAnswers = [
   { number: 1, answer: "MCAT" },
-  { number: 2, answer: "BLACKCAT" },
+  { number: 2, answer: "KOBE" },
   { number: 3, answer: "IFUGAOHOUSE" },
   { number: 4, answer: "MUMSHIE" },
   { number: 5, answer: "13" },

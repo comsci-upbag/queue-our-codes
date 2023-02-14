@@ -33,30 +33,46 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   const puzzleId = participant.current_puzzle;
-  const currentTime = Date.now();
+  const currentTime = new Date(Date.now());
+  const FIVE_MINS_IN_MS = 300_000
 
-  if (puzzleId === 4 && participant.lastSubmitted > 0) {
-    const FIVE_MINS_IN_MS = 300_000
-    const elapsedTimeSinceLastSubmit = currentTime - participant.lastSubmitted
+  if (puzzleId === 4 && participant.lastSubmitted) {
+    const elapsedTimeSinceLastSubmit = currentTime.getTime() - participant.lastSubmitted.getTime()
 
-    if (elapsedTimeSinceLastSubmit < FIVE_MINS_IN_MS && puzzleId === 4) {
-      res.status(200).json({ timeUntilCanSubmit: FIVE_MINS_IN_MS - elapsedTimeSinceLastSubmit })
+    if (elapsedTimeSinceLastSubmit < FIVE_MINS_IN_MS) {
+      res.status(200).json({ isAnswerCorrect: false, timeUntilCanSubmit: FIVE_MINS_IN_MS - elapsedTimeSinceLastSubmit })
       return;
     }
-  }
 
-  if (puzzleId === 4 && participant.tries >= 3 && participant.lastSubmitted === 0) {
     await prisma.participantStatus.update({
       where: {
         email: session.user.email,
       },
       data: {
+        tries: 0,
+        lastSubmitted: null
+      }
+    })
+    res.status(200).json({ isAnswerCorrect: false, timeUntilCanSubmit: null, triesLeft: 3 })
+    return;
+  }
+
+  if (puzzleId === 4 && participant.tries === 3 && participant.lastSubmitted === null) {
+    await prisma.participantStatus.update({
+      where: {
+        email: session.user.email,
+      },
+      data: {
+        tries: 0,
         lastSubmitted: currentTime
       }
     })
+
+    res.status(200).json({ isAnswerCorrect: false, triesLeft: 0, timeUntilCanSubmit: FIVE_MINS_IN_MS })
+    return;
   }
 
-  if (puzzleId === 5 && participant.tries >= 2) {
+  if (puzzleId === 5 && participant.tries === 2) {
     await prisma.participantStatus.update({
       where: {
         email: session.user.email,
@@ -66,6 +82,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         tries: 0,
       }
     })
+    res.status(200).json({ isAnswerCorrect: false, triesLeft: 0, shouldReload: true });
+    return;
   }
 
   if (!isAnswerCorrect("text", puzzleId, answer)) {
@@ -74,10 +92,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         id: participant.id
       },
       data: {
-        tries: participant.tries + 1
+        tries: participant.tries + 1 < 3 ? participant.tries + 1 : 3
       }
     })
-    res.status(200).json({ isAnswerCorrect: false });
+    res.status(200).json({ isAnswerCorrect: false, triesLeft: 2 - participant.tries });
     return;
   }
 
@@ -89,7 +107,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     data: {
       current_puzzle: participant.current_puzzle + 1,
       tries: 0,
-      lastSubmitted: 0
+      lastSubmitted: null
     }
   })
 
