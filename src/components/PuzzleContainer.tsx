@@ -1,9 +1,13 @@
 import Puzzle from "@/pages/api/puzzle"
 import styles from "@/styles/Home.module.css"
 import { useState, useRef, useEffect } from "react"
-import AnswerBox from "@/components/AnswerBox"
 
-import AlertBox from "@/components/AlertBox"
+import dynamic from "next/dynamic"
+
+const AnswerBox = dynamic(() => import("@/components/AnswerBox"), {
+  ssr: false,
+})
+
 import { useSetRecoilState } from "recoil"
 import { visibilePuzzleState } from "@/globals/states"
 
@@ -15,7 +19,6 @@ interface props {
 export default function PuzzleContainer({ currentPuzzle, previousAnswers }: props) {
 
   const puzzlesContainer = useRef<HTMLDivElement>(null);
-  const [showAlert, setShowAlert] = useState<boolean>(false);
   const [visiblePuzzle, setVisiblePuzzle] = useState<number>(currentPuzzle);
 
   const setIsFinished = useSetRecoilState(visibilePuzzleState)
@@ -27,7 +30,6 @@ export default function PuzzleContainer({ currentPuzzle, previousAnswers }: prop
 
   return (
     <>
-      <AlertBox showWhen={showAlert} title="Wrong Answer" message="Please try again" type="danger" show={setShowAlert} />
       <div ref={puzzlesContainer}>
         <div className={styles.PuzzleCard} key={visiblePuzzle}>
           <div className={styles.HomeContainer} id={styles.ClueContainer}>
