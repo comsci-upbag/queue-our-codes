@@ -34,6 +34,7 @@ export default function Puzzle3({ puzzleId, currentPuzzle }: Props) {
             ]}
           />
           <TextBlock type="instruction" message="Guess the answer to the riddle. Type your answer in the box below. Answers are not case-sensitive but don’t put extra spaces." />
+          <TextBlock type="narration" message="HINT: The answer reveals itself in the CSS building if u gao there. A house where no one else resides yet." />
         </Sequential>
       </div>
     </>
